@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
+import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/styles/strings.dart';
 
 class MedicationWidget extends StatelessWidget {
   final Medication medication;
@@ -9,7 +11,7 @@ class MedicationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(AppSizes.smallPadding),
         child: Column(
           children: [
             Row(
@@ -17,7 +19,7 @@ class MedicationWidget extends StatelessWidget {
                 Text(medication.name),
                 const Spacer(),
                 if (medication.amount != null)
-                  Text('Remaining Pills: ${medication.amount}'),
+                  Text('${AppStrings.remaining} ${medication.amount}'),
               ],
             ),
           ],

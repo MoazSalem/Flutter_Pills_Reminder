@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
+import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/main_screen/presentation/widgets/medication_widget.dart';
 
 class MedicationList extends StatelessWidget {
@@ -8,7 +9,7 @@ class MedicationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(AppSizes.normalPadding),
       child: ListView.builder(
         itemCount: medicationList.length,
         itemBuilder: (context, index) =>

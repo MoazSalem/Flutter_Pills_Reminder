@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
+import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/features/main_screen/presentation/widgets/medication_list.dart';
 
 class MainScreen extends StatelessWidget {
@@ -11,12 +13,12 @@ class MainScreen extends StatelessWidget {
     final List<Medication> tempList = [];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pills Reminder'),
-        toolbarHeight: 80,
+        title: const Text(AppStrings.appName),
+        toolbarHeight: AppSizes.appBarHeight,
         backgroundColor: theme.surfaceContainerHigh,
       ),
       body: tempList.isEmpty
-          ? const Center(child: Text('No Pills Scheduled for Reminder'))
+          ? const Center(child: Text(AppStrings.noPills))
           : MedicationList(medicationList: tempList),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pills_reminder/core/styles/strings.dart';
+import 'package:pills_reminder/core/styles/theme.dart';
 import 'package:pills_reminder/features/main_screen/presentation/screens/main_screen/main_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,17 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Pills Reminder',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          brightness: Brightness.dark,
-        ),
-      ),
+      title: AppStrings.appName,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: MainScreen(),
     );
   }
