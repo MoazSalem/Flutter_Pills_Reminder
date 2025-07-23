@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
@@ -58,7 +57,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
             child: Column(
               spacing: AppSizes.normalPadding,
               children: [
+                /// Appbar with back button
                 const CustomAppbar(),
+
+                /// Medication name
                 CustomTextFormField(
                   controller: nameController,
                   labelText: 'Medication Name',
@@ -69,6 +71,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     return null;
                   },
                 ),
+
+                /// Amount of pills available
                 CustomTextFormField(
                   controller: amountController,
                   labelText: 'Amount (Optional)',
@@ -83,6 +87,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     return null;
                   },
                 ),
+
+                /// Frequency of medication
                 CustomDropDown(
                   value: frequency,
                   items: MedicationFrequency.values,
@@ -92,6 +98,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   }),
                   label: 'Frequency',
                 ),
+
+                /// Days selection should be here
+
+                /// Pills per day
                 CustomDropDown(
                   value: repeatTimes,
                   items: List.generate(20, (i) => i + 1),
@@ -100,7 +110,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   }),
                   label: 'Pills Per Day',
                 ),
-                // Days selection should be here
+
+                /// Pills times selection
                 ...List.generate(
                   repeatTimes,
                   (i) => PillTime(
@@ -125,8 +136,6 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   ),
                 ),
 
-                // Notification Scheduling should be here
-                Container(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
