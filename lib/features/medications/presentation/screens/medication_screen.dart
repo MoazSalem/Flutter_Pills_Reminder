@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
+import 'package:pills_reminder/features/medications/presentation/widgets/pill_time.dart';
 
 class MedicationScreen extends StatefulWidget {
   const MedicationScreen({super.key});
@@ -20,7 +22,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   int repeatTimes = 1;
   List<Weekday> selectedDays = [];
 
-  final List<DateTime> notificationTimes = [];
+  final List<TimeOfDay> times = [];
 
   Map<Weekday, bool> days = {
     Weekday.saturday: false,
@@ -90,45 +92,76 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   }),
                   label: 'Frequency',
                 ),
-                if (frequency == MedicationFrequency.daily)
-                  CustomDropDown(
-                    value: repeatTimes,
-                    items: List.generate(20, (i) => i + 1),
-                    onChanged: (value) => setState(() {
-                      repeatTimes = value!;
-                    }),
-                    label: 'Number of times per ${frequencies[frequency]}',
-                  ),
+                CustomDropDown(
+                  value: repeatTimes,
+                  items: List.generate(20, (i) => i + 1),
+                  onChanged: (value) => setState(() {
+                    repeatTimes = value!;
+                  }),
+                  label: 'Pills Per Day',
+                ),
                 // Days selection should be here
-                Container(),
+                ...List.generate(
+                  repeatTimes,
+                  (i) => PillTime(
+                    i: i,
+                    times: times,
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select a time';
+                      }
+                      return null;
+                    },
+                    onTap: () async {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (time != null) {
+                        setState(() => times.add(time));
+                      }
+                      return time;
+                    },
+                  ),
+                ),
+
                 // Notification Scheduling should be here
                 Container(),
                 Row(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: AppSizes.buttonHeight,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (!formKey.currentState!.validate()) {
-                              return;
-                            }
-                            // final medication = Medication(
-                            //   name: nameController.text,
-                            //   amount: int.tryParse(amountController.text),
-                            //   frequency: frequency,
-                            //   days: selectedDays == [] ? null : selectedDays,
-                            //   notificationTimes: notificationTimes,
-                            // );
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Save'),
+                    SizedBox(
+                      height: AppSizes.buttonHeight,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primaryContainer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppSizes.roundedRadius,
+                            ),
+                          ),
                         ),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) {
+                            return;
+                          }
+                          // final medication = Medication(
+                          //   name: nameController.text,
+                          //   amount: int.tryParse(amountController.text),
+                          //   frequency: frequency,
+                          //   days: selectedDays == [] ? null : selectedDays,
+                          //   notificationTimes: notificationTimes,
+                          // );
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.done, size: AppSizes.largeIconSize),
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(width: AppSizes.normalPadding),
               ],
             ),
           ),
