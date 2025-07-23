@@ -5,6 +5,7 @@ import 'package:pills_reminder/features/medications/presentation/widgets/custom_
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/pill_time.dart';
+import 'package:pills_reminder/features/medications/presentation/widgets/weekday_picker.dart';
 
 class MedicationScreen extends StatefulWidget {
   const MedicationScreen({super.key});
@@ -95,11 +96,27 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   customNames: frequencies,
                   onChanged: (value) => setState(() {
                     frequency = value!;
+                    days.forEach((key, value) => days[key] = false);
                   }),
                   label: 'Frequency',
                 ),
 
-                /// Days selection should be here
+                /// Days selection
+                if (frequency == MedicationFrequency.daysPerWeek ||
+                    frequency == MedicationFrequency.weekly)
+                  WeekdayPicker(
+                    key: ValueKey(frequency),
+                    frequency: frequency,
+                    days: days,
+                    onChanged: (day, value) => setState(() {
+                      days[day] = value;
+                      if (value) {
+                        selectedDays.add(day);
+                      } else {
+                        selectedDays.remove(day);
+                      }
+                    }),
+                  ),
 
                 /// Pills per day
                 CustomDropDown(
@@ -107,6 +124,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   items: List.generate(20, (i) => i + 1),
                   onChanged: (value) => setState(() {
                     repeatTimes = value!;
+                    times.clear();
                   }),
                   label: 'Pills Per Day',
                 ),
