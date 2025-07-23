@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/medication.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/features/main_screen/presentation/screens/main_screen/main_screen.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
@@ -20,6 +19,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   MedicationFrequency frequency = MedicationFrequency.daily;
   int repeatTimes = 1;
   List<Weekday> selectedDays = [];
+
   final List<DateTime> notificationTimes = [];
 
   Map<Weekday, bool> days = {
@@ -36,7 +36,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
     MedicationFrequency.daily: "Daily",
     MedicationFrequency.weekly: "Weekly",
     MedicationFrequency.monthly: "Monthly",
-    MedicationFrequency.coupleTimes: "Couple Times",
+    MedicationFrequency.daysPerWeek: "Couple of Days per Week",
   };
 
   onDispose() {
@@ -84,12 +84,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 CustomDropDown(
                   value: frequency,
                   items: MedicationFrequency.values,
-                  customNames: {
-                    MedicationFrequency.daily: 'Daily',
-                    MedicationFrequency.weekly: 'Weekly',
-                    MedicationFrequency.monthly: 'Monthly',
-                    MedicationFrequency.coupleTimes: 'Couple of Times',
-                  },
+                  customNames: frequencies,
                   onChanged: (value) => setState(() {
                     frequency = value!;
                   }),
@@ -119,13 +114,13 @@ class _MedicationScreenState extends State<MedicationScreen> {
                             if (!formKey.currentState!.validate()) {
                               return;
                             }
-                            final medication = Medication(
-                              name: nameController.text,
-                              amount: int.tryParse(amountController.text),
-                              frequency: frequency,
-                              days: selectedDays == [] ? null : selectedDays,
-                              notificationTimes: notificationTimes,
-                            );
+                            // final medication = Medication(
+                            //   name: nameController.text,
+                            //   amount: int.tryParse(amountController.text),
+                            //   frequency: frequency,
+                            //   days: selectedDays == [] ? null : selectedDays,
+                            //   notificationTimes: notificationTimes,
+                            // );
                             Navigator.pop(context);
                           },
                           child: const Text('Save'),
