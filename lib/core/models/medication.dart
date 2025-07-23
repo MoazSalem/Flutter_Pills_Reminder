@@ -21,7 +21,7 @@ class Medication {
   final List<Weekday>? selectedDays;
 
   /// Used if frequency is monthly (e.g. 15 = 15th day of each month)
-  final int? monthlyDay;
+  final DateTime? monthlyDay;
 
   Medication({
     required this.name,
@@ -38,7 +38,7 @@ class Medication {
     List<TimeOfDay>? times,
     MedicationFrequency? frequency,
     List<Weekday>? selectedDays,
-    int? monthlyDay,
+    DateTime? monthlyDay,
   }) {
     return Medication(
       name: name ?? this.name,

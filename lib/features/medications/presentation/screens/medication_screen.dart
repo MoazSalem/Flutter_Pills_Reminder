@@ -22,7 +22,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   MedicationFrequency frequency = MedicationFrequency.daily;
   int repeatTimes = 1;
   List<Weekday> selectedDays = [];
-  List<TimeOfDay?> times = [];
+  List<TimeOfDay?> times = [null];
   DateTime? monthlyDay;
 
   Map<Weekday, bool> days = {
@@ -190,13 +190,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
                           if (!formKey.currentState!.validate()) {
                             return;
                           }
-                          // final medication = Medication(
-                          //   name: nameController.text,
-                          //   amount: int.tryParse(amountController.text),
-                          //   frequency: frequency,
-                          //   days: selectedDays == [] ? null : selectedDays,
-                          //   notificationTimes: notificationTimes,
-                          // );
+                          final medication = Medication(
+                            name: nameController.text,
+                            amount: int.tryParse(amountController.text),
+                            frequency: frequency,
+                            selectedDays:
+                                frequency == MedicationFrequency.weekly ||
+                                    frequency == MedicationFrequency.daysPerWeek
+                                ? selectedDays
+                                : null,
+                            monthlyDay: frequency == MedicationFrequency.monthly
+                                ? monthlyDay
+                                : null,
+                            times: List<TimeOfDay>.from(times),
+                          );
                           Navigator.pop(context);
                         },
                         child: Icon(Icons.done, size: AppSizes.largeIconSize),
