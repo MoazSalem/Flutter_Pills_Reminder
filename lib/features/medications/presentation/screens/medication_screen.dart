@@ -21,8 +21,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   MedicationFrequency frequency = MedicationFrequency.daily;
   int repeatTimes = 1;
   List<Weekday> selectedDays = [];
-
-  final List<TimeOfDay> times = [];
+  List<TimeOfDay?> times = [];
 
   Map<Weekday, bool> days = {
     Weekday.saturday: false,
@@ -124,7 +123,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   items: List.generate(20, (i) => i + 1),
                   onChanged: (value) => setState(() {
                     repeatTimes = value!;
-                    times.clear();
+                    times = List.generate(repeatTimes, (_) => null);
                   }),
                   label: 'Pills Per Day',
                 ),
@@ -134,7 +133,6 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   repeatTimes,
                   (i) => PillTime(
                     i: i,
-                    times: times,
                     validator: (value) {
                       if (value == null) {
                         return 'Please select a time';
@@ -147,9 +145,13 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         initialTime: TimeOfDay.now(),
                       );
                       if (time != null) {
-                        setState(() => times.add(time));
+                        setState(() => times[i]);
                       }
                       return time;
+                    },
+                    time: i < times.length ? times[i] : null,
+                    onChanged: (newTime) {
+                      setState(() => times[i] = newTime);
                     },
                   ),
                 ),

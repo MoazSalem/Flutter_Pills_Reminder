@@ -5,24 +5,32 @@ class PillTime extends StatelessWidget {
   const PillTime({
     super.key,
     required this.i,
-    required this.times,
+    required this.time,
     this.validator,
+    required this.onChanged,
     required this.onTap,
   });
 
   final int i;
-  final List<TimeOfDay> times;
+  final TimeOfDay? time;
   final String? Function(TimeOfDay?)? validator;
+  final ValueChanged<TimeOfDay?> onChanged;
   final Future<TimeOfDay?> Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return FormField<TimeOfDay>(
-      key: ValueKey(i),
-      initialValue: times.isNotEmpty && i < times.length ? times[i] : null,
       validator: validator,
       builder: (field) {
-        final hasError = field.hasError;
+        final error = field.errorText;
+        final isError = field.hasError;
+
+        // keep the form value in sync with external value
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (field.value != time) {
+            field.didChange(time);
+          }
+        });
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +39,7 @@ class PillTime extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
-                border: hasError
+                border: isError
                     ? Border.all(
                         color: Theme.of(context).colorScheme.error,
                         width: 1,
@@ -43,29 +51,30 @@ class PillTime extends StatelessWidget {
                   horizontal: AppSizes.largePadding,
                 ),
                 title: Text('Pill ${i + 1} Time'),
-                subtitle: field.value != null
-                    ? Text(field.value!.format(context))
+                subtitle: time != null
+                    ? Text(time!.format(context))
                     : const Text("Not Set"),
                 trailing: InkWell(
                   borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
                   onTap: () async {
-                    final pickedTime = await onTap();
-                    if (pickedTime != null) {
-                      field.didChange(pickedTime);
+                    final newTime = await onTap();
+                    if (newTime != null) {
+                      onChanged(newTime); // updates external state
+                      field.didChange(newTime); // updates internal field value
                     }
                   },
                   child: const Icon(Icons.edit),
                 ),
               ),
             ),
-            if (hasError)
+            if (isError)
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSizes.largePadding,
                   vertical: 4,
                 ),
                 child: Text(
-                  field.errorText!,
+                  error!,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.error,
                     fontSize: 12,
