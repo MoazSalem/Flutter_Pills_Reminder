@@ -4,6 +4,7 @@ import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
+import 'package:pills_reminder/features/medications/presentation/widgets/day_picker.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/pill_time.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/weekday_picker.dart';
 
@@ -22,6 +23,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   int repeatTimes = 1;
   List<Weekday> selectedDays = [];
   List<TimeOfDay?> times = [];
+  DateTime? monthlyDay;
 
   Map<Weekday, bool> days = {
     Weekday.saturday: false,
@@ -96,6 +98,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   onChanged: (value) => setState(() {
                     frequency = value!;
                     days.forEach((key, value) => days[key] = false);
+                    monthlyDay = null;
                   }),
                   label: 'Frequency',
                 ),
@@ -115,6 +118,17 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         selectedDays.remove(day);
                       }
                     }),
+                  ),
+
+                /// Day of the month if frequency is monthly
+                if (frequency == MedicationFrequency.monthly)
+                  DayPicker(
+                    selectedDate: monthlyDay,
+                    onTap: (DateTime date) {
+                      setState(() {
+                        monthlyDay = date;
+                      });
+                    },
                   ),
 
                 /// Pills per day
@@ -142,7 +156,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     onTap: () async {
                       final time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay.now(),
+                        initialTime: TimeOfDay(hour: 12, minute: 0),
                       );
                       if (time != null) {
                         setState(() => times[i]);
