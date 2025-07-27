@@ -32,7 +32,8 @@ dependencies:
     sdk: flutter
 
   get: ^4.7.2
-  hive_ce: ^2.11.3
+  hive_ce_flutter: ^2.3.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
