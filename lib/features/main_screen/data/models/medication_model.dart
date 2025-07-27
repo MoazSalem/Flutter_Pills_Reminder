@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pills_reminder/core/utils/helpers.dart';
+import 'package:pills_reminder/features/main_screen/domain/entites/medication.dart';
 
-enum MedicationFrequency {
-  daily, // every day
-  daysPerWeek, // e.g. Mon, Wed, Fri
-  weekly, // Once a specific day of the week
-  monthly, // Once a month on specific day
-}
-
-enum Weekday { saturday, sunday, monday, tuesday, wednesday, thursday, friday }
-
-class Medication {
+class MedicationModel {
+  final String id;
   final String name;
   int? amount;
   MedicationFrequency frequency;
@@ -23,7 +17,8 @@ class Medication {
   /// Used if frequency is monthly (e.g. 15 = 15th day of each month)
   final DateTime? monthlyDay;
 
-  Medication({
+  MedicationModel({
+    required this.id,
     required this.name,
     this.amount,
     required this.times,
@@ -32,7 +27,7 @@ class Medication {
     this.monthlyDay,
   });
 
-  Medication copyWith({
+  MedicationModel copyWith({
     String? name,
     int? amount,
     List<TimeOfDay>? times,
@@ -40,7 +35,8 @@ class Medication {
     List<Weekday>? selectedDays,
     DateTime? monthlyDay,
   }) {
-    return Medication(
+    return MedicationModel(
+      id: id,
       name: name ?? this.name,
       amount: amount ?? this.amount,
       times: times ?? this.times,
@@ -49,25 +45,6 @@ class Medication {
       monthlyDay: monthlyDay ?? this.monthlyDay,
     );
   }
-}
 
-extension WeekdayExtension on Weekday {
-  String get label {
-    switch (this) {
-      case Weekday.saturday:
-        return 'Sat';
-      case Weekday.sunday:
-        return 'Sun';
-      case Weekday.monday:
-        return 'Mon';
-      case Weekday.tuesday:
-        return 'Tue';
-      case Weekday.wednesday:
-        return 'Wed';
-      case Weekday.thursday:
-        return 'Thu';
-      case Weekday.friday:
-        return 'Fri';
-    }
-  }
+  Medication toEntity() => Medication(id: id, name: name, amount: amount);
 }

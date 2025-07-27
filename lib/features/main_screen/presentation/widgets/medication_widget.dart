@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pills_reminder/core/models/medication.dart';
+import 'package:pills_reminder/features/main_screen/data/models/medication_model.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
+import 'package:pills_reminder/features/main_screen/domain/entites/medication.dart';
 
 class MedicationWidget extends StatelessWidget {
   final Medication medication;

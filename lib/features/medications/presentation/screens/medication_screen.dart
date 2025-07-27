@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pills_reminder/core/models/medication.dart';
+import 'package:pills_reminder/core/utils/helpers.dart';
+import 'package:pills_reminder/features/main_screen/data/models/medication_model.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
@@ -190,7 +191,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                           if (!formKey.currentState!.validate()) {
                             return;
                           }
-                          final medication = Medication(
+                          final medication = MedicationModel(
                             name: nameController.text,
                             amount: int.tryParse(amountController.text),
                             frequency: frequency,
@@ -203,6 +204,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                 ? monthlyDay
                                 : null,
                             times: List<TimeOfDay>.from(times),
+                            id: DateTime.now().millisecondsSinceEpoch
+                                .toString(),
                           );
                           Navigator.pop(context);
                         },
