@@ -1,4 +1,4 @@
-import 'package:pills_reminder/features/main_screen/data/models/medication_model.dart';
+import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 
 abstract class MedicationLocalDataSource {
   Future<List<MedicationModel>> getAll();

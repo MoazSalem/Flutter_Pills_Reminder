@@ -1,6 +1,6 @@
 import 'package:hive_ce/hive.dart';
-import 'package:pills_reminder/features/main_screen/data/models/medication_model.dart';
-import 'package:pills_reminder/features/main_screen/domain/datasources/medication_local_data_source.dart';
+import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
+import 'package:pills_reminder/features/medications/domain/datasources/medication_local_data_source.dart';
 
 class MedicationLocalDataSourceImpl implements MedicationLocalDataSource {
   final Box<MedicationModel> box;

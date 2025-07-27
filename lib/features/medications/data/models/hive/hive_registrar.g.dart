@@ -3,7 +3,7 @@
 // Check in to version control
 
 import 'package:hive_ce/hive.dart';
-import 'package:pills_reminder/features/main_screen/data/models/hive/medication_model_adapter.dart';
+import 'package:pills_reminder/features/medications/data/models/hive/medication_model_adapter.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {

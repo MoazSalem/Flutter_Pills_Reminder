@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
-import 'package:pills_reminder/features/main_screen/domain/entites/medication.dart';
-import 'package:pills_reminder/features/main_screen/presentation/widgets/fab.dart';
-import 'package:pills_reminder/features/main_screen/presentation/widgets/medication_list.dart';
+import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
+import 'package:pills_reminder/features/medications/presentation/widgets/fab.dart';
+import 'package:pills_reminder/features/medications/presentation/widgets/medication_list.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
