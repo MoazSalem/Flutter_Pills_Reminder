@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
-import 'package:pills_reminder/core/utils/helpers.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/models/medication_frequency.dart';
+import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 
 class MedicationModel extends HiveObject {

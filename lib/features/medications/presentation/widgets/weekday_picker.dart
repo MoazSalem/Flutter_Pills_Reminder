@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pills_reminder/core/utils/helpers.dart';
+import 'package:pills_reminder/core/models/medication_frequency.dart';
+import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 
 class WeekdayPicker extends StatelessWidget {

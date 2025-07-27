@@ -1,11 +1,23 @@
-enum MedicationFrequency {
-  daily, // every day
-  daysPerWeek, // e.g. Mon, Wed, Fri
-  weekly, // Once a specific day of the week
-  monthly, // Once a month on specific day
-}
+import 'package:hive_ce_flutter/hive_flutter.dart';
+part 'weekday.g.dart';
 
-enum Weekday { saturday, sunday, monday, tuesday, wednesday, thursday, friday }
+@HiveType(typeId: 3)
+enum Weekday {
+  @HiveField(0)
+  saturday,
+  @HiveField(1)
+  sunday,
+  @HiveField(2)
+  monday,
+  @HiveField(3)
+  tuesday,
+  @HiveField(4)
+  wednesday,
+  @HiveField(5)
+  thursday,
+  @HiveField(6)
+  friday,
+}
 
 extension WeekdayExtension on Weekday {
   String get label {
