@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:pills_reminder/core/utils/helpers.dart';
 import 'package:pills_reminder/features/main_screen/domain/entites/medication.dart';
 
-class MedicationModel {
+class MedicationModel extends HiveObject {
   final String id;
   final String name;
   int? amount;
