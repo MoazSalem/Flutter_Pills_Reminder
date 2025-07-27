@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pills_reminder/core/utils/helpers.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
+import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/widgets/custom_drop_down.dart';
@@ -51,6 +53,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<MedicationController>();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
@@ -207,6 +210,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                             id: DateTime.now().millisecondsSinceEpoch
                                 .toString(),
                           );
+                          controller.addMedication(medication);
                           Navigator.pop(context);
                         },
                         child: Icon(Icons.done, size: AppSizes.largeIconSize),

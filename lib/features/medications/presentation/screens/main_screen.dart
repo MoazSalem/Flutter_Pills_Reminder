@@ -15,7 +15,6 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<MedicationController>();
     final theme = Theme.of(context).colorScheme;
-    final List<Medication> tempList = [];
 
     return Scaffold(
       backgroundColor: theme.surfaceContainerHigh,
@@ -25,9 +24,12 @@ class MainScreen extends StatelessWidget {
         toolbarHeight: AppSizes.appBarHeight,
         backgroundColor: theme.surfaceContainerLow,
       ),
-      body: tempList.isEmpty
-          ? const Center(child: Text(AppStrings.noPills))
-          : MedicationList(medicationList: tempList),
+      body: Obx(() {
+        final medications = controller.medications;
+        return medications.isEmpty
+            ? const Center(child: Text(AppStrings.noPills))
+            : MedicationList(medicationList: medications);
+      }),
       floatingActionButton: Fab(theme: theme),
     );
   }
