@@ -21,6 +21,7 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
       name: fields[1] as String,
       amount: (fields[2] as num?)?.toInt(),
       times: (fields[4] as List).cast<TimeOfDay>(),
+      timesPillTaken: (fields[7] as List).cast<bool>(),
       frequency: fields[3] as MedicationFrequency,
       selectedDays: (fields[5] as List?)?.cast<Weekday>(),
       monthlyDay: fields[6] as DateTime?,
@@ -30,7 +31,7 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
   @override
   void write(BinaryWriter writer, MedicationModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
       ..writeByte(5)
       ..write(obj.selectedDays)
       ..writeByte(6)
-      ..write(obj.monthlyDay);
+      ..write(obj.monthlyDay)
+      ..writeByte(7)
+      ..write(obj.timesPillTaken);
   }
 
   @override

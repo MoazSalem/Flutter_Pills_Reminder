@@ -208,6 +208,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
                                 ? monthlyDay
                                 : null,
                             times: List<TimeOfDay>.from(times),
+                            timesPillTaken: List<bool>.filled(
+                              repeatTimes,
+                              false,
+                            ),
                             id: DateTime.now().millisecondsSinceEpoch
                                 .toString(),
                           );

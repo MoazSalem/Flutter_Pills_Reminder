@@ -13,6 +13,8 @@ class MedicationModel extends HiveObject {
   /// the times the medication will be taken
   final List<TimeOfDay> times;
 
+  final List<bool> timesPillTaken;
+
   /// Used if frequency is daysPerWeek or weekly
   final List<Weekday>? selectedDays;
 
@@ -24,6 +26,7 @@ class MedicationModel extends HiveObject {
     required this.name,
     this.amount,
     required this.times,
+    required this.timesPillTaken,
     required this.frequency,
     this.selectedDays,
     this.monthlyDay,
@@ -33,6 +36,7 @@ class MedicationModel extends HiveObject {
     String? name,
     int? amount,
     List<TimeOfDay>? times,
+    List<bool>? timesPillTaken,
     MedicationFrequency? frequency,
     List<Weekday>? selectedDays,
     DateTime? monthlyDay,
@@ -42,6 +46,7 @@ class MedicationModel extends HiveObject {
       name: name ?? this.name,
       amount: amount ?? this.amount,
       times: times ?? this.times,
+      timesPillTaken: timesPillTaken ?? this.timesPillTaken,
       frequency: frequency ?? this.frequency,
       selectedDays: selectedDays ?? this.selectedDays,
       monthlyDay: monthlyDay ?? this.monthlyDay,

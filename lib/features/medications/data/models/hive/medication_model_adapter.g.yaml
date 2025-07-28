@@ -5,7 +5,7 @@ nextTypeId: 1
 types:
   MedicationModel:
     typeId: 0
-    nextIndex: 7
+    nextIndex: 8
     fields:
       id:
         index: 0
@@ -21,3 +21,5 @@ types:
         index: 5
       monthlyDay:
         index: 6
+      timesPillTaken:
+        index: 7
