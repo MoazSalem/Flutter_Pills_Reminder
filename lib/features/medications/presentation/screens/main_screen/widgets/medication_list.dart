@@ -9,8 +9,12 @@ class MedicationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppSizes.largePadding),
-      child: ListView.builder(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.largePadding,
+        vertical: AppSizes.normalPadding,
+      ),
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemCount: medicationList.length,
         itemBuilder: (context, index) =>
             MedicationWidget(medication: medicationList[index]),

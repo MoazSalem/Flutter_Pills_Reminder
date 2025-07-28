@@ -1,5 +1,5 @@
 class AppSizes {
-  static const double appBarHeight = 100.0;
+  static const double appBarHeight = 80.0;
   static const double pillHeight = 100.0;
   static const double tinyPadding = 4.0;
   static const double smallPadding = 8.0;
@@ -8,6 +8,7 @@ class AppSizes {
   static const double smallTextSize = 14.0;
   static const double normalTextSize = 18.0;
   static const double largeTextSize = 24.0;
+  static const double extraLargeTextSize = 32.0;
   static const double circularRadius = 28.0;
   static const double roundedRadius = 56.0;
   static const double normalIconSize = 22.0;
