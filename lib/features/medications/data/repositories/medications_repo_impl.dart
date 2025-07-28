@@ -15,6 +15,11 @@ class MedicationsRepoImpl implements MedicationsRepo {
   }
 
   @override
+  Future<MedicationModel> getMedication(String id) async {
+    return localDataSource.get(id.toString());
+  }
+
+  @override
   Future<void> addMedication(MedicationModel med) {
     localDataSource.add(med);
     return Future.value();

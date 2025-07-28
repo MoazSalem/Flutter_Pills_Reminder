@@ -13,6 +13,12 @@ class MedicationLocalDataSourceImpl implements MedicationLocalDataSource {
   }
 
   @override
+  Future<MedicationModel> get(String id) async {
+    final MedicationModel medication = box.get(id)!;
+    return medication;
+  }
+
+  @override
   Future<void> add(MedicationModel medication) async {
     await box.put(medication.id, medication);
   }

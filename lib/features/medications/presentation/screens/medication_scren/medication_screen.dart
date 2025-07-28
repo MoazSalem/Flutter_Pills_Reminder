@@ -13,7 +13,8 @@ import 'package:pills_reminder/features/medications/presentation/screens/medicat
 import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/weekday_picker.dart';
 
 class MedicationScreen extends StatefulWidget {
-  const MedicationScreen({super.key});
+  const MedicationScreen({super.key, this.medication});
+  final MedicationModel? medication;
 
   @override
   State<MedicationScreen> createState() => _MedicationScreenState();
@@ -45,6 +46,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
     MedicationFrequency.monthly: "Monthly",
     MedicationFrequency.daysPerWeek: "Couple of Days per Week",
   };
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.medication != null) {
+      nameController.text = widget.medication!.name;
+      amountController.text = widget.medication!.amount.toString();
+      frequency = widget.medication!.frequency;
+      repeatTimes = widget.medication!.times.length;
+      selectedDays = widget.medication!.selectedDays ?? [];
+      times = widget.medication!.times;
+      monthlyDay = widget.medication!.monthlyDay;
+    }
+  }
 
   onDispose() {
     nameController.dispose();
@@ -217,10 +232,16 @@ class _MedicationScreenState extends State<MedicationScreen> {
                               repeatTimes,
                               false,
                             ),
-                            id: DateTime.now().millisecondsSinceEpoch
-                                .toString(),
+                            id:
+                                widget.medication?.id ??
+                                DateTime.now().millisecondsSinceEpoch
+                                    .toString(),
                           );
-                          controller.addMedication(medication);
+                          if (widget.medication != null) {
+                            controller.updateMedication(medication);
+                          } else {
+                            controller.addMedication(medication);
+                          }
                           Navigator.pop(context);
                         },
                         child: Icon(Icons.done, size: AppSizes.largeIconSize),

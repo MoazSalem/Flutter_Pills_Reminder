@@ -21,6 +21,11 @@ class MedicationController extends GetxController {
     medications.assignAll(data);
   }
 
+  Future<MedicationModel> getMedication(String id) async {
+    final data = await repo.getMedication(id);
+    return data;
+  }
+
   Future<void> addMedication(MedicationModel med) async {
     await repo.addMedication(med);
     getAllMedications(); // Refresh
