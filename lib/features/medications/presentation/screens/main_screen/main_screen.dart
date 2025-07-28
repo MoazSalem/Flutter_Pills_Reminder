@@ -16,12 +16,12 @@ class MainScreen extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: theme.surfaceContainerHigh,
+      backgroundColor: theme.surfaceContainer,
       appBar: AppBar(
         title: const Text(AppStrings.appName, style: AppStyles.title),
         centerTitle: true,
         toolbarHeight: AppSizes.appBarHeight,
-        backgroundColor: theme.surfaceContainerLow,
+        backgroundColor: theme.surface,
       ),
       body: Obx(() {
         final medications = controller.medications;

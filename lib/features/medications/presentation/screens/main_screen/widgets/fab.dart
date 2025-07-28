@@ -8,20 +8,24 @@ class Fab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0,
-      backgroundColor: theme.primaryContainer,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(AppSizes.circularRadius),
+    return SizedBox(
+      width: AppSizes.buttonHeight,
+      height: AppSizes.buttonHeight,
+      child: FloatingActionButton(
+        elevation: 0,
+        backgroundColor: theme.primaryContainer,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(AppSizes.roundedRadius),
+          ),
         ),
+        onPressed: () => showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (context) => const EditMedicationScreen(),
+        ),
+        child: const Icon(Icons.add, size: AppSizes.largeIconSize),
       ),
-      onPressed: () => showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (context) => const EditMedicationScreen(),
-      ),
-      child: const Icon(Icons.add),
     );
   }
 }
