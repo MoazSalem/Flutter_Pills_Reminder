@@ -6,5 +6,5 @@ abstract class MedicationsRepo {
   Future<MedicationModel> getMedication(String id);
   Future<void> addMedication(MedicationModel med) async {}
   Future<void> updateMedication(MedicationModel med) async {}
-  Future<void> deleteMedication(int id) async {}
+  Future<void> deleteMedication(String id) async {}
 }

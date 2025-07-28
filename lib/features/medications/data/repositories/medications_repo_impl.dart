@@ -26,7 +26,7 @@ class MedicationsRepoImpl implements MedicationsRepo {
   }
 
   @override
-  Future<void> deleteMedication(int id) {
+  Future<void> deleteMedication(String id) {
     localDataSource.delete(id.toString());
     return Future.value();
   }

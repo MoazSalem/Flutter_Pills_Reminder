@@ -36,7 +36,7 @@ class MedicationController extends GetxController {
     getAllMedications();
   }
 
-  Future<void> deleteMedication(int id) async {
+  Future<void> deleteMedication(String id) async {
     await repo.deleteMedication(id);
     getAllMedications();
   }

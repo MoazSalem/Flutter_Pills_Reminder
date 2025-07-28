@@ -10,6 +10,7 @@ import 'package:pills_reminder/features/medications/presentation/screens/medicat
 import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/day_picker.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/pill_time.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/rounded_icon_button.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/weekday_picker.dart';
 
 class MedicationScreen extends StatefulWidget {
@@ -70,6 +71,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<MedicationController>();
+    final theme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
@@ -191,61 +193,67 @@ class _MedicationScreenState extends State<MedicationScreen> {
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: widget.medication != null
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      height: AppSizes.buttonHeight,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSizes.largePadding - 3,
-                          ),
-                          elevation: 0,
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primaryContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppSizes.roundedRadius,
-                            ),
-                          ),
+                    /// delete medication
+                    if (widget.medication != null)
+                      RoundedIconButton(
+                        color: theme.errorContainer,
+                        icon: Icon(
+                          size: AppSizes.largeIconSize,
+                          Icons.delete_forever_outlined,
+                          color: theme.onErrorContainer,
                         ),
                         onPressed: () {
-                          if (!formKey.currentState!.validate()) {
-                            return;
-                          }
-                          final medication = MedicationModel(
-                            name: nameController.text,
-                            amount: int.tryParse(amountController.text),
-                            frequency: frequency,
-                            selectedDays:
-                                frequency == MedicationFrequency.weekly ||
-                                    frequency == MedicationFrequency.daysPerWeek
-                                ? selectedDays
-                                : null,
-                            monthlyDay: frequency == MedicationFrequency.monthly
-                                ? monthlyDay
-                                : null,
-                            times: List<TimeOfDay>.from(times),
-                            timesPillTaken: List<bool>.filled(
-                              repeatTimes,
-                              false,
-                            ),
-                            id:
-                                widget.medication?.id ??
-                                DateTime.now().millisecondsSinceEpoch
-                                    .toString(),
-                          );
-                          if (widget.medication != null) {
-                            controller.updateMedication(medication);
-                          } else {
-                            controller.addMedication(medication);
-                          }
-                          Navigator.pop(context);
+                          controller
+                              .deleteMedication(widget.medication!.id)
+                              .then((value) {
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
+                              });
                         },
-                        child: Icon(Icons.done, size: AppSizes.largeIconSize),
                       ),
+
+                    /// Save medication
+                    RoundedIconButton(
+                      color: theme.primaryContainer,
+                      icon: Icon(
+                        size: AppSizes.largeIconSize,
+                        Icons.done,
+                        color: theme.onPrimaryContainer,
+                      ),
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+                        final medication = MedicationModel(
+                          name: nameController.text,
+                          amount: int.tryParse(amountController.text),
+                          frequency: frequency,
+                          selectedDays:
+                              frequency == MedicationFrequency.weekly ||
+                                  frequency == MedicationFrequency.daysPerWeek
+                              ? selectedDays
+                              : null,
+                          monthlyDay: frequency == MedicationFrequency.monthly
+                              ? monthlyDay
+                              : null,
+                          times: List<TimeOfDay>.from(times),
+                          timesPillTaken: List<bool>.filled(repeatTimes, false),
+                          id:
+                              widget.medication?.id ??
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                        );
+                        if (widget.medication != null) {
+                          controller.updateMedication(medication);
+                        } else {
+                          controller.addMedication(medication);
+                        }
+                        Navigator.pop(context);
+                      },
                     ),
                   ],
                 ),
