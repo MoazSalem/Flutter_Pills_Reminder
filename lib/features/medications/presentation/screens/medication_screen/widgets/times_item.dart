@@ -4,9 +4,15 @@ import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 
 class TimesItem extends StatelessWidget {
-  const TimesItem({super.key, required this.index, required this.medication});
+  const TimesItem({
+    super.key,
+    required this.index,
+    required this.medication,
+    this.onChanged,
+  });
   final int index;
   final MedicationModel medication;
+  final void Function(bool?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +44,13 @@ class TimesItem extends StatelessWidget {
           medication.timesPillTaken[index] ? "Taken" : "Not Taken",
           style: AppStyles.subTitle.copyWith(fontSize: AppSizes.normalTextSize),
         ),
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
         ),
         trailing: Checkbox(
           value: medication.timesPillTaken[index],
-          onChanged: null,
+          onChanged: onChanged,
         ),
       ),
     );

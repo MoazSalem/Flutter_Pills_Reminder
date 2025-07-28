@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
+import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/edit_icon.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/frequency_and_days.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/times_item.dart';
 
-class MedicationScreen extends StatelessWidget {
+class MedicationScreen extends StatefulWidget {
   const MedicationScreen({super.key, required this.medication});
   final MedicationModel medication;
 
   @override
+  State<MedicationScreen> createState() => _MedicationScreenState();
+}
+
+class _MedicationScreenState extends State<MedicationScreen> {
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.find<MedicationController>();
     final theme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Padding(
@@ -21,11 +29,11 @@ class MedicationScreen extends StatelessWidget {
           child: Column(
             spacing: AppSizes.tinyPadding,
             children: [
-              CustomAppbar(action: EditIcon(medication: medication)),
+              CustomAppbar(action: EditIcon(medication: widget.medication)),
 
               /// Medication name
               Text(
-                medication.name,
+                widget.medication.name,
                 style: AppStyles.title.copyWith(
                   fontSize: AppSizes.extraLargeTextSize,
                 ),
@@ -33,22 +41,37 @@ class MedicationScreen extends StatelessWidget {
 
               /// Medication amount
               Text(
-                "Pills Left: ${medication.amount}",
+                "Pills Left: ${widget.medication.amount}",
                 style: AppStyles.subTitle.copyWith(
                   color: theme.onPrimaryContainer,
                 ),
               ),
 
               /// Frequency and days
-              FrequencyAndDays(medication: medication),
+              FrequencyAndDays(medication: widget.medication),
 
-              if (medication.selectedDays == null)
+              if (widget.medication.selectedDays == null)
                 SizedBox(height: AppSizes.normalPadding),
 
               /// Times pills are taken
               ...List.generate(
-                medication.times.length,
-                (i) => TimesItem(index: i, medication: medication),
+                widget.medication.times.length,
+                (i) => TimesItem(
+                  index: i,
+                  medication: widget.medication,
+                  onChanged: (_) {
+                    if (widget.medication.timesPillTaken[i]) {
+                      widget.medication.timesPillTaken[i] = false;
+                      widget.medication.amount = widget.medication.amount! + 1;
+                      controller.updateMedication(widget.medication);
+                    } else {
+                      widget.medication.timesPillTaken[i] = true;
+                      widget.medication.amount = widget.medication.amount! - 1;
+                      controller.updateMedication(widget.medication);
+                    }
+                    setState(() {});
+                  },
+                ),
               ),
             ],
           ),
