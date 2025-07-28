@@ -12,6 +12,7 @@ class MedicationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Card(
+      elevation: 0,
       color: theme.primaryContainer,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSizes.pillHeight),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_screen.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/medication_screen.dart';
 
 class Fab extends StatelessWidget {
   final ColorScheme theme;
@@ -9,6 +9,7 @@ class Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      elevation: 0,
       backgroundColor: theme.primaryContainer,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

@@ -4,8 +4,8 @@ import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/medications/presentation/widgets/fab.dart';
-import 'package:pills_reminder/features/medications/presentation/widgets/medication_list.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/main_screen/widgets/fab.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/main_screen/widgets/medication_list.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
