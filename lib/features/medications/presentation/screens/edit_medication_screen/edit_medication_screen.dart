@@ -122,6 +122,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                   onChanged: (value) => setState(() {
                     frequency = value!;
                     days.forEach((key, value) => days[key] = false);
+                    selectedDays.clear();
                     monthlyDay = null;
                   }),
                   label: 'Frequency',
@@ -136,11 +137,12 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     days: days,
                     onChanged: (day, value) => setState(() {
                       days[day] = value;
-                      if (value) {
-                        selectedDays.add(day);
-                      } else {
-                        selectedDays.remove(day);
-                      }
+                      selectedDays.clear();
+                      days.forEach((key, value) {
+                        if (value) {
+                          selectedDays.add(key);
+                        }
+                      });
                     }),
                   ),
 
