@@ -5,7 +5,7 @@ import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_appbar.dart';
+import 'package:pills_reminder/core/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
@@ -41,13 +41,6 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
     Weekday.friday: false,
   };
 
-  Map<MedicationFrequency, String> frequencies = {
-    MedicationFrequency.daily: "Daily",
-    MedicationFrequency.weekly: "Weekly",
-    MedicationFrequency.monthly: "Monthly",
-    MedicationFrequency.daysPerWeek: "Couple of Days per Week",
-  };
-
   @override
   void initState() {
     super.initState();
@@ -57,6 +50,15 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       frequency = widget.medication!.frequency;
       repeatTimes = widget.medication!.times.length;
       selectedDays = widget.medication!.selectedDays ?? [];
+      days = {
+        Weekday.saturday: selectedDays.contains(Weekday.saturday),
+        Weekday.sunday: selectedDays.contains(Weekday.sunday),
+        Weekday.monday: selectedDays.contains(Weekday.monday),
+        Weekday.tuesday: selectedDays.contains(Weekday.tuesday),
+        Weekday.wednesday: selectedDays.contains(Weekday.wednesday),
+        Weekday.thursday: selectedDays.contains(Weekday.thursday),
+        Weekday.friday: selectedDays.contains(Weekday.friday),
+      };
       times = widget.medication!.times;
       monthlyDay = widget.medication!.monthlyDay;
     }
@@ -249,6 +251,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
+                          Navigator.pop(context);
                         } else {
                           controller.addMedication(medication);
                         }

@@ -12,3 +12,10 @@ enum MedicationFrequency {
   @HiveField(3)
   monthly, // Once a month on specific day
 }
+
+Map<MedicationFrequency, String> frequencies = {
+  MedicationFrequency.daily: "Daily",
+  MedicationFrequency.weekly: "Weekly",
+  MedicationFrequency.monthly: "Monthly",
+  MedicationFrequency.daysPerWeek: "Days of Week",
+};
