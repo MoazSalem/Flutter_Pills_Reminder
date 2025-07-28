@@ -5,7 +5,7 @@ import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/medication_screen.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/edit_medication_screen.dart';
 
 class MedicationWidget extends StatelessWidget {
   final Medication medication;
@@ -23,7 +23,7 @@ class MedicationWidget extends StatelessWidget {
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,
-            builder: (context) => MedicationScreen(medication: model),
+            builder: (context) => EditMedicationScreen(medication: model),
           );
         }
       },

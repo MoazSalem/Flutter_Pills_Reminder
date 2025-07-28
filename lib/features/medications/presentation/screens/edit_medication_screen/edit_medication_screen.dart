@@ -5,23 +5,23 @@ import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/custom_appbar.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/custom_drop_down.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/custom_text_formfield.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/day_picker.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/pill_time.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/rounded_icon_button.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_scren/widgets/weekday_picker.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_appbar.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_drop_down.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/pill_time.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/rounded_icon_button.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/weekday_picker.dart';
 
-class MedicationScreen extends StatefulWidget {
-  const MedicationScreen({super.key, this.medication});
+class EditMedicationScreen extends StatefulWidget {
+  const EditMedicationScreen({super.key, this.medication});
   final MedicationModel? medication;
 
   @override
-  State<MedicationScreen> createState() => _MedicationScreenState();
+  State<EditMedicationScreen> createState() => _EditMedicationScreenState();
 }
 
-class _MedicationScreenState extends State<MedicationScreen> {
+class _EditMedicationScreenState extends State<EditMedicationScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
