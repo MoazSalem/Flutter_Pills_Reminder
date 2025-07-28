@@ -182,6 +182,11 @@ class _MedicationScreenState extends State<MedicationScreen> {
                       height: AppSizes.buttonHeight,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.largePadding - 3,
+                          ),
+                          elevation: 0,
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.primaryContainer,

@@ -26,7 +26,7 @@ class CustomAppbar extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 3.0),
                   child: Icon(
                     Icons.arrow_back_ios_new,
-                    size: AppSizes.largeIconSize,
+                    size: AppSizes.normalIconSize,
                     color: theme.onPrimaryContainer,
                   ),
                 ),
