@@ -3,8 +3,8 @@ import 'package:pills_reminder/features/medications/domain/entities/medication.d
 
 abstract class MedicationsRepo {
   Future<List<Medication>> getAllMedications();
-  Future<MedicationModel> getMedication(String id);
+  Future<MedicationModel> getMedication(int id);
   Future<void> addMedication(MedicationModel med) async {}
   Future<void> updateMedication(MedicationModel med) async {}
-  Future<void> deleteMedication(String id) async {}
+  Future<void> deleteMedication(int id) async {}
 }

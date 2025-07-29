@@ -45,7 +45,7 @@ class MedicationController extends GetxController {
     required int id,
     required String title,
   }) async {
-    debugPrint("Notification scheduled with id $id");
+    debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotification(
       id: id,
       title: title,
@@ -64,7 +64,7 @@ class MedicationController extends GetxController {
     await notificationService.normalNotification(title: title, body: body);
   }
 
-  Future<MedicationModel> getMedication(String id) async {
+  Future<MedicationModel> getMedication(int id) async {
     final data = await repo.getMedication(id);
     return data;
   }
@@ -79,7 +79,7 @@ class MedicationController extends GetxController {
     getAllMedications();
   }
 
-  Future<void> deleteMedication(String id) async {
+  Future<void> deleteMedication(int id) async {
     await repo.deleteMedication(id);
     getAllMedications();
   }

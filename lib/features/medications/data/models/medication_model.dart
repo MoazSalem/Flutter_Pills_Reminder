@@ -5,7 +5,7 @@ import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 
 class MedicationModel extends HiveObject {
-  final String id;
+  final int id;
   final String name;
   int? amount;
   MedicationFrequency frequency;

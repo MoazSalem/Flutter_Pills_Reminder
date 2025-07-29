@@ -247,9 +247,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                               : null,
                           times: List<TimeOfDay>.from(times),
                           timesPillTaken: List<bool>.filled(repeatTimes, false),
-                          id:
-                              widget.medication?.id ??
-                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          id: widget.medication?.id ?? UniqueKey().hashCode,
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);

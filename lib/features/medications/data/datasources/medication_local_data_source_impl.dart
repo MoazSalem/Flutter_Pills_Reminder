@@ -13,7 +13,7 @@ class MedicationLocalDataSourceImpl implements MedicationLocalDataSource {
   }
 
   @override
-  Future<MedicationModel> get(String id) async {
+  Future<MedicationModel> get(int id) async {
     final MedicationModel medication = box.get(id)!;
     return medication;
   }
@@ -29,7 +29,7 @@ class MedicationLocalDataSourceImpl implements MedicationLocalDataSource {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(int id) async {
     await box.delete(id);
   }
 }

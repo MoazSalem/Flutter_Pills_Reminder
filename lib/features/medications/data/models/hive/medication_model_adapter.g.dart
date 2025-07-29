@@ -17,7 +17,7 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MedicationModel(
-      id: fields[0] as String,
+      id: (fields[0] as num).toInt(),
       name: fields[1] as String,
       amount: (fields[2] as num?)?.toInt(),
       times: (fields[4] as List).cast<TimeOfDay>(),
