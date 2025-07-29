@@ -44,13 +44,15 @@ class MedicationController extends GetxController {
   Future<void> scheduleNotification({
     required DateTime dateTime,
     required int id,
-    required String title,
+    String? title,
+    required String body,
   }) async {
     requestNotificationPermission();
     debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotification(
       id: id,
-      title: title,
+      title: title ?? 'Take Your Medication',
+      body: body,
       dateTime: dateTime,
     );
   }

@@ -10,13 +10,14 @@ class NotificationServiceImpl implements NotificationService {
   @override
   Future<void> scheduleMedicationNotification({
     required int id,
-    required String title,
+    String? title,
+    required String body,
     required DateTime dateTime,
   }) async {
     await _plugin.zonedSchedule(
       id,
-      'Medication Reminder',
       title,
+      body,
       TZDateTime.from(dateTime.toUtc(), local),
       const NotificationDetails(
         android: AndroidNotificationDetails('med_channel', 'Medications'),

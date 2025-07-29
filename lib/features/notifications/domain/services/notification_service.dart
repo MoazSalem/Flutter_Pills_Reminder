@@ -1,7 +1,8 @@
 abstract class NotificationService {
   Future<void> scheduleMedicationNotification({
     required int id,
-    required String title,
+    String? title,
+    required String body,
     required DateTime dateTime,
   });
 
