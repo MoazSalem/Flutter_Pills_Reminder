@@ -1,6 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/data/repositories/medications_repo_impl.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
@@ -45,6 +46,7 @@ class MedicationController extends GetxController {
     required int id,
     required String title,
   }) async {
+    requestNotificationPermission();
     debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotification(
       id: id,
@@ -82,5 +84,29 @@ class MedicationController extends GetxController {
   Future<void> deleteMedication(int id) async {
     await repo.deleteMedication(id);
     getAllMedications();
+  }
+
+  Future<void> requestNotificationPermission() async {
+    final status = await Permission.notification.request();
+
+    if (!status.isGranted) {
+      Get.snackbar(
+        duration: const Duration(seconds: 5),
+        'Permission Denied',
+        'Notifications will not work until permission is granted.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.error,
+        colorText: Get.theme.colorScheme.onError,
+        mainButton: TextButton(
+          onPressed: () {
+            openAppSettings();
+          },
+          child: Text(
+            'Open Settings',
+            style: TextStyle(color: Get.theme.colorScheme.onError),
+          ),
+        ),
+      );
+    }
   }
 }
