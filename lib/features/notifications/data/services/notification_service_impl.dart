@@ -22,7 +22,7 @@ class NotificationServiceImpl implements NotificationService {
         android: AndroidNotificationDetails('med_channel', 'Medications'),
       ),
       matchDateTimeComponents: DateTimeComponents.time,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 

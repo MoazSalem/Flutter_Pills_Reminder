@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
@@ -41,13 +40,15 @@ class MedicationController extends GetxController {
     notificationService = NotificationServiceImpl(notificationsPlugin);
   }
 
-  Future<void> scheduleNotification(
-    DateTime dateTime,
-    MedicationModel medication,
-  ) async {
+  Future<void> scheduleNotification({
+    required DateTime dateTime,
+    required int id,
+    required String title,
+  }) async {
+    debugPrint("Notification scheduled with id $id");
     await notificationService.scheduleMedicationNotification(
-      id: Random().nextInt(9999),
-      title: medication.name,
+      id: id,
+      title: title,
       dateTime: dateTime,
     );
   }
