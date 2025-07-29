@@ -5,5 +5,10 @@ abstract class NotificationService {
     required DateTime dateTime,
   });
 
+  Future<void> normalNotification({
+    required String title,
+    required String body,
+  });
+
   Future<void> cancelNotification(int id);
 }

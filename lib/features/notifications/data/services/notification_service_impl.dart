@@ -27,6 +27,21 @@ class NotificationServiceImpl implements NotificationService {
   }
 
   @override
+  Future<void> normalNotification({
+    required String title,
+    required String body,
+  }) {
+    return _plugin.show(
+      0,
+      title,
+      body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails('med_channel', 'Medications'),
+      ),
+    );
+  }
+
+  @override
   Future<void> cancelNotification(int id) async {
     await _plugin.cancel(id);
   }

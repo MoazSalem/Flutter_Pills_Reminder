@@ -10,8 +10,8 @@ class MedicationsBinding extends Bindings {
   void dependencies() {
     final Box<MedicationModel> box = Hive.box('medications');
     final localDataSource = MedicationLocalDataSourceImpl(box);
-    Get.lazyPut<MedicationController>(
-      () => MedicationController(
+    Get.put<MedicationController>(
+      MedicationController(
         MedicationsRepoImpl(localDataSource: localDataSource),
       ),
     );

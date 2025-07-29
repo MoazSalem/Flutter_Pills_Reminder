@@ -15,21 +15,26 @@ class MainScreen extends StatelessWidget {
     final controller = Get.find<MedicationController>();
     final theme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      backgroundColor: theme.surface,
-      appBar: AppBar(
-        title: const Text(AppStrings.appName, style: AppStyles.title),
-        centerTitle: true,
-        toolbarHeight: AppSizes.appBarHeight,
-        backgroundColor: theme.surfaceContainer,
-      ),
-      body: Obx(() {
-        final medications = controller.medications;
-        return medications.isEmpty
-            ? const Center(child: Text(AppStrings.noPills))
-            : MedicationList(medicationList: medications);
-      }),
-      floatingActionButton: Fab(theme: theme),
-    );
+    return Obx(() {
+      if (!controller.isReady.value) {
+        return CircularProgressIndicator();
+      }
+      return Scaffold(
+        backgroundColor: theme.surface,
+        appBar: AppBar(
+          title: const Text(AppStrings.appName, style: AppStyles.title),
+          centerTitle: true,
+          toolbarHeight: AppSizes.appBarHeight,
+          backgroundColor: theme.surfaceContainer,
+        ),
+        body: Obx(() {
+          final medications = controller.medications;
+          return medications.isEmpty
+              ? const Center(child: Text(AppStrings.noPills))
+              : MedicationList(medicationList: medications);
+        }),
+        floatingActionButton: Fab(theme: theme),
+      );
+    });
   }
 }

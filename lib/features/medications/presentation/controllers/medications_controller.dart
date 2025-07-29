@@ -1,24 +1,66 @@
+import 'dart:math';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/data/repositories/medications_repo_impl.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
+import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
+import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
 
 class MedicationController extends GetxController {
   final MedicationsRepoImpl repo;
-
   MedicationController(this.repo);
 
-  var medications = <Medication>[].obs;
+  RxList<Medication> medications = <Medication>[].obs;
+  late final NotificationService notificationService;
+  final isReady = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     getAllMedications();
+    await initNotificationService();
+    isReady.value = true;
   }
 
   void getAllMedications() async {
     final data = await repo.getAllMedications();
     medications.assignAll(data);
+  }
+
+  Future<void> initNotificationService() async {
+    final notificationsPlugin = FlutterLocalNotificationsPlugin();
+    // Ensure plugin is initialized
+    await notificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(),
+      ),
+    );
+    notificationService = NotificationServiceImpl(notificationsPlugin);
+  }
+
+  Future<void> scheduleNotification(
+    DateTime dateTime,
+    MedicationModel medication,
+  ) async {
+    await notificationService.scheduleMedicationNotification(
+      id: Random().nextInt(9999),
+      title: medication.name,
+      dateTime: dateTime,
+    );
+  }
+
+  Future<void> cancelNotification(int id) async {
+    await notificationService.cancelNotification(id);
+  }
+
+  Future<void> normalNotification({
+    required String title,
+    required String body,
+  }) async {
+    await notificationService.normalNotification(title: title, body: body);
   }
 
   Future<MedicationModel> getMedication(String id) async {
