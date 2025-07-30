@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -52,6 +53,10 @@ class NotificationServiceImpl implements NotificationService {
     required TimeOfDay time,
     required List<Weekday> weekdays,
   }) async {
+    /// Initialize the notificationsIds box
+    var box = await Hive.openBox('notificationsIds');
+    box.put(id, []);
+
     /// Helper function to get the next notification time
     tz.TZDateTime nextInstanceOfTime(TimeOfDay time) {
       final now = tz.TZDateTime.now(tz.local);
@@ -105,8 +110,13 @@ class NotificationServiceImpl implements NotificationService {
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = nextInstanceOfTime(time);
 
+      box.put(id, [
+        ...box.get(id)!,
+        id + scheduledDate.hour + scheduledDate.minute,
+      ]);
+
       await _plugin.zonedSchedule(
-        id,
+        id + scheduledDate.hour + scheduledDate.minute, // unique ID per time
         title,
         body,
         scheduledDate,
@@ -130,8 +140,14 @@ class NotificationServiceImpl implements NotificationService {
           time,
         );
 
+        // Store sub ids for each weekday to cancel later
+        box.put(id, [
+          ...box.get(id)!,
+          id + weekday.index + scheduledDate.hour + scheduledDate.minute,
+        ]);
+
         await _plugin.zonedSchedule(
-          (id + weekday.index).toInt(), // unique ID per weekday
+          (id + weekday.index).toInt(), // unique ID per weekday and time
           title,
           body,
           scheduledDate,
