@@ -81,19 +81,19 @@ class NotificationServiceImpl implements NotificationService {
     /// Helper function to get the weekday from the index
     timeZonesDayToWeekday(int index) {
       switch (index) {
-        case 0:
-          return Weekday.monday;
         case 1:
-          return Weekday.tuesday;
+          return Weekday.monday;
         case 2:
-          return Weekday.wednesday;
+          return Weekday.tuesday;
         case 3:
-          return Weekday.thursday;
+          return Weekday.wednesday;
         case 4:
-          return Weekday.friday;
+          return Weekday.thursday;
         case 5:
-          return Weekday.saturday;
+          return Weekday.friday;
         case 6:
+          return Weekday.saturday;
+        case 7:
           return Weekday.sunday;
         default:
           return Weekday.monday;
@@ -103,7 +103,6 @@ class NotificationServiceImpl implements NotificationService {
     /// Helper function to get the notifications for each weekday
     tz.TZDateTime nextInstanceOfDayAndTime(Weekday weekday, TimeOfDay time) {
       tz.TZDateTime scheduled = nextInstanceOfTime(time);
-
       while (timeZonesDayToWeekday(scheduled.weekday) != weekday) {
         scheduled = scheduled.add(const Duration(days: 1));
       }
