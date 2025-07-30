@@ -117,6 +117,7 @@ class MedicationController extends GetxController {
     for (var id in ids) {
       await notificationService.cancelNotification(id);
     }
+    box.delete(id);
   }
 
   Future<void> normalNotification({
@@ -134,13 +135,13 @@ class MedicationController extends GetxController {
     required String medicationName,
   }) async {
     await requestNotificationPermission();
-    debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotificationOnce(
       id: id,
       title: title ?? 'Take Your Medication',
       body: 'Time to take your $medicationName pill',
       dateTime: dateTime,
     );
+    debugPrint("Notification scheduled with id $id at $dateTime");
   }
 
   Future<void> scheduleDailyOrWeeklyNotification({
@@ -151,15 +152,15 @@ class MedicationController extends GetxController {
     required List<Weekday> weekdays,
   }) async {
     await requestNotificationPermission();
-    debugPrint(
-      "Weekly Notification scheduled with id $id at $time at $weekdays",
-    );
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
       title: title ?? 'Take Your Medication',
       body: 'Time to take your $medicationName pill',
       time: time,
       weekdays: weekdays,
+    );
+    debugPrint(
+      "Weekly Notification scheduled with id $id at $time at $weekdays",
     );
   }
 }

@@ -55,7 +55,7 @@ class NotificationServiceImpl implements NotificationService {
   }) async {
     /// Initialize the notificationsIds box
     var box = await Hive.openBox('notificationsIds');
-    box.put(id, []);
+    final List subIds = box.get(id) ?? [];
 
     /// Helper function to get the next notification time
     tz.TZDateTime nextInstanceOfTime(TimeOfDay time) {
@@ -109,11 +109,9 @@ class NotificationServiceImpl implements NotificationService {
     // If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = nextInstanceOfTime(time);
-
-      box.put(id, [
-        ...box.get(id)!,
-        id + scheduledDate.hour + scheduledDate.minute,
-      ]);
+      // Store sub ids to cancel later
+      subIds.add(id + scheduledDate.hour + scheduledDate.minute);
+      box.put(id, subIds);
 
       await _plugin.zonedSchedule(
         id + scheduledDate.hour + scheduledDate.minute, // unique ID per time
@@ -141,13 +139,16 @@ class NotificationServiceImpl implements NotificationService {
         );
 
         // Store sub ids for each weekday to cancel later
-        box.put(id, [
-          ...box.get(id)!,
+        subIds.add(
           id + weekday.index + scheduledDate.hour + scheduledDate.minute,
-        ]);
+        );
+        box.put(id, subIds);
 
         await _plugin.zonedSchedule(
-          (id + weekday.index).toInt(), // unique ID per weekday and time
+          id +
+              weekday.index +
+              scheduledDate.hour +
+              scheduledDate.minute, // unique ID per weekday and time
           title,
           body,
           scheduledDate,
