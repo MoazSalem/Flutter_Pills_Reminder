@@ -105,6 +105,14 @@ class MedicationController extends GetxController {
     await notificationService.cancelNotification(id);
   }
 
+  Future<void> cancelAllNotificationForMedication(int id) async {
+    var box = await Hive.openBox('notificationsIds');
+    var ids = box.get(id);
+    for (var id in ids) {
+      await notificationService.cancelNotification(id);
+    }
+  }
+
   Future<void> normalNotification({
     required String title,
     required String body,
@@ -117,22 +125,22 @@ class MedicationController extends GetxController {
     required DateTime dateTime,
     required int id,
     String? title,
-    required String body,
+    required String medicationName,
   }) async {
     requestNotificationPermission();
     debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotificationOnce(
       id: id,
       title: title ?? 'Take Your Medication',
-      body: body,
+      body: 'Time to take your $medicationName pill',
       dateTime: dateTime,
     );
   }
 
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
-    required String title,
-    required String body,
+    String? title,
+    required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
   }) async {
@@ -142,8 +150,8 @@ class MedicationController extends GetxController {
     );
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
-      title: title,
-      body: body,
+      title: title ?? 'Take Your Medication',
+      body: 'Time to take your $medicationName pill',
       time: time,
       weekdays: weekdays,
     );
