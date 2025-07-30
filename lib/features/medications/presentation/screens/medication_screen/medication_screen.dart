@@ -91,11 +91,17 @@ class _MedicationScreenState extends State<MedicationScreen> {
                   onChanged: (_) {
                     if (widget.medication.timesPillTaken[i]) {
                       widget.medication.timesPillTaken[i] = false;
-                      widget.medication.amount = widget.medication.amount! + 1;
+                      if (widget.medication.amount != null) {
+                        widget.medication.amount =
+                            widget.medication.amount! + 1;
+                      }
                       controller.updateMedication(widget.medication);
                     } else {
                       widget.medication.timesPillTaken[i] = true;
-                      widget.medication.amount = widget.medication.amount! - 1;
+                      if (widget.medication.amount != null) {
+                        widget.medication.amount =
+                            widget.medication.amount! - 1;
+                      }
                       controller.updateMedication(widget.medication);
                     }
                     setState(() {});
