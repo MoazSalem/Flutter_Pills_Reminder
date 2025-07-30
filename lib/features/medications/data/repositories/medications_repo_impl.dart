@@ -36,4 +36,14 @@ class MedicationsRepoImpl implements MedicationsRepo {
     localDataSource.update(med);
     return Future.value();
   }
+
+  @override
+  Future<void> resetProgress() async {
+    final medications = await localDataSource.getAll();
+    for (var med in medications) {
+      final timesPillTaken = List.generate(med.times.length, (_) => false);
+      localDataSource.update(med.copyWith(timesPillTaken: timesPillTaken));
+    }
+    return Future.value();
+  }
 }

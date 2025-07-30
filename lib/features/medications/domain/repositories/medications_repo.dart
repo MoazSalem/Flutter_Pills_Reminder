@@ -7,4 +7,5 @@ abstract class MedicationsRepo {
   Future<void> addMedication(MedicationModel med) async {}
   Future<void> updateMedication(MedicationModel med) async {}
   Future<void> deleteMedication(int id) async {}
+  Future<void> resetProgress() async {}
 }

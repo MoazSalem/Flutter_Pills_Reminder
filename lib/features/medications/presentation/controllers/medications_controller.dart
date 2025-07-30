@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
@@ -20,9 +21,23 @@ class MedicationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    resetProgress();
     getAllMedications();
     await initNotificationService();
     isReady.value = true;
+  }
+
+  void resetProgress() async {
+    var box = await Hive.openBox('date');
+    final int lastOpenedDay =
+        box.get('lastOpenedDate') ?? DateTime.now().weekday;
+    if (lastOpenedDay == DateTime.now().weekday) {
+      box.put('lastOpenedDate', DateTime.now().weekday);
+      return;
+    } else {
+      box.put('lastOpenedDate', DateTime.now().weekday);
+      await repo.resetProgress();
+    }
   }
 
   void getAllMedications() async {
