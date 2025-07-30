@@ -17,6 +17,7 @@ class MedicationController extends GetxController {
   RxList<Medication> medications = <Medication>[].obs;
   late final NotificationService notificationService;
   final isReady = false.obs;
+  bool isNotificationPermissionGranted = false;
 
   @override
   void onInit() async {
@@ -78,9 +79,14 @@ class MedicationController extends GetxController {
   }
 
   Future<void> requestNotificationPermission() async {
+    if (isNotificationPermissionGranted) {
+      return;
+    }
+    isNotificationPermissionGranted = true;
     final status = await Permission.notification.request();
 
     if (!status.isGranted) {
+      isNotificationPermissionGranted = false;
       Get.snackbar(
         duration: const Duration(seconds: 5),
         'Permission Denied',
@@ -117,7 +123,7 @@ class MedicationController extends GetxController {
     required String title,
     required String body,
   }) async {
-    requestNotificationPermission();
+    await requestNotificationPermission();
     await notificationService.normalNotification(title: title, body: body);
   }
 
@@ -127,7 +133,7 @@ class MedicationController extends GetxController {
     String? title,
     required String medicationName,
   }) async {
-    requestNotificationPermission();
+    await requestNotificationPermission();
     debugPrint("Notification scheduled with id $id at $dateTime");
     await notificationService.scheduleMedicationNotificationOnce(
       id: id,
@@ -144,7 +150,7 @@ class MedicationController extends GetxController {
     required TimeOfDay time,
     required List<Weekday> weekdays,
   }) async {
-    requestNotificationPermission();
+    await requestNotificationPermission();
     debugPrint(
       "Weekly Notification scheduled with id $id at $time at $weekdays",
     );
