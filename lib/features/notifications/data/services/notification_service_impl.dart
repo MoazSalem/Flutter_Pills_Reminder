@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
@@ -53,6 +54,9 @@ class NotificationServiceImpl implements NotificationService {
     required TimeOfDay time,
     required List<Weekday> weekdays,
   }) async {
+    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
     /// Initialize the notificationsIds box
     var box = await Hive.openBox('notificationsIds');
     final List subIds = box.get(id) ?? [];
@@ -117,7 +121,7 @@ class NotificationServiceImpl implements NotificationService {
         id + scheduledDate.hour + scheduledDate.minute, // unique ID per time
         title,
         body,
-        scheduledDate,
+        tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
         const NotificationDetails(
           android: AndroidNotificationDetails(
             'daily_channel',
@@ -151,7 +155,7 @@ class NotificationServiceImpl implements NotificationService {
               scheduledDate.minute, // unique ID per weekday and time
           title,
           body,
-          scheduledDate,
+          tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
           const NotificationDetails(
             android: AndroidNotificationDetails(
               'weekly_channel',

@@ -113,7 +113,7 @@ class MedicationController extends GetxController {
 
   Future<void> cancelAllNotificationForMedication(int id) async {
     var box = await Hive.openBox('notificationsIds');
-    var ids = box.get(id);
+    var ids = box.get(id) ?? [];
     for (var id in ids) {
       await notificationService.cancelNotification(id);
     }
