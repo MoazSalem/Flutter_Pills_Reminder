@@ -40,12 +40,41 @@ class _MedicationScreenState extends State<MedicationScreen> {
               ),
 
               /// Medication amount
-              Text(
-                "Pills Left: ${widget.medication.amount}",
-                style: AppStyles.subTitle.copyWith(
-                  color: theme.onPrimaryContainer,
+              if (widget.medication.amount != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: AppSizes.tinyPadding,
+                  children: [
+                    MaterialButton(
+                      color: theme.primaryContainer,
+                      shape: CircleBorder(),
+                      onPressed: () {
+                        widget.medication.amount =
+                            widget.medication.amount! - 1;
+                        controller.updateMedication(widget.medication);
+                        setState(() {});
+                      },
+                      child: const Icon(Icons.remove),
+                    ),
+                    Text(
+                      "Pills Left: ${widget.medication.amount}",
+                      style: AppStyles.subTitle.copyWith(
+                        color: theme.onPrimaryContainer,
+                      ),
+                    ),
+                    MaterialButton(
+                      color: theme.primaryContainer,
+                      shape: CircleBorder(),
+                      onPressed: () {
+                        widget.medication.amount =
+                            widget.medication.amount! + 1;
+                        controller.updateMedication(widget.medication);
+                        setState(() {});
+                      },
+                      child: const Icon(Icons.add),
+                    ),
+                  ],
                 ),
-              ),
 
               /// Frequency and days
               FrequencyAndDays(medication: widget.medication),

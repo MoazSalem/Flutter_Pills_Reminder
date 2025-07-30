@@ -216,6 +216,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                               .then((value) {
                                 if (context.mounted) {
                                   Navigator.pop(context);
+                                  Navigator.pop(context);
                                 }
                               });
                         },
