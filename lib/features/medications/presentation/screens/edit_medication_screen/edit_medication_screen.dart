@@ -184,7 +184,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     onTap: () async {
                       final time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay(hour: 12, minute: 0),
+                        initialTime: times[i] ?? TimeOfDay(hour: 12, minute: 0),
                       );
                       if (time != null) {
                         setState(() => times[i]);
@@ -214,9 +214,16 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         ),
                         onPressed: () async {
                           frequency == MedicationFrequency.monthly
-                              ? await controller.cancelNotification(
-                                  widget.medication!.id,
-                                )
+                              ? {
+                                  for (
+                                    int i = 0;
+                                    i < widget.medication!.times.length;
+                                    i++
+                                  )
+                                    await controller.cancelNotification(
+                                      widget.medication!.id + i,
+                                    ),
+                                }
                               : await controller
                                     .cancelAllNotificationForMedication(
                                       widget.medication!.id,
@@ -257,9 +264,16 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
                           frequency == MedicationFrequency.monthly
-                              ? await controller.cancelNotification(
-                                  medication.id,
-                                )
+                              ? [
+                                  for (
+                                    int i = 0;
+                                    i < medication.times.length;
+                                    i++
+                                  )
+                                    await controller.cancelNotification(
+                                      medication.id + i,
+                                    ),
+                                ]
                               : await controller
                                     .cancelAllNotificationForMedication(
                                       medication.id,
@@ -268,11 +282,24 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           controller.addMedication(medication);
                         }
                         frequency == MedicationFrequency.monthly
-                            ? await controller.scheduleNotificationOnce(
-                                id: medication.id,
-                                medicationName: medication.name,
-                                dateTime: medication.monthlyDay!,
-                              )
+                            ? [
+                                for (
+                                  int i = 0;
+                                  i < medication.times.length;
+                                  i++
+                                )
+                                  await controller.scheduleNotificationOnce(
+                                    id: medication.id + i,
+                                    medicationName: medication.name,
+                                    dateTime: DateTime(
+                                      medication.monthlyDay!.year,
+                                      medication.monthlyDay!.month,
+                                      medication.monthlyDay!.day,
+                                      medication.times[i].hour,
+                                      medication.times[i].minute,
+                                    ),
+                                  ),
+                              ]
                             : {
                                 for (
                                   int i = 0;
