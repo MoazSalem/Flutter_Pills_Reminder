@@ -214,10 +214,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           controller
                               .deleteMedication(widget.medication!.id)
                               .then((value) {
-                                if (context.mounted) {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                }
+                                Get.until((route) => route.isFirst);
                               });
                         },
                       ),
@@ -252,11 +249,10 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
-                          Navigator.pop(context);
                         } else {
                           controller.addMedication(medication);
                         }
-                        Navigator.pop(context);
+                        Get.until((route) => route.isFirst);
                       },
                     ),
                   ],
