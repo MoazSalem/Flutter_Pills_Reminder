@@ -165,7 +165,18 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                   items: List.generate(20, (i) => i + 1),
                   onChanged: (value) => setState(() {
                     repeatTimes = value!;
-                    times = List.generate(repeatTimes, (_) => null);
+                    if (repeatTimes < times.length) {
+                      final difference = times.length - repeatTimes;
+                      for (var i = 0; i < difference; i++) {
+                        times.removeAt(times.length - 1);
+                      }
+                    } else if (repeatTimes > times.length) {
+                      final difference = repeatTimes - times.length;
+                      times = [
+                        ...times,
+                        ...List.generate(difference, (_) => null),
+                      ];
+                    }
                   }),
                   label: 'Pills Per Day',
                 ),
