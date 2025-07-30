@@ -211,11 +211,15 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           color: theme.onErrorContainer,
                         ),
                         onPressed: () {
-                          controller
-                              .deleteMedication(widget.medication!.id)
-                              .then((value) {
-                                Get.until((route) => route.isFirst);
-                              });
+                          frequency == MedicationFrequency.monthly
+                              ? controller.cancelNotification(
+                                  widget.medication!.id,
+                                )
+                              : controller.cancelAllNotificationForMedication(
+                                  widget.medication!.id,
+                                );
+                          controller.deleteMedication(widget.medication!.id);
+                          Get.until((route) => route.isFirst);
                         },
                       ),
 
@@ -249,9 +253,37 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
+                          frequency == MedicationFrequency.monthly
+                              ? controller.cancelNotification(medication.id)
+                              : controller.cancelAllNotificationForMedication(
+                                  medication.id,
+                                );
                         } else {
                           controller.addMedication(medication);
                         }
+                        frequency == MedicationFrequency.monthly
+                            ? controller.scheduleNotificationOnce(
+                                id: medication.id,
+                                medicationName: medication.name,
+                                dateTime: medication.monthlyDay!,
+                              )
+                            : {
+                                for (
+                                  int i = 0;
+                                  i < medication.times.length;
+                                  i++
+                                )
+                                  {
+                                    controller
+                                        .scheduleDailyOrWeeklyNotification(
+                                          id: medication.id,
+                                          medicationName: medication.name,
+                                          time: medication.times[i],
+                                          weekdays:
+                                              medication.selectedDays ?? [],
+                                        ),
+                                  },
+                              };
                         Get.until((route) => route.isFirst);
                       },
                     ),
