@@ -46,7 +46,9 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
     super.initState();
     if (widget.medication != null) {
       nameController.text = widget.medication!.name;
-      amountController.text = widget.medication!.amount.toString();
+      amountController.text = widget.medication!.amount == null
+          ? ""
+          : widget.medication!.amount.toString();
       frequency = widget.medication!.frequency;
       repeatTimes = widget.medication!.times.length;
       selectedDays = widget.medication!.selectedDays ?? [];
@@ -210,14 +212,15 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           Icons.delete_forever_outlined,
                           color: theme.onErrorContainer,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           frequency == MedicationFrequency.monthly
-                              ? controller.cancelNotification(
+                              ? await controller.cancelNotification(
                                   widget.medication!.id,
                                 )
-                              : controller.cancelAllNotificationForMedication(
-                                  widget.medication!.id,
-                                );
+                              : await controller
+                                    .cancelAllNotificationForMedication(
+                                      widget.medication!.id,
+                                    );
                           controller.deleteMedication(widget.medication!.id);
                           Get.until((route) => route.isFirst);
                         },
@@ -231,7 +234,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         Icons.done,
                         color: theme.onPrimaryContainer,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (!formKey.currentState!.validate()) {
                           return;
                         }
@@ -254,15 +257,18 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
                           frequency == MedicationFrequency.monthly
-                              ? controller.cancelNotification(medication.id)
-                              : controller.cancelAllNotificationForMedication(
+                              ? await controller.cancelNotification(
                                   medication.id,
-                                );
+                                )
+                              : await controller
+                                    .cancelAllNotificationForMedication(
+                                      medication.id,
+                                    );
                         } else {
                           controller.addMedication(medication);
                         }
                         frequency == MedicationFrequency.monthly
-                            ? controller.scheduleNotificationOnce(
+                            ? await controller.scheduleNotificationOnce(
                                 id: medication.id,
                                 medicationName: medication.name,
                                 dateTime: medication.monthlyDay!,
@@ -274,7 +280,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                   i++
                                 )
                                   {
-                                    controller
+                                    await controller
                                         .scheduleDailyOrWeeklyNotification(
                                           id: medication.id,
                                           medicationName: medication.name,
