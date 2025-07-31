@@ -5,6 +5,7 @@ class AppStyles {
   static const TextStyle title = TextStyle(
     fontSize: AppSizes.largeTextSize,
     fontWeight: FontWeight.bold,
+    fontFamily: 'Gambarino',
   );
   static const TextStyle subTitle = TextStyle(
     fontSize: AppSizes.smallTextSize,

@@ -25,6 +25,7 @@ class FrequencyAndDays extends StatelessWidget {
                 "${frequencies[medication.frequency]!}${medication.frequency == MedicationFrequency.once ? " On Day ${medication.monthlyDay!.day}" : ''}",
                 style: AppStyles.subTitle.copyWith(
                   color: theme.onPrimaryContainer,
+                  fontFamily: 'Gambarino',
                 ),
               ),
               backgroundColor: theme.primaryContainer,
@@ -41,6 +42,7 @@ class FrequencyAndDays extends StatelessWidget {
                   medication.selectedDays![i].label,
                   style: AppStyles.subTitle.copyWith(
                     color: theme.onPrimaryContainer,
+                    fontFamily: 'Gambarino',
                   ),
                 ),
                 backgroundColor: theme.primaryContainer,
