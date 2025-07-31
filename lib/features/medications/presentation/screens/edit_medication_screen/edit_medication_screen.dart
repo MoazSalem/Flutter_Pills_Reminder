@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
@@ -9,6 +11,7 @@ import 'package:pills_reminder/core/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/notification_type_title.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/pill_time.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/rounded_icon_button.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/weekday_picker.dart';
@@ -30,6 +33,9 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
   List<Weekday> selectedDays = [];
   List<TimeOfDay?> times = [null];
   DateTime? monthlyDay;
+
+  /// this is only needed for android
+  NotificationType? notificationType;
 
   Map<Weekday, bool> days = {
     Weekday.saturday: false,
@@ -63,6 +69,10 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       };
       times = widget.medication!.times;
       monthlyDay = widget.medication!.monthlyDay;
+      notificationType = widget.medication!.notificationType;
+    }
+    if (Platform.isAndroid && notificationType == null) {
+      notificationType = NotificationType.inexact;
     }
   }
 
@@ -208,6 +218,16 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                   ),
                 ),
 
+                /// Notification type
+                if (notificationType != null)
+                  NotificationTypeTitle(
+                    notificationType: notificationType!,
+                    onChanged: (value) {
+                      setState(() {
+                        notificationType = value;
+                      });
+                    },
+                  ),
                 Row(
                   mainAxisAlignment: widget.medication != null
                       ? MainAxisAlignment.spaceBetween
@@ -269,6 +289,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           times: List<TimeOfDay>.from(times),
                           timesPillTaken: List<bool>.filled(repeatTimes, false),
                           id: widget.medication?.id ?? UniqueKey().hashCode,
+                          notificationType: notificationType,
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
@@ -307,6 +328,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                       medication.times[i].hour,
                                       medication.times[i].minute,
                                     ),
+                                    notificationType:
+                                        medication.notificationType,
                                   ),
                               ]
                             : {
@@ -323,6 +346,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                           time: medication.times[i],
                                           weekdays:
                                               medication.selectedDays ?? [],
+                                          notificationType:
+                                              medication.notificationType,
                                         ),
                                   },
                               };

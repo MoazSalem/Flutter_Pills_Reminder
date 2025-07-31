@@ -9,11 +9,15 @@ class CustomDropDown<T> extends StatefulWidget {
     required this.value,
     required this.items,
     this.customNames,
+    this.itemsWidget,
+    this.selectedWidget,
   });
 
   final void Function(T? value) onChanged;
   final T value;
   final List<T> items;
+  final List<DropdownMenuItem<T>>? itemsWidget;
+  final List<Widget>? selectedWidget;
   final String label;
   final Map<dynamic, dynamic>? customNames;
 
@@ -39,18 +43,23 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
         menuMaxHeight: 200,
         value: selectedValue,
         onChanged: widget.onChanged,
-        items: widget.items
-            .map(
-              (item) => DropdownMenuItem<T>(
-                value: item,
-                child: Text(
-                  widget.customNames != null
-                      ? widget.customNames![item]
-                      : item.toString(),
-                ),
-              ),
-            )
-            .toList(),
+        selectedItemBuilder: widget.selectedWidget != null
+            ? (context) => widget.selectedWidget!
+            : null,
+        items:
+            widget.itemsWidget ??
+            widget.items
+                .map(
+                  (item) => DropdownMenuItem<T>(
+                    value: item,
+                    child: Text(
+                      widget.customNames != null
+                          ? widget.customNames![item]
+                          : item.toString(),
+                    ),
+                  ),
+                )
+                .toList(),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(AppSizes.largePadding),
           alignLabelWithHint: true,
