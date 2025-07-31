@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 
 abstract class NotificationService {
@@ -12,6 +13,7 @@ abstract class NotificationService {
     String? title,
     required String body,
     required DateTime dateTime,
+    NotificationType? notificationType,
   });
 
   Future<void> scheduleDailyOrWeeklyNotification({
@@ -20,6 +22,7 @@ abstract class NotificationService {
     required String body,
     required TimeOfDay time,
     required List<Weekday> weekdays,
+    NotificationType? notificationType,
   });
 
   Future<void> cancelNotification(int id);

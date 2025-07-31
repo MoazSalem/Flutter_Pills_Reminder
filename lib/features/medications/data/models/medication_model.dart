@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 
@@ -21,6 +22,8 @@ class MedicationModel extends HiveObject {
   /// Used if frequency is monthly (e.g. 15 = 15th day of each month)
   final DateTime? monthlyDay;
 
+  final NotificationType? notificationType;
+
   MedicationModel({
     required this.id,
     required this.name,
@@ -30,6 +33,7 @@ class MedicationModel extends HiveObject {
     required this.frequency,
     this.selectedDays,
     this.monthlyDay,
+    this.notificationType,
   });
 
   MedicationModel copyWith({
@@ -40,6 +44,7 @@ class MedicationModel extends HiveObject {
     MedicationFrequency? frequency,
     List<Weekday>? selectedDays,
     DateTime? monthlyDay,
+    NotificationType? notificationType,
   }) {
     return MedicationModel(
       id: id,
@@ -50,6 +55,7 @@ class MedicationModel extends HiveObject {
       frequency: frequency ?? this.frequency,
       selectedDays: selectedDays ?? this.selectedDays,
       monthlyDay: monthlyDay ?? this.monthlyDay,
+      notificationType: notificationType ?? this.notificationType,
     );
   }
 

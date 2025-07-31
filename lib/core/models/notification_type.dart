@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 part 'notification_type.g.dart';
 
@@ -31,6 +32,17 @@ extension WeekdayExtension on NotificationType {
         return 'Exact';
       case NotificationType.alarmClock:
         return 'Alarm Clock';
+    }
+  }
+
+  AndroidScheduleMode get androidScheduleMode {
+    switch (this) {
+      case NotificationType.inexact:
+        return AndroidScheduleMode.inexactAllowWhileIdle;
+      case NotificationType.exact:
+        return AndroidScheduleMode.exactAllowWhileIdle;
+      case NotificationType.alarmClock:
+        return AndroidScheduleMode.exact;
     }
   }
 }

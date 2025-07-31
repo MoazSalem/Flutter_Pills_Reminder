@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -110,6 +111,7 @@ class NotificationRepoImpl implements NotificationRepo {
     String? title,
     String? body,
     required String medicationName,
+    NotificationType? notificationType,
   }) async {
     await requestNotificationPermission();
     await notificationService.scheduleMedicationNotificationOnce(
@@ -117,6 +119,7 @@ class NotificationRepoImpl implements NotificationRepo {
       title: title ?? 'Take Your Medication',
       body: body ?? 'Time to take your $medicationName pill',
       dateTime: dateTime,
+      notificationType: notificationType,
     );
     debugPrint("Notification scheduled with id $id at $dateTime");
   }
@@ -129,6 +132,7 @@ class NotificationRepoImpl implements NotificationRepo {
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
+    NotificationType? notificationType,
   }) async {
     await requestNotificationPermission();
     await notificationService.scheduleDailyOrWeeklyNotification(
@@ -137,6 +141,7 @@ class NotificationRepoImpl implements NotificationRepo {
       body: body ?? 'Time to take your $medicationName pill',
       time: time,
       weekdays: weekdays,
+      notificationType: notificationType,
     );
     debugPrint(
       "Weekly Notification scheduled with id $id at $time at $weekdays",

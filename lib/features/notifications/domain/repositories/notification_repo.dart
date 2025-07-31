@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 
 abstract class NotificationRepo {
@@ -17,6 +18,7 @@ abstract class NotificationRepo {
     String? title,
     String? body,
     required String medicationName,
+    NotificationType? notificationType,
   });
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
@@ -25,5 +27,6 @@ abstract class NotificationRepo {
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
+    NotificationType? notificationType,
   });
 }

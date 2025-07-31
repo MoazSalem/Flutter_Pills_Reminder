@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -32,6 +33,7 @@ class NotificationServiceImpl implements NotificationService {
     String? title,
     required String body,
     required DateTime dateTime,
+    NotificationType? notificationType,
   }) async {
     await _plugin.zonedSchedule(
       id,
@@ -42,7 +44,9 @@ class NotificationServiceImpl implements NotificationService {
         android: AndroidNotificationDetails('med_channel', 'Medications'),
       ),
       matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode:
+          notificationType?.androidScheduleMode ??
+          AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
@@ -53,6 +57,7 @@ class NotificationServiceImpl implements NotificationService {
     required String body,
     required TimeOfDay time,
     required List<Weekday> weekdays,
+    NotificationType? notificationType,
   }) async {
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
@@ -165,7 +170,9 @@ class NotificationServiceImpl implements NotificationService {
             ),
           ),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          androidScheduleMode:
+              notificationType?.androidScheduleMode ??
+              AndroidScheduleMode.inexactAllowWhileIdle,
         );
       }
     }

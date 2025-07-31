@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
@@ -77,6 +78,7 @@ class MedicationController extends GetxController {
     String? title,
     String? body,
     required String medicationName,
+    NotificationType? notificationType,
   }) async {
     notificationRepo.scheduleNotificationOnce(
       dateTime: dateTime,
@@ -84,6 +86,7 @@ class MedicationController extends GetxController {
       title: title,
       body: body,
       medicationName: medicationName,
+      notificationType: notificationType,
     );
   }
 
@@ -94,6 +97,7 @@ class MedicationController extends GetxController {
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
+    NotificationType? notificationType,
   }) async {
     notificationRepo.scheduleDailyOrWeeklyNotification(
       id: id,
@@ -102,6 +106,7 @@ class MedicationController extends GetxController {
       medicationName: medicationName,
       time: time,
       weekdays: weekdays,
+      notificationType: notificationType,
     );
   }
 }
