@@ -1,3 +1,7 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,6 +9,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val keyProperties = Properties().apply {
+    load(FileInputStream(File("keystore.properties")))
+}
+val detKeyAlias = keyProperties.getProperty("keyAlias")
+require(detKeyAlias != null) { "keyAlias not found in key.properties file." }
+val detKeyPassword = keyProperties.getProperty("keyPassword")
+val detStoreFile = keyProperties.getProperty("storeFile")
+val detStorePassword = keyProperties.getProperty("storePassword")
 android {
     namespace = "com.moazsalem.pills_reminder"
     compileSdk = flutter.compileSdkVersion
@@ -32,10 +44,20 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = detKeyAlias
+            keyPassword = detKeyPassword
+            storeFile = file(detStoreFile)
+            storePassword = detStorePassword
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
