@@ -26,4 +26,6 @@ abstract class NotificationService {
   });
 
   Future<void> cancelNotification(int id);
+
+  Future<void> requestExactAlarmPermission();
 }

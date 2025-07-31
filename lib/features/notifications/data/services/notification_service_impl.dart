@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -136,7 +137,9 @@ class NotificationServiceImpl implements NotificationService {
           ),
         ),
         matchDateTimeComponents: DateTimeComponents.time,
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        androidScheduleMode:
+            notificationType?.androidScheduleMode ??
+            AndroidScheduleMode.inexactAllowWhileIdle,
       );
     } else {
       // Schedule on each selected weekday
@@ -181,5 +184,18 @@ class NotificationServiceImpl implements NotificationService {
   @override
   Future<void> cancelNotification(int id) async {
     await _plugin.cancel(id);
+  }
+
+  @override
+  Future<void> requestExactAlarmPermission() async {
+    if (Platform.isAndroid) {
+      final bool? granted;
+      granted = await _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.requestNotificationsPermission();
+      debugPrint(granted.toString());
+    }
   }
 }
