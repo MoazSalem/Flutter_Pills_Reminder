@@ -114,6 +114,12 @@ dependencies:
 
 ---
 
+## 📦 Releases
+
+ You can download the latest APK builds from the [Releases](https://github.com/MoazSalem/Flutter_Pills_Reminder/releases) section.
+
+---
+
 ## 🤝 Contributing
 
 Feel free to fork the project and open PRs! Whether it’s a bug fix, UI enhancement, or feature suggestion — **contributions are welcome**.
