@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:io';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
@@ -51,6 +54,28 @@ class NotificationRepoImpl implements NotificationRepo {
           ),
         ),
       );
+    }
+  }
+
+  @override
+  Future<void> requestExactAlarmPermission() async {
+    if (Platform.isAndroid) {
+      const platform = MethodChannel('exact_alarm_channel');
+
+      try {
+        final isGranted = await platform.invokeMethod(
+          'checkExactAlarmPermission',
+        );
+
+        if (!isGranted) {
+          final intent = AndroidIntent(
+            action: 'android.settings.REQUEST_SCHEDULE_EXACT_ALARM',
+          );
+          await intent.launch();
+        }
+      } catch (e) {
+        debugPrint('Error checking exact alarm permission: $e');
+      }
     }
   }
 
