@@ -32,26 +32,27 @@ class MedicationWidget extends StatelessWidget {
         color: theme.primaryContainer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.pillHeight),
+          side: BorderSide(
+            color: theme.primaryFixedDim,
+            width: AppSizes.smallPadding,
+          ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSizes.largePadding),
-          child: SizedBox(
-            height: AppSizes.pillHeight,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: AppSizes.tinyPadding,
-              children: [
-                Text(medication.name, style: AppStyles.title),
-                if (medication.amount != null)
-                  Text(
-                    '${AppStrings.remaining} ${medication.amount}',
-                    style: AppStyles.subTitle.copyWith(
-                      color: theme.onPrimaryContainer,
-                    ),
+        child: SizedBox(
+          height: AppSizes.pillHeight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: AppSizes.tinyPadding,
+            children: [
+              Text(medication.name, style: AppStyles.title),
+              if (medication.amount != null)
+                Text(
+                  '${AppStrings.remaining} ${medication.amount}',
+                  style: AppStyles.subTitle.copyWith(
+                    color: theme.onPrimaryContainer,
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),

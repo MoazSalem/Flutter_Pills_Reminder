@@ -18,7 +18,7 @@ class TimesItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSizes.smallPadding),
+      padding: EdgeInsets.symmetric(vertical: AppSizes.tinyPadding),
       child: ListTile(
         tileColor: theme.surfaceContainer,
         contentPadding: const EdgeInsets.all(AppSizes.normalPadding),

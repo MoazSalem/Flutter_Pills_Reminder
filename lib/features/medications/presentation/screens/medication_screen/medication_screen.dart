@@ -79,8 +79,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
               /// Frequency and days
               FrequencyAndDays(medication: widget.medication),
 
-              if (widget.medication.selectedDays == null)
-                SizedBox(height: AppSizes.normalPadding),
+              SizedBox(height: AppSizes.normalPadding),
 
               /// Times pills are taken
               ...List.generate(

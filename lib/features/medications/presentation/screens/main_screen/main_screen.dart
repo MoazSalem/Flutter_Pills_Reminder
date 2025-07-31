@@ -30,7 +30,14 @@ class MainScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: theme.colorScheme.surface,
           appBar: AppBar(
-            title: const Text(AppStrings.appName, style: AppStyles.title),
+            title: Row(
+              spacing: AppSizes.tinyPadding,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(AppStrings.appName, style: AppStyles.title),
+                Icon(Icons.medication, color: theme.colorScheme.primary),
+              ],
+            ),
             centerTitle: true,
             toolbarHeight: AppSizes.appBarHeight,
             backgroundColor: theme.colorScheme.surfaceContainer,

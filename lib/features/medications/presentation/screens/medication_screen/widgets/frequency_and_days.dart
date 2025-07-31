@@ -13,7 +13,7 @@ class FrequencyAndDays extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.all(AppSizes.normalPadding),
+      padding: const EdgeInsets.all(AppSizes.smallPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

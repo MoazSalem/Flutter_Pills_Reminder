@@ -2,7 +2,7 @@
 // Do not modify
 // Check in to version control
 
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/medication_model_adapter.dart';
