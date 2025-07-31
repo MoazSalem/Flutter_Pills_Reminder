@@ -75,12 +75,14 @@ class MedicationController extends GetxController {
     required DateTime dateTime,
     required int id,
     String? title,
+    String? body,
     required String medicationName,
   }) async {
     notificationRepo.scheduleNotificationOnce(
       dateTime: dateTime,
       id: id,
       title: title,
+      body: body,
       medicationName: medicationName,
     );
   }
@@ -88,6 +90,7 @@ class MedicationController extends GetxController {
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
     String? title,
+    String? body,
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
@@ -95,6 +98,7 @@ class MedicationController extends GetxController {
     notificationRepo.scheduleDailyOrWeeklyNotification(
       id: id,
       title: title,
+      body: body,
       medicationName: medicationName,
       time: time,
       weekdays: weekdays,

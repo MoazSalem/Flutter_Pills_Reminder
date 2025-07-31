@@ -17,7 +17,7 @@ class NotificationRepoImpl implements NotificationRepo {
     // Ensure plugin is initialized
     await notificationsPlugin.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        android: AndroidInitializationSettings('@drawable/icon'),
         iOS: DarwinInitializationSettings(),
       ),
     );
@@ -83,13 +83,14 @@ class NotificationRepoImpl implements NotificationRepo {
     required DateTime dateTime,
     required int id,
     String? title,
+    String? body,
     required String medicationName,
   }) async {
     await requestNotificationPermission();
     await notificationService.scheduleMedicationNotificationOnce(
       id: id,
       title: title ?? 'Take Your Medication',
-      body: 'Time to take your $medicationName pill',
+      body: body ?? 'Time to take your $medicationName pill',
       dateTime: dateTime,
     );
     debugPrint("Notification scheduled with id $id at $dateTime");
@@ -99,6 +100,7 @@ class NotificationRepoImpl implements NotificationRepo {
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
     String? title,
+    String? body,
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
@@ -107,7 +109,7 @@ class NotificationRepoImpl implements NotificationRepo {
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
       title: title ?? 'Take Your Medication',
-      body: 'Time to take your $medicationName pill',
+      body: body ?? 'Time to take your $medicationName pill',
       time: time,
       weekdays: weekdays,
     );

@@ -14,11 +14,13 @@ abstract class NotificationRepo {
     required DateTime dateTime,
     required int id,
     String? title,
+    String? body,
     required String medicationName,
   });
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
     String? title,
+    String? body,
     required String medicationName,
     required TimeOfDay time,
     required List<Weekday> weekdays,
