@@ -1,3 +1,4 @@
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/domain/datasources/medication_local_data_source.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
@@ -39,10 +40,21 @@ class MedicationsRepoImpl implements MedicationsRepo {
 
   @override
   Future<void> resetProgress() async {
-    final medications = await localDataSource.getAll();
-    for (var med in medications) {
-      final timesPillTaken = List.generate(med.times.length, (_) => false);
-      localDataSource.update(med.copyWith(timesPillTaken: timesPillTaken));
+    var box = await Hive.openBox('date');
+    final int lastOpenedDay =
+        box.get('lastOpenedDate') ?? DateTime.now().weekday;
+    if (lastOpenedDay == DateTime.now().weekday) {
+      box.put('lastOpenedDate', DateTime.now().weekday);
+      return;
+    } else {
+      box.put('lastOpenedDate', DateTime.now().weekday);
+      final medications = await localDataSource.getAll();
+      for (var med in medications) {
+        final timesPillTaken = List.generate(med.times.length, (_) => false);
+        await localDataSource.update(
+          med.copyWith(timesPillTaken: timesPillTaken),
+        );
+      }
     }
     return Future.value();
   }

@@ -42,7 +42,10 @@ class TimesItem extends StatelessWidget {
         ),
         title: Text(
           medication.timesPillTaken[index] ? "Taken" : "Not Taken",
-          style: AppStyles.subTitle.copyWith(fontSize: AppSizes.normalTextSize),
+          style: AppStyles.subTitle.copyWith(
+            fontSize: AppSizes.normalTextSize,
+            fontFamily: 'Gambarino',
+          ),
         ),
 
         shape: RoundedRectangleBorder(
