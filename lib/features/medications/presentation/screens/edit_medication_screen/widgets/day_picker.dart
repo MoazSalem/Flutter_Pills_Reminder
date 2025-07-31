@@ -13,7 +13,7 @@ class DayPicker extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
           ),
           child: ListTile(

@@ -1,5 +1,5 @@
 class AppSizes {
-  static const double appBarHeight = 80.0;
+  static const double appBarHeight = 100.0;
   static const double pillHeight = 136.0;
   static const double tinyPadding = 4.0;
   static const double smallPadding = 8.0;

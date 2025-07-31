@@ -56,14 +56,14 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
           alignLabelWithHint: true,
           labelText: widget.label,
           filled: true,
-          fillColor: theme.colorScheme.surfaceContainer,
+          fillColor: theme.colorScheme.surfaceContainerLowest,
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
           ),
         ),
         borderRadius: BorderRadius.circular(12),
-        dropdownColor: theme.colorScheme.surfaceContainer,
+        dropdownColor: theme.colorScheme.surfaceContainerLowest,
       ),
     );
   }

@@ -37,7 +37,7 @@ class PillTime extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainer,
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
                 border: isError
                     ? Border.all(

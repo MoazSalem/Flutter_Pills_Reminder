@@ -30,17 +30,20 @@ class MainScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: theme.colorScheme.surface,
           appBar: AppBar(
-            title: Row(
-              spacing: AppSizes.tinyPadding,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(AppStrings.appName, style: AppStyles.title),
-                Icon(Icons.medication, color: theme.colorScheme.primary),
-              ],
+            title: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.normalPadding,
+              ),
+              child: Text(
+                AppStrings.appName,
+                style: AppStyles.title.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
+              ),
             ),
-            centerTitle: true,
+            centerTitle: false,
             toolbarHeight: AppSizes.appBarHeight,
-            backgroundColor: theme.colorScheme.surfaceContainer,
+            backgroundColor: theme.colorScheme.surfaceContainerLowest,
           ),
           body: Obx(() {
             final medications = controller.medications;

@@ -21,7 +21,7 @@ class CustomTextFormField extends StatelessWidget {
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       decoration: InputDecoration(
         filled: true,
-        fillColor: theme.surfaceContainer,
+        fillColor: theme.surfaceContainerLowest,
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(

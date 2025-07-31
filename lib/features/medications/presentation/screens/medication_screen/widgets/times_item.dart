@@ -20,7 +20,7 @@ class TimesItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSizes.tinyPadding),
       child: ListTile(
-        tileColor: theme.surfaceContainer,
+        tileColor: theme.surfaceContainerLowest,
         contentPadding: const EdgeInsets.all(AppSizes.normalPadding),
         leading: Container(
           height: AppSizes.roundedRadius,

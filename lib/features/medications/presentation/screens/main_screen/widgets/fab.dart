@@ -24,7 +24,7 @@ class Fab extends StatelessWidget {
           context: context,
           builder: (context) => const EditMedicationScreen(),
         ),
-        child: const Icon(Icons.add, size: AppSizes.largeIconSize),
+        child: const Icon(Icons.medication, size: AppSizes.largeIconSize),
       ),
     );
   }
