@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/widgets/custom_button.dart';
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({super.key, this.action});
@@ -13,27 +15,16 @@ class CustomAppbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          InkWell(
-            onTap: () => Navigator.pop(context),
-            borderRadius: BorderRadius.circular(AppSizes.circularRadius),
-            child: Ink(
-              height: AppSizes.roundedRadius,
-              width: AppSizes.roundedRadius,
-              decoration: BoxDecoration(
-                color: theme.primaryContainer,
-                borderRadius: BorderRadius.circular(AppSizes.circularRadius),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 3.0),
-                  child: Icon(
-                    Icons.arrow_back_ios_new,
-                    size: AppSizes.normalIconSize,
-                    color: theme.onPrimaryContainer,
-                  ),
-                ),
+          CustomButton(
+            icon: Padding(
+              padding: const EdgeInsets.only(right: 3.0),
+              child: Icon(
+                Icons.arrow_back_ios_new,
+                size: AppSizes.normalIconSize,
+                color: theme.onPrimaryContainer,
               ),
             ),
+            onTap: () => Get.back(),
           ),
           ?action,
         ],

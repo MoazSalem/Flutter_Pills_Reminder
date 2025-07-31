@@ -5,7 +5,8 @@ import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/edit_icon.dart';
+import 'package:pills_reminder/core/widgets/custom_button.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/edit_medication_screen.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/frequency_and_days.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/times_item.dart';
 
@@ -29,7 +30,20 @@ class _MedicationScreenState extends State<MedicationScreen> {
           child: Column(
             spacing: AppSizes.tinyPadding,
             children: [
-              CustomAppbar(action: EditIcon(medication: widget.medication)),
+              CustomAppbar(
+                action: CustomButton(
+                  onTap: () {
+                    /// Edit medication screen
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) =>
+                          EditMedicationScreen(medication: widget.medication),
+                    );
+                  },
+                  icon: Icon(Icons.edit),
+                ),
+              ),
 
               /// Medication name
               Text(
@@ -43,18 +57,21 @@ class _MedicationScreenState extends State<MedicationScreen> {
               if (widget.medication.amount != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: AppSizes.tinyPadding,
+                  spacing: AppSizes.largePadding,
                   children: [
-                    MaterialButton(
-                      color: theme.primaryContainer,
-                      shape: CircleBorder(),
-                      onPressed: () {
+                    CustomButton(
+                      size: 40,
+                      icon: Icon(
+                        Icons.remove,
+                        size: AppSizes.normalIconSize,
+                        color: theme.onPrimaryContainer,
+                      ),
+                      onTap: () {
                         widget.medication.amount =
                             widget.medication.amount! - 1;
                         controller.updateMedication(widget.medication);
                         setState(() {});
                       },
-                      child: const Icon(Icons.remove),
                     ),
                     Text(
                       "Pills Left: ${widget.medication.amount}",
@@ -62,16 +79,19 @@ class _MedicationScreenState extends State<MedicationScreen> {
                         color: theme.onPrimaryContainer,
                       ),
                     ),
-                    MaterialButton(
-                      color: theme.primaryContainer,
-                      shape: CircleBorder(),
-                      onPressed: () {
+                    CustomButton(
+                      size: 40,
+                      icon: Icon(
+                        Icons.add,
+                        size: AppSizes.normalIconSize,
+                        color: theme.onPrimaryContainer,
+                      ),
+                      onTap: () {
                         widget.medication.amount =
                             widget.medication.amount! + 1;
                         controller.updateMedication(widget.medication);
                         setState(() {});
                       },
-                      child: const Icon(Icons.add),
                     ),
                   ],
                 ),
