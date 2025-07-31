@@ -29,12 +29,12 @@ class MedicationWidget extends StatelessWidget {
       },
       child: Card(
         elevation: 0,
-        color: theme.primaryContainer,
+        color: theme.surfaceContainerLowest,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.pillHeight),
           side: BorderSide(
             color: theme.primaryFixedDim,
-            width: AppSizes.smallPadding,
+            width: AppSizes.smallPadding - 2,
           ),
         ),
         child: SizedBox(

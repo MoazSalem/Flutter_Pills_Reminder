@@ -17,7 +17,7 @@ class FrequencyAndDays extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: AppSizes.tinyPadding,
+        spacing: AppSizes.smallPadding,
         children: [
           if (medication.frequency != MedicationFrequency.daysPerWeek)
             Chip(
@@ -28,8 +28,8 @@ class FrequencyAndDays extends StatelessWidget {
                   fontFamily: 'Gambarino',
                 ),
               ),
-              backgroundColor: theme.primaryContainer,
-              side: BorderSide.none,
+              backgroundColor: theme.surfaceContainerLowest,
+              side: BorderSide(color: theme.primaryFixedDim, width: 4),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
               ),
@@ -46,7 +46,11 @@ class FrequencyAndDays extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: theme.primaryContainer,
-                side: BorderSide.none,
+                side: BorderSide(
+                  color: theme.primaryFixedDim,
+                  width: 4,
+                  strokeAlign: BorderSide.strokeAlignCenter,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
                 ),

@@ -37,42 +37,54 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ButtonTheme(
-      alignedDropdown: true,
-      child: DropdownButtonFormField<T>(
-        menuMaxHeight: 200,
-        value: selectedValue,
-        onChanged: widget.onChanged,
-        selectedItemBuilder: widget.selectedWidget != null
-            ? (context) => widget.selectedWidget!
-            : null,
-        items:
-            widget.itemsWidget ??
-            widget.items
-                .map(
-                  (item) => DropdownMenuItem<T>(
-                    value: item,
-                    child: Text(
-                      widget.customNames != null
-                          ? widget.customNames![item]
-                          : item.toString(),
+    final OutlineInputBorder border = OutlineInputBorder(
+      borderSide: BorderSide(
+        color: theme.colorScheme.primaryFixedDim,
+        width: 4,
+      ),
+      borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+    );
+    return Center(
+      child: ButtonTheme(
+        alignedDropdown: true,
+        child: DropdownButtonFormField<T>(
+          menuMaxHeight: 300,
+          value: selectedValue,
+          onChanged: widget.onChanged,
+          selectedItemBuilder: widget.selectedWidget != null
+              ? (context) => widget.selectedWidget!
+              : null,
+          items:
+              widget.itemsWidget ??
+              widget.items
+                  .map(
+                    (item) => DropdownMenuItem<T>(
+                      value: item,
+                      child: Text(
+                        widget.customNames != null
+                            ? widget.customNames![item]
+                            : item.toString(),
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(AppSizes.largePadding),
-          alignLabelWithHint: true,
-          labelText: widget.label,
-          filled: true,
-          fillColor: theme.colorScheme.surfaceContainerLowest,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+                  )
+                  .toList(),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+            ),
+            contentPadding: const EdgeInsets.all(AppSizes.largePadding),
+            alignLabelWithHint: true,
+            labelText: widget.label,
+            filled: true,
+            fillColor: theme.colorScheme.surfaceContainerLowest,
+            enabledBorder: border,
+            focusedBorder: border,
+            disabledBorder: border,
           ),
+          borderRadius: BorderRadius.circular(12),
+          dropdownColor: theme.colorScheme.surfaceContainerLowest,
         ),
-        borderRadius: BorderRadius.circular(12),
-        dropdownColor: theme.colorScheme.surfaceContainerLowest,
       ),
     );
   }

@@ -9,11 +9,11 @@ class Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: AppSizes.buttonHeight,
-      height: AppSizes.buttonHeight,
+      width: AppSizes.buttonSize,
+      height: AppSizes.buttonSize,
       child: FloatingActionButton(
         elevation: 0,
-        backgroundColor: theme.primaryContainer,
+        backgroundColor: theme.surfaceContainerLowest,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(AppSizes.roundedRadius),

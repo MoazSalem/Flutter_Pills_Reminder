@@ -13,5 +13,5 @@ class AppSizes {
   static const double roundedRadius = 56.0;
   static const double normalIconSize = 22.0;
   static const double largeIconSize = 28.0;
-  static const double buttonHeight = 70.0;
+  static const double buttonSize = 70.0;
 }

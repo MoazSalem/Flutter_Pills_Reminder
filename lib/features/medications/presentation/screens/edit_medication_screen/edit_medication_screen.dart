@@ -5,6 +5,7 @@ import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
@@ -13,7 +14,6 @@ import 'package:pills_reminder/features/medications/presentation/screens/edit_me
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/notification_type_title.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/pill_time.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/rounded_icon_button.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/weekday_picker.dart';
 
 class EditMedicationScreen extends StatefulWidget {
@@ -235,14 +235,16 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                   children: [
                     /// delete medication
                     if (widget.medication != null)
-                      RoundedIconButton(
+                      CustomButton(
+                        size: AppSizes.buttonSize,
                         color: theme.errorContainer,
+                        sideColor: theme.onError,
                         icon: Icon(
                           size: AppSizes.largeIconSize,
                           Icons.delete_forever_outlined,
                           color: theme.onErrorContainer,
                         ),
-                        onPressed: () async {
+                        onTap: () async {
                           frequency == MedicationFrequency.once
                               ? {
                                   for (
@@ -264,14 +266,14 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                       ),
 
                     /// Save medication
-                    RoundedIconButton(
-                      color: theme.primaryContainer,
+                    CustomButton(
+                      size: AppSizes.buttonSize,
                       icon: Icon(
                         size: AppSizes.largeIconSize,
                         Icons.done,
                         color: theme.onPrimaryContainer,
                       ),
-                      onPressed: () async {
+                      onTap: () async {
                         if (!formKey.currentState!.validate()) {
                           return;
                         }

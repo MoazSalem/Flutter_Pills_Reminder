@@ -15,6 +15,10 @@ class DayPicker extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primaryFixedDim,
+              width: 4,
+            ),
           ),
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(

@@ -41,7 +41,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                           EditMedicationScreen(medication: widget.medication),
                     );
                   },
-                  icon: Icon(Icons.edit),
+                  icon: Icon(Icons.edit, color: theme.onPrimaryContainer),
                 ),
               ),
 

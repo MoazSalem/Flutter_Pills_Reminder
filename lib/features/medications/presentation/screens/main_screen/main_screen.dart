@@ -43,7 +43,6 @@ class MainScreen extends StatelessWidget {
             ),
             centerTitle: false,
             toolbarHeight: AppSizes.appBarHeight,
-            backgroundColor: theme.colorScheme.surfaceContainerLowest,
           ),
           body: Obx(() {
             final medications = controller.medications;

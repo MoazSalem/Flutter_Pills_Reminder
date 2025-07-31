@@ -15,19 +15,24 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final OutlineInputBorder border = OutlineInputBorder(
+      borderSide: BorderSide(color: theme.primaryFixedDim, width: 4),
+      borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+    );
     return TextFormField(
       validator: validator,
       controller: controller,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       decoration: InputDecoration(
+        focusedBorder: border,
+        enabledBorder: border,
+        disabledBorder: border,
+        errorBorder: border.copyWith(
+          borderSide: BorderSide(color: theme.error, width: 4),
+        ),
         filled: true,
         fillColor: theme.surfaceContainerLowest,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.all(
-            Radius.circular(AppSizes.roundedRadius),
-          ),
-        ),
+        border: border,
         labelText: labelText,
         contentPadding: EdgeInsets.symmetric(
           vertical: AppSizes.largePadding,

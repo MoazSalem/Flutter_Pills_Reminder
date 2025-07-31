@@ -28,6 +28,11 @@ class TimesItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.primaryContainer,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+            border: Border.all(
+              color: theme.primaryFixedDim,
+              width: 4,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -47,11 +52,12 @@ class TimesItem extends StatelessWidget {
             fontFamily: 'Gambarino',
           ),
         ),
-
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+          side: BorderSide(color: theme.primaryFixedDim, width: 4),
         ),
         trailing: Checkbox(
+          activeColor: theme.primary,
           value: medication.timesPillTaken[index],
           onChanged: onChanged,
         ),

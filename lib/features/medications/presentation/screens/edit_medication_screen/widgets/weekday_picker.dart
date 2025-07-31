@@ -25,6 +25,16 @@ class WeekdayPicker extends StatelessWidget {
         children: Weekday.values.map((day) {
           final selected = days[day] ?? false;
           return FilterChip(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+            ),
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.surfaceContainerLowest,
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.primaryFixedDim,
+              width: 4,
+            ),
             selectedColor: Theme.of(context).colorScheme.primaryContainer,
             label: Text(day.label),
             selected: selected,
