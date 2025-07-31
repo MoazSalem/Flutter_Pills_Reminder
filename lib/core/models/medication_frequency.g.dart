@@ -18,9 +18,7 @@ class MedicationFrequencyAdapter extends TypeAdapter<MedicationFrequency> {
       case 1:
         return MedicationFrequency.daysPerWeek;
       case 2:
-        return MedicationFrequency.weekly;
-      case 3:
-        return MedicationFrequency.monthly;
+        return MedicationFrequency.once;
       default:
         return MedicationFrequency.daily;
     }
@@ -33,10 +31,8 @@ class MedicationFrequencyAdapter extends TypeAdapter<MedicationFrequency> {
         writer.writeByte(0);
       case MedicationFrequency.daysPerWeek:
         writer.writeByte(1);
-      case MedicationFrequency.weekly:
+      case MedicationFrequency.once:
         writer.writeByte(2);
-      case MedicationFrequency.monthly:
-        writer.writeByte(3);
     }
   }
 

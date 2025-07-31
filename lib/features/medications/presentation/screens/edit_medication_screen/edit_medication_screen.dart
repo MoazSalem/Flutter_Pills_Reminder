@@ -131,8 +131,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                 ),
 
                 /// Days selection
-                if (frequency == MedicationFrequency.daysPerWeek ||
-                    frequency == MedicationFrequency.weekly)
+                if (frequency == MedicationFrequency.daysPerWeek)
                   WeekdayPicker(
                     key: ValueKey(frequency),
                     frequency: frequency,
@@ -148,8 +147,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     }),
                   ),
 
-                /// Day of the month if frequency is monthly
-                if (frequency == MedicationFrequency.monthly)
+                /// Day of the month if frequency is once
+                if (frequency == MedicationFrequency.once)
                   DayPicker(
                     selectedDate: monthlyDay,
                     onTap: (DateTime date) {
@@ -224,7 +223,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           color: theme.onErrorContainer,
                         ),
                         onPressed: () async {
-                          frequency == MedicationFrequency.monthly
+                          frequency == MedicationFrequency.once
                               ? {
                                   for (
                                     int i = 0;
@@ -261,11 +260,10 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           amount: int.tryParse(amountController.text),
                           frequency: frequency,
                           selectedDays:
-                              frequency == MedicationFrequency.weekly ||
-                                  frequency == MedicationFrequency.daysPerWeek
+                              frequency == MedicationFrequency.daysPerWeek
                               ? selectedDays
                               : null,
-                          monthlyDay: frequency == MedicationFrequency.monthly
+                          monthlyDay: frequency == MedicationFrequency.once
                               ? monthlyDay
                               : null,
                           times: List<TimeOfDay>.from(times),
@@ -274,7 +272,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         );
                         if (widget.medication != null) {
                           controller.updateMedication(medication);
-                          frequency == MedicationFrequency.monthly
+                          frequency == MedicationFrequency.once
                               ? [
                                   for (
                                     int i = 0;
@@ -292,7 +290,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         } else {
                           controller.addMedication(medication);
                         }
-                        frequency == MedicationFrequency.monthly
+                        frequency == MedicationFrequency.once
                             ? [
                                 for (
                                   int i = 0;

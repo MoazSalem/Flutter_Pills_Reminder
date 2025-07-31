@@ -20,7 +20,7 @@ class DayPicker extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(
               horizontal: AppSizes.largePadding,
             ),
-            title: Text('Day of the Month'),
+            title: Text('Date'),
             subtitle: Text(
               selectedDate == null
                   ? 'Not Set'

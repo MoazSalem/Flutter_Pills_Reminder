@@ -22,7 +22,7 @@ class FrequencyAndDays extends StatelessWidget {
           if (medication.frequency != MedicationFrequency.daysPerWeek)
             Chip(
               label: Text(
-                "${frequencies[medication.frequency]!}${medication.frequency == MedicationFrequency.monthly ? " On Day ${medication.monthlyDay!.day}" : ''}",
+                "${frequencies[medication.frequency]!}${medication.frequency == MedicationFrequency.once ? " On Day ${medication.monthlyDay!.day}" : ''}",
                 style: AppStyles.subTitle.copyWith(
                   color: theme.onPrimaryContainer,
                 ),

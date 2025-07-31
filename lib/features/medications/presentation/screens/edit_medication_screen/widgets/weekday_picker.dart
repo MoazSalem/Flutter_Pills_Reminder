@@ -17,7 +17,6 @@ class WeekdayPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSingleSelection = frequency == MedicationFrequency.weekly;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSizes.largePadding),
       child: Wrap(
@@ -30,15 +29,7 @@ class WeekdayPicker extends StatelessWidget {
             label: Text(day.label),
             selected: selected,
             onSelected: (bool value) {
-              if (isSingleSelection) {
-                // Clear all, select only this one
-                for (final key in days.keys) {
-                  days[key] = false;
-                }
-                onChanged(day, true);
-              } else {
-                onChanged(day, value);
-              }
+              onChanged(day, value);
             },
           );
         }).toList(),
