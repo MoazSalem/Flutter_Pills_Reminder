@@ -14,10 +14,11 @@ class Fab extends StatelessWidget {
       child: FloatingActionButton(
         elevation: 0,
         backgroundColor: theme.primaryContainer,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(AppSizes.roundedRadius),
           ),
+          side: BorderSide(color: theme.primaryFixedDim, width: 4),
         ),
         onPressed: () => showModalBottomSheet(
           isScrollControlled: true,
