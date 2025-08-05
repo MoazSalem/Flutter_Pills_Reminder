@@ -38,6 +38,7 @@ class MainScreen extends StatelessWidget {
                 AppStrings.appName,
                 style: AppStyles.title.copyWith(
                   color: theme.colorScheme.onPrimaryContainer,
+                  fontSize: AppSizes.titleTextSize,
                 ),
               ),
             ),

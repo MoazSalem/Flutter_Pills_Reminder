@@ -42,15 +42,17 @@ class MedicationWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: AppSizes.tinyPadding,
             children: [
-              Text(medication.name, style: AppStyles.title),
+              Text(
+                medication.name,
+                style: AppStyles.title.copyWith(
+                  color: theme.onPrimaryContainer,
+                ),
+              ),
               if (medication.amount != null)
                 Text(
                   '${AppStrings.remaining} ${medication.amount}',
-                  style: AppStyles.subTitle.copyWith(
-                    color: theme.onPrimaryContainer,
-                  ),
+                  style: AppStyles.subTitle,
                 ),
             ],
           ),

@@ -8,6 +8,7 @@ class AppSizes {
   static const double smallTextSize = 14.0;
   static const double normalTextSize = 18.0;
   static const double largeTextSize = 24.0;
+  static const double titleTextSize = 28.0;
   static const double extraLargeTextSize = 32.0;
   static const double circularRadius = 28.0;
   static const double roundedRadius = 56.0;
