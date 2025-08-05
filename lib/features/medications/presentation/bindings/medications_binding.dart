@@ -4,6 +4,7 @@ import 'package:pills_reminder/features/medications/data/datasources/medication_
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/data/repositories/medications_repo_impl.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
+import 'package:pills_reminder/features/medications/presentation/controllers/notifications_controller.dart';
 import 'package:pills_reminder/features/notifications/data/repositories/notification_repo_impl.dart';
 
 class MedicationsBinding extends Bindings {
@@ -14,8 +15,10 @@ class MedicationsBinding extends Bindings {
     Get.put<MedicationController>(
       MedicationController(
         MedicationsRepoImpl(localDataSource: localDataSource),
-        NotificationRepoImpl(),
       ),
+    );
+    Get.put<NotificationsController>(
+      NotificationsController(NotificationRepoImpl()),
     );
   }
 }

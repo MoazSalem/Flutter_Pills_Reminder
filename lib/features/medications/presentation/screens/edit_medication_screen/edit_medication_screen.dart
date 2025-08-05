@@ -9,6 +9,7 @@ import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
+import 'package:pills_reminder/features/medications/presentation/controllers/notifications_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
@@ -84,7 +85,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MedicationController>();
+    final medicationsController = Get.find<MedicationController>();
+    final notificationsController = Get.find<NotificationsController>();
     final theme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Padding(
@@ -252,15 +254,18 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                     i < widget.medication!.times.length;
                                     i++
                                   )
-                                    await controller.cancelNotification(
-                                      widget.medication!.id + i,
-                                    ),
+                                    await notificationsController
+                                        .cancelNotification(
+                                          widget.medication!.id + i,
+                                        ),
                                 }
-                              : await controller
+                              : await notificationsController
                                     .cancelAllNotificationForMedication(
                                       widget.medication!.id,
                                     );
-                          controller.deleteMedication(widget.medication!.id);
+                          medicationsController.deleteMedication(
+                            widget.medication!.id,
+                          );
                           Get.until((route) => route.isFirst);
                         },
                       ),
@@ -294,7 +299,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           notificationType: notificationType,
                         );
                         if (widget.medication != null) {
-                          controller.updateMedication(medication);
+                          medicationsController.updateMedication(medication);
                           frequency == MedicationFrequency.once
                               ? [
                                   for (
@@ -302,16 +307,15 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                     i < medication.times.length;
                                     i++
                                   )
-                                    await controller.cancelNotification(
-                                      medication.id + i,
-                                    ),
+                                    await notificationsController
+                                        .cancelNotification(medication.id + i),
                                 ]
-                              : await controller
+                              : await notificationsController
                                     .cancelAllNotificationForMedication(
                                       medication.id,
                                     );
                         } else {
-                          controller.addMedication(medication);
+                          medicationsController.addMedication(medication);
                         }
                         frequency == MedicationFrequency.once
                             ? [
@@ -320,19 +324,20 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                   i < medication.times.length;
                                   i++
                                 )
-                                  await controller.scheduleNotificationOnce(
-                                    id: medication.id + i,
-                                    medicationName: medication.name,
-                                    dateTime: DateTime(
-                                      medication.monthlyDay!.year,
-                                      medication.monthlyDay!.month,
-                                      medication.monthlyDay!.day,
-                                      medication.times[i].hour,
-                                      medication.times[i].minute,
-                                    ),
-                                    notificationType:
-                                        medication.notificationType,
-                                  ),
+                                  await notificationsController
+                                      .scheduleNotificationOnce(
+                                        id: medication.id + i,
+                                        medicationName: medication.name,
+                                        dateTime: DateTime(
+                                          medication.monthlyDay!.year,
+                                          medication.monthlyDay!.month,
+                                          medication.monthlyDay!.day,
+                                          medication.times[i].hour,
+                                          medication.times[i].minute,
+                                        ),
+                                        notificationType:
+                                            medication.notificationType,
+                                      ),
                               ]
                             : {
                                 for (
@@ -341,7 +346,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                   i++
                                 )
                                   {
-                                    await controller
+                                    await notificationsController
                                         .scheduleDailyOrWeeklyNotification(
                                           id: medication.id,
                                           medicationName: medication.name,

@@ -1,17 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pills_reminder/core/models/notification_type.dart';
-import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 import 'package:pills_reminder/features/medications/domain/repositories/medications_repo.dart';
-import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 
 class MedicationController extends GetxController {
   final MedicationsRepo medicationsRepo;
-  final NotificationRepo notificationRepo;
-  MedicationController(this.medicationsRepo, this.notificationRepo);
-
+  MedicationController(this.medicationsRepo);
   RxList<Medication> medications = <Medication>[].obs;
   final isReady = false.obs;
 
@@ -20,7 +14,6 @@ class MedicationController extends GetxController {
     super.onInit();
     resetPillsProgress();
     getAllMedications();
-    await notificationRepo.initNotificationService();
     isReady.value = true;
   }
 
@@ -51,62 +44,5 @@ class MedicationController extends GetxController {
   Future<void> deleteMedication(int id) async {
     await medicationsRepo.deleteMedication(id);
     getAllMedications();
-  }
-
-  Future<void> requestNotificationPermission() async {
-    await notificationRepo.requestNotificationPermission();
-  }
-
-  Future<void> cancelNotification(int id) async {
-    await notificationRepo.cancelNotification(id);
-  }
-
-  Future<void> cancelAllNotificationForMedication(int id) async {
-    await notificationRepo.cancelAllNotificationForMedication(id);
-  }
-
-  Future<void> normalNotification({
-    required String title,
-    required String body,
-  }) async {
-    notificationRepo.normalNotification(title: title, body: body);
-  }
-
-  Future<void> scheduleNotificationOnce({
-    required DateTime dateTime,
-    required int id,
-    String? title,
-    String? body,
-    required String medicationName,
-    NotificationType? notificationType,
-  }) async {
-    notificationRepo.scheduleNotificationOnce(
-      dateTime: dateTime,
-      id: id,
-      title: title,
-      body: body,
-      medicationName: medicationName,
-      notificationType: notificationType,
-    );
-  }
-
-  Future<void> scheduleDailyOrWeeklyNotification({
-    required int id,
-    String? title,
-    String? body,
-    required String medicationName,
-    required TimeOfDay time,
-    required List<Weekday> weekdays,
-    NotificationType? notificationType,
-  }) async {
-    notificationRepo.scheduleDailyOrWeeklyNotification(
-      id: id,
-      title: title,
-      body: body,
-      medicationName: medicationName,
-      time: time,
-      weekdays: weekdays,
-      notificationType: notificationType,
-    );
   }
 }

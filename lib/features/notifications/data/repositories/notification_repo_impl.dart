@@ -100,8 +100,8 @@ class NotificationRepoImpl implements NotificationRepo {
     }
     await notificationService.scheduleMedicationNotificationOnce(
       id: id,
-      title: title ?? 'Take Your Medication',
-      body: body ?? 'Time to take your $medicationName pill',
+      title: title ?? 'Take Your $medicationName',
+      body: body ?? 'Time to take your pill',
       dateTime: dateTime,
       notificationType: notificationType,
     );
@@ -124,8 +124,8 @@ class NotificationRepoImpl implements NotificationRepo {
     }
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
-      title: title ?? 'Take Your Medication',
-      body: body ?? 'Time to take your $medicationName pill',
+      title: title ?? 'Take Your $medicationName',
+      body: body ?? 'Time to take your pill',
       time: time,
       weekdays: weekdays,
       notificationType: notificationType,
