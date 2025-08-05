@@ -59,20 +59,27 @@ class TimesItem extends StatelessWidget {
             width: AppSizes.borderWidth,
           ),
         ),
-        trailing: Checkbox(
-          side: BorderSide(
-            color: theme.primaryFixedDim,
-            width: AppSizes.borderWidth,
+        trailing: Transform.scale(
+          scale: 1.3,
+          child: Checkbox(
+            visualDensity: const VisualDensity(horizontal: 4.0, vertical: 4.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
+            ),
+            side: BorderSide(
+              color: theme.primaryFixedDim,
+              width: AppSizes.borderWidth,
+            ),
+            fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return theme.primaryFixedDim;
+              }
+              return null;
+            }),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            value: medication.timesPillTaken[index],
+            onChanged: onChanged,
           ),
-          fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(WidgetState.selected)) {
-              return theme.primaryFixedDim;
-            }
-            return null;
-          }),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          value: medication.timesPillTaken[index],
-          onChanged: onChanged,
         ),
       ),
     );
