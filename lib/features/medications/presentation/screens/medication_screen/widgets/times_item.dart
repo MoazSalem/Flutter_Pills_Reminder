@@ -26,20 +26,20 @@ class TimesItem extends StatelessWidget {
           height: AppSizes.roundedRadius,
           width: AppSizes.roundedRadius,
           decoration: BoxDecoration(
-            color: theme.primaryContainer,
+            color: theme.primaryFixedDim,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
-            border: Border.all(
-              color: theme.primaryFixedDim,
-              width: 4,
-              strokeAlign: BorderSide.strokeAlignOutside,
-            ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(AppSizes.smallPadding),
             child: Center(
               child: Text(
                 "${medication.times[index].hour.toString().padLeft(2, '0')}:${medication.times[index].minute.toString().padLeft(2, '0')}",
-                style: TextStyle(fontSize: 14, color: theme.onPrimaryContainer),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: theme.onPrimary,
+                  fontFamily: 'Gambarino',
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -57,7 +57,14 @@ class TimesItem extends StatelessWidget {
           side: BorderSide(color: theme.primaryFixedDim, width: 4),
         ),
         trailing: Checkbox(
-          activeColor: theme.primary,
+          side: BorderSide(color: theme.primaryFixedDim, width: 3),
+          fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
+              return theme.primaryFixedDim;
+            }
+            return null;
+          }),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           value: medication.timesPillTaken[index],
           onChanged: onChanged,
         ),
