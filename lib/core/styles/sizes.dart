@@ -14,4 +14,5 @@ class AppSizes {
   static const double normalIconSize = 22.0;
   static const double largeIconSize = 28.0;
   static const double buttonSize = 70.0;
+  static const double borderWidth = 2.0;
 }

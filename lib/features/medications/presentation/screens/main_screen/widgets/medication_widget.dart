@@ -34,7 +34,7 @@ class MedicationWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSizes.pillHeight),
           side: BorderSide(
             color: theme.primaryFixedDim,
-            width: AppSizes.smallPadding - 2,
+            width: AppSizes.borderWidth,
           ),
         ),
         child: SizedBox(

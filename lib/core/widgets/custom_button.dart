@@ -30,7 +30,7 @@ class CustomButton extends StatelessWidget {
           color: color ?? theme.surfaceContainerLowest,
           border: Border.all(
             color: sideColor ?? theme.primaryFixedDim,
-            width: 4,
+            width: AppSizes.borderWidth,
           ),
           borderRadius: BorderRadius.circular(size ?? AppSizes.circularRadius),
         ),

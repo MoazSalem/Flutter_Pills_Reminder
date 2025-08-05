@@ -54,10 +54,16 @@ class TimesItem extends StatelessWidget {
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
-          side: BorderSide(color: theme.primaryFixedDim, width: 4),
+          side: BorderSide(
+            color: theme.primaryFixedDim,
+            width: AppSizes.borderWidth,
+          ),
         ),
         trailing: Checkbox(
-          side: BorderSide(color: theme.primaryFixedDim, width: 3),
+          side: BorderSide(
+            color: theme.primaryFixedDim,
+            width: AppSizes.borderWidth,
+          ),
           fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
             if (states.contains(WidgetState.selected)) {
               return theme.primaryFixedDim;

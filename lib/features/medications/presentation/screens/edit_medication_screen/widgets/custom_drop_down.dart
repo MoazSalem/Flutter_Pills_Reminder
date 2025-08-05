@@ -40,7 +40,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
     final OutlineInputBorder border = OutlineInputBorder(
       borderSide: BorderSide(
         color: theme.colorScheme.primaryFixedDim,
-        width: 4,
+        width: AppSizes.borderWidth,
       ),
       borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
     );

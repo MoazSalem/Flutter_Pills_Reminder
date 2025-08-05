@@ -29,7 +29,10 @@ class FrequencyAndDays extends StatelessWidget {
                 ),
               ),
               backgroundColor: theme.surfaceContainerLowest,
-              side: BorderSide(color: theme.primaryFixedDim, width: 4),
+              side: BorderSide(
+                color: theme.primaryFixedDim,
+                width: AppSizes.borderWidth,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
               ),
@@ -48,7 +51,7 @@ class FrequencyAndDays extends StatelessWidget {
                 backgroundColor: theme.primaryContainer,
                 side: BorderSide(
                   color: theme.primaryFixedDim,
-                  width: 4,
+                  width: AppSizes.borderWidth,
                   strokeAlign: BorderSide.strokeAlignCenter,
                 ),
                 shape: RoundedRectangleBorder(

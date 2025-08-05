@@ -17,7 +17,7 @@ class DayPicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
             border: Border.all(
               color: Theme.of(context).colorScheme.primaryFixedDim,
-              width: 4,
+              width: AppSizes.borderWidth,
             ),
           ),
           child: ListTile(

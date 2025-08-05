@@ -39,15 +39,12 @@ class PillTime extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
-                border: isError
-                    ? Border.all(
-                        color: Theme.of(context).colorScheme.error,
-                        width: 4,
-                      )
-                    : Border.all(
-                        color: Theme.of(context).colorScheme.primaryFixedDim,
-                        width: 4,
-                      ),
+                border: Border.all(
+                  color: isError
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primaryFixedDim,
+                  width: AppSizes.borderWidth,
+                ),
               ),
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(

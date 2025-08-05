@@ -18,7 +18,10 @@ class Fab extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(AppSizes.roundedRadius),
           ),
-          side: BorderSide(color: theme.primaryFixedDim, width: 4),
+          side: BorderSide(
+            color: theme.primaryFixedDim,
+            width: AppSizes.borderWidth,
+          ),
         ),
         onPressed: () => showModalBottomSheet(
           isScrollControlled: true,
