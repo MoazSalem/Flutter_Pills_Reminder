@@ -12,7 +12,7 @@ class ThemeController extends GetxController {
   void onInit() {
     super.onInit();
     themeMode = ThemeMode.system;
-    lightTheme = AppTheme.lightTheme;
-    darkTheme = AppTheme.darkTheme;
+    lightTheme = AppThemes.lightThemes[0];
+    darkTheme = AppThemes.darkThemes[0];
   }
 }
