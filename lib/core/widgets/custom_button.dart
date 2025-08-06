@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/edit_medication_screen.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({

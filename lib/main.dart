@@ -13,6 +13,7 @@ Future<void> main() async {
   Hive.registerAdapters();
   await Hive.openBox<MedicationModel>('medications');
   tz.initializeTimeZones();
+  await Hive.openBox('Themes');
   Get.put<ThemeController>(ThemeController());
   runApp(const MyApp());
 }

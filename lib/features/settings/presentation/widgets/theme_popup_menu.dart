@@ -18,14 +18,6 @@ class ThemePopupMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final themesValues = AppThemes.themeColors.values.toList();
     final themesNames = AppThemes.themeColors.keys.toList();
-    final theme = Theme.of(context).colorScheme;
-    final OutlineInputBorder border = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: theme.primaryFixedDim,
-        width: AppSizes.borderWidth,
-      ),
-      borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
-    );
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLowest,

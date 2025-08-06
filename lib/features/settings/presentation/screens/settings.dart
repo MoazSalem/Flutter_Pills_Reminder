@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pills_reminder/core/controllers/theme_controller.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/core/styles/strings.dart';
-import 'package:pills_reminder/core/styles/styles.dart';
-import 'package:pills_reminder/core/widgets/custom_button.dart';
+import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/settings/presentation/widgets/custom_app_bar.dart';
 import 'package:pills_reminder/features/settings/presentation/widgets/theme_popup_menu.dart';
 
@@ -13,13 +12,33 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    final themeController = Get.find<ThemeController>();
     return Scaffold(
       backgroundColor: theme.surface,
       appBar: customAppBar(theme: theme),
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
         child: Column(
-          children: [ThemePopupMenu(themeIndex: 0, onChanged: (newIndex) {})],
+          children: [
+            CustomDropDown(
+              label: 'Theme Mode',
+              value: themeController.themeMode.value,
+              items: const [ThemeMode.system, ThemeMode.light, ThemeMode.dark],
+              onChanged: (mode) => themeController.changeThemeMode(mode!),
+              customNames: const {
+                ThemeMode.system: 'Follow System',
+                ThemeMode.light: 'Light',
+                ThemeMode.dark: 'Dark',
+              },
+            ),
+            const SizedBox(height: AppSizes.largePadding),
+            ThemePopupMenu(
+              themeIndex: themeController.themeIndex,
+              onChanged: (newIndex) {
+                themeController.changeTheme(newIndex);
+              },
+            ),
+          ],
         ),
       ),
     );

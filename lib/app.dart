@@ -11,14 +11,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
-    return GetMaterialApp(
-      initialBinding: MedicationsBinding(),
-      debugShowCheckedModeBanner: false,
-      title: AppStrings.appName,
-      theme: themeController.lightTheme,
-      darkTheme: themeController.darkTheme,
-      themeMode: themeController.themeMode,
-      home: MainScreen(),
+    return Obx(
+      () => GetMaterialApp(
+        initialBinding: MedicationsBinding(),
+        debugShowCheckedModeBanner: false,
+        title: AppStrings.appName,
+        theme: themeController.lightTheme.value,
+        darkTheme: themeController.darkTheme.value,
+        themeMode: themeController.themeMode.value,
+        home: MainScreen(),
+      ),
     );
   }
 }

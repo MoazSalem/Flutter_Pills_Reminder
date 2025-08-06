@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
-import 'custom_drop_down.dart';
+import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 
 class NotificationTypeTitle extends StatelessWidget {
   const NotificationTypeTitle({
