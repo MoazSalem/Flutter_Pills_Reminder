@@ -12,13 +12,14 @@ abstract class NotificationRepo {
     required String title,
     required String body,
   });
-  Future<void> scheduleNotificationOnce({
+  Future<void> scheduleNotification({
     required DateTime dateTime,
     required int id,
     String? title,
     String? body,
     required String medicationName,
     NotificationType? notificationType,
+    required bool isRepeating,
   });
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,

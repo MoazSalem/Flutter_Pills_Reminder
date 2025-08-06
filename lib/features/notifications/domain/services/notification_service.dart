@@ -8,12 +8,13 @@ abstract class NotificationService {
     required String body,
   });
 
-  Future<void> scheduleMedicationNotificationOnce({
+  Future<void> scheduleMedicationNotification({
     required int id,
     String? title,
     required String body,
     required DateTime dateTime,
     NotificationType? notificationType,
+    required bool isRepeating,
   });
 
   Future<void> scheduleDailyOrWeeklyNotification({

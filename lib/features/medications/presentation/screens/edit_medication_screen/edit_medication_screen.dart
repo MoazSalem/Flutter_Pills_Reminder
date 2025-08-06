@@ -325,7 +325,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                   i++
                                 )
                                   await notificationsController
-                                      .scheduleNotificationOnce(
+                                      .scheduleNotification(
                                         id: medication.id + i,
                                         medicationName: medication.name,
                                         dateTime: DateTime(
@@ -337,6 +337,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                                         ),
                                         notificationType:
                                             medication.notificationType,
+                                        isRepeating: true,
                                       ),
                               ]
                             : {

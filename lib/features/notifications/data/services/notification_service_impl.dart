@@ -29,12 +29,13 @@ class NotificationServiceImpl implements NotificationService {
   }
 
   @override
-  Future<void> scheduleMedicationNotificationOnce({
+  Future<void> scheduleMedicationNotification({
     required int id,
     String? title,
     required String body,
     required DateTime dateTime,
     NotificationType? notificationType,
+    required bool isRepeating,
   }) async {
     await _plugin.zonedSchedule(
       id,
@@ -44,7 +45,9 @@ class NotificationServiceImpl implements NotificationService {
       const NotificationDetails(
         android: AndroidNotificationDetails('med_channel', 'Medications'),
       ),
-      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+      matchDateTimeComponents: isRepeating
+          ? DateTimeComponents.dayOfMonthAndTime
+          : null,
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.inexactAllowWhileIdle,

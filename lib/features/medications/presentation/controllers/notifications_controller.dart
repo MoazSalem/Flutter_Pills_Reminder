@@ -33,21 +33,23 @@ class NotificationsController extends GetxController {
     notificationRepo.normalNotification(title: title, body: body);
   }
 
-  Future<void> scheduleNotificationOnce({
+  Future<void> scheduleNotification({
     required DateTime dateTime,
     required int id,
     String? title,
     String? body,
     required String medicationName,
     NotificationType? notificationType,
+    bool isRepeating = false,
   }) async {
-    notificationRepo.scheduleNotificationOnce(
+    notificationRepo.scheduleNotification(
       dateTime: dateTime,
       id: id,
       title: title,
       body: body,
       medicationName: medicationName,
       notificationType: notificationType,
+      isRepeating: isRepeating,
     );
   }
 

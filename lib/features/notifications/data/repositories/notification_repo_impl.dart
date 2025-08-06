@@ -86,24 +86,26 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
-  Future<void> scheduleNotificationOnce({
+  Future<void> scheduleNotification({
     required DateTime dateTime,
     required int id,
     String? title,
     String? body,
     required String medicationName,
     NotificationType? notificationType,
+    required bool isRepeating,
   }) async {
     await requestNotificationPermission();
     if (Platform.isAndroid && notificationType != NotificationType.inexact) {
       await requestExactAlarmPermission();
     }
-    await notificationService.scheduleMedicationNotificationOnce(
+    await notificationService.scheduleMedicationNotification(
       id: id,
       title: title ?? 'Take Your $medicationName',
       body: body ?? 'Time to take your pill',
       dateTime: dateTime,
       notificationType: notificationType,
+      isRepeating: isRepeating,
     );
     debugPrint("Notification scheduled with id $id at $dateTime");
   }
