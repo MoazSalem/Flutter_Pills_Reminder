@@ -51,6 +51,8 @@ class NotificationServiceImpl implements NotificationService {
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.inexactAllowWhileIdle,
+      // add the id to the payload so we can access it in actions
+      payload: id.toString(),
     );
   }
 
@@ -143,6 +145,8 @@ class NotificationServiceImpl implements NotificationService {
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.inexactAllowWhileIdle,
+        // add the id to the payload so we can access it in actions
+        payload: id.toString(),
       );
     } else {
       // Schedule on each selected weekday
@@ -179,6 +183,8 @@ class NotificationServiceImpl implements NotificationService {
           androidScheduleMode:
               notificationType?.androidScheduleMode ??
               AndroidScheduleMode.inexactAllowWhileIdle,
+          // add the id to the payload so we can access it in actions
+          payload: id.toString(),
         );
       }
     }
