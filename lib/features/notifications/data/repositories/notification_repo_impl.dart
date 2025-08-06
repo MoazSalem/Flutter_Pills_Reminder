@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -6,22 +7,76 @@ import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
+import 'package:timezone/timezone.dart' as tz;
 
+@pragma('vm:entry-point')
 class NotificationRepoImpl implements NotificationRepo {
   bool isNotificationPermissionGranted = false;
+  final notificationsPlugin = FlutterLocalNotificationsPlugin();
   late final NotificationService notificationService;
+
   @override
   Future<void> initNotificationService() async {
-    final notificationsPlugin = FlutterLocalNotificationsPlugin();
     // Ensure plugin is initialized
     await notificationsPlugin.initialize(
       const InitializationSettings(
         android: AndroidInitializationSettings('@drawable/icon'),
         iOS: DarwinInitializationSettings(),
       ),
+      onDidReceiveNotificationResponse: (response) async {
+        if (response.notificationResponseType ==
+            NotificationResponseType.selectedNotificationAction) {
+          final medicationController = Get.find<MedicationController>();
+          final String actionId = response.actionId!;
+          // Reschedule in 30 minutes
+          if (actionId == 'remind_again') {
+            final newTime = tz.TZDateTime.now(
+              tz.local,
+            ).add(const Duration(minutes: 30));
+            final data = jsonDecode(response.payload!);
+            final int id = data['id'] ?? 600;
+            final medication = await medicationController.getMedication(id);
+            await scheduleNotification(
+              id: id + 60302, // use a different ID to avoid conflicts
+              dateTime: newTime,
+              title: 'Reminder for ${medication.name}',
+              body: 'please take your pill 30 minutes has passed.',
+              medicationName: medication.name,
+              notificationType: medication.notificationType,
+              isRepeating: false,
+            );
+          }
+          // Mark the medication as taken and decrement the count by 1
+          if (actionId == 'mark_as_done') {
+            final data = jsonDecode(response.payload!);
+            final int id = data['id'] ?? 700;
+            final time = TimeOfDay(
+              hour: int.parse(data['pill time'].split(':')[0]),
+              minute: int.parse(data['pill time'].split(':')[1]),
+            );
+            final medication = await medicationController.getMedication(id);
+            final timesPillTaken = List.generate(medication.times.length, (i) {
+              if (medication.times[i] == time) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+            medicationController.updateMedication(
+              medication.copyWith(
+                amount: medication.amount != null && medication.amount! > 0
+                    ? medication.amount! - 1
+                    : null,
+                timesPillTaken: timesPillTaken,
+              ),
+            );
+          }
+        }
+      },
     );
     notificationService = NotificationServiceImpl(notificationsPlugin);
   }

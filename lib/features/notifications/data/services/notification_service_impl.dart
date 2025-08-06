@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,7 +11,20 @@ import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
-
+  static const List<AndroidNotificationAction> actionsList = [
+    AndroidNotificationAction(
+      'remind_again',
+      'Remind Again in 30 minutes',
+      showsUserInterface: true,
+      cancelNotification: true,
+    ),
+    AndroidNotificationAction(
+      'mark_as_done',
+      'Mark as Taken',
+      showsUserInterface: true,
+      cancelNotification: true,
+    ),
+  ];
   NotificationServiceImpl(this._plugin);
 
   @override
@@ -43,7 +57,11 @@ class NotificationServiceImpl implements NotificationService {
       body,
       tz.TZDateTime.from(dateTime.toUtc(), tz.local),
       const NotificationDetails(
-        android: AndroidNotificationDetails('med_channel', 'Medications'),
+        android: AndroidNotificationDetails(
+          'med_channel',
+          'Medications',
+          actions: actionsList,
+        ),
       ),
       matchDateTimeComponents: isRepeating
           ? DateTimeComponents.dayOfMonthAndTime
@@ -52,7 +70,10 @@ class NotificationServiceImpl implements NotificationService {
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.inexactAllowWhileIdle,
       // add the id to the payload so we can access it in actions
-      payload: id.toString(),
+      payload: jsonEncode({
+        'id': id,
+        'pill time': '${dateTime.hour}:${dateTime.minute}',
+      }),
     );
   }
 
@@ -139,6 +160,7 @@ class NotificationServiceImpl implements NotificationService {
             channelDescription: 'Daily medication reminders',
             importance: Importance.max,
             priority: Priority.high,
+            actions: actionsList,
           ),
         ),
         matchDateTimeComponents: DateTimeComponents.time,
@@ -146,7 +168,10 @@ class NotificationServiceImpl implements NotificationService {
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.inexactAllowWhileIdle,
         // add the id to the payload so we can access it in actions
-        payload: id.toString(),
+        payload: jsonEncode({
+          'id': id,
+          'pill time': '${scheduledDate.hour}:${scheduledDate.minute}',
+        }),
       );
     } else {
       // Schedule on each selected weekday
@@ -177,6 +202,7 @@ class NotificationServiceImpl implements NotificationService {
               channelDescription: 'Weekly medication reminders',
               importance: Importance.max,
               priority: Priority.high,
+              actions: actionsList,
             ),
           ),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
@@ -184,7 +210,10 @@ class NotificationServiceImpl implements NotificationService {
               notificationType?.androidScheduleMode ??
               AndroidScheduleMode.inexactAllowWhileIdle,
           // add the id to the payload so we can access it in actions
-          payload: id.toString(),
+          payload: jsonEncode({
+            'id': id,
+            'pill time': '${scheduledDate.hour}:${scheduledDate.minute}',
+          }),
         );
       }
     }
