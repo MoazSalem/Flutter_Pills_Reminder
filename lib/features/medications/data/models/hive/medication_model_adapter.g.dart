@@ -25,13 +25,14 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
       frequency: fields[3] as MedicationFrequency,
       selectedDays: (fields[5] as List?)?.cast<Weekday>(),
       monthlyDay: fields[6] as DateTime?,
+      notificationType: fields[8] as NotificationType?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MedicationModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class MedicationModelAdapter extends TypeAdapter<MedicationModel> {
       ..writeByte(6)
       ..write(obj.monthlyDay)
       ..writeByte(7)
-      ..write(obj.timesPillTaken);
+      ..write(obj.timesPillTaken)
+      ..writeByte(8)
+      ..write(obj.notificationType);
   }
 
   @override

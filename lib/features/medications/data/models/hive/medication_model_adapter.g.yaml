@@ -5,7 +5,7 @@ nextTypeId: 1
 types:
   MedicationModel:
     typeId: 0
-    nextIndex: 8
+    nextIndex: 9
     fields:
       id:
         index: 0
@@ -23,3 +23,5 @@ types:
         index: 6
       timesPillTaken:
         index: 7
+      notificationType:
+        index: 8
