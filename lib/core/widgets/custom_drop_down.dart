@@ -48,7 +48,8 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
       child: ButtonTheme(
         alignedDropdown: true,
         child: DropdownButtonFormField<T>(
-          menuMaxHeight: 300,
+          iconEnabledColor: theme.colorScheme.primaryFixedDim,
+          menuMaxHeight: 600,
           value: selectedValue,
           onChanged: widget.onChanged,
           selectedItemBuilder: widget.selectedWidget != null
@@ -76,6 +77,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
             contentPadding: const EdgeInsets.all(AppSizes.largePadding),
             alignLabelWithHint: true,
             labelText: widget.label,
+            labelStyle: TextStyle(color: theme.colorScheme.primaryFixedDim),
             filled: true,
             fillColor: theme.colorScheme.surfaceContainerLowest,
             enabledBorder: border,

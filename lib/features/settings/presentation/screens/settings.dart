@@ -4,7 +4,7 @@ import 'package:pills_reminder/core/controllers/theme_controller.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/settings/presentation/widgets/custom_app_bar.dart';
-import 'package:pills_reminder/features/settings/presentation/widgets/theme_popup_menu.dart';
+import 'package:pills_reminder/features/settings/presentation/widgets/custom_theme_dropdown.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -32,12 +32,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: AppSizes.largePadding),
-            ThemePopupMenu(
-              themeIndex: themeController.themeIndex,
-              onChanged: (newIndex) {
-                themeController.changeTheme(newIndex);
-              },
-            ),
+            CustomThemeDropdown(themeController: themeController),
           ],
         ),
       ),

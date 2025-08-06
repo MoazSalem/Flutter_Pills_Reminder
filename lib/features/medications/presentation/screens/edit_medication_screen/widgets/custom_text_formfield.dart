@@ -37,6 +37,7 @@ class CustomTextFormField extends StatelessWidget {
         fillColor: theme.surfaceContainerLowest,
         border: border,
         labelText: labelText,
+        labelStyle: TextStyle(color: theme.primaryFixedDim),
         contentPadding: EdgeInsets.symmetric(
           vertical: AppSizes.largePadding,
           horizontal: AppSizes.largePadding,
