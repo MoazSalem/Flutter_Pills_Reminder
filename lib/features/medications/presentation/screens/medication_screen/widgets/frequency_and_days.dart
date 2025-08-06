@@ -48,7 +48,7 @@ class FrequencyAndDays extends StatelessWidget {
                     fontFamily: 'Gambarino',
                   ),
                 ),
-                backgroundColor: theme.primaryContainer,
+                backgroundColor: theme.surfaceContainerLowest,
                 side: BorderSide(
                   color: theme.primaryFixedDim,
                   width: AppSizes.borderWidth,
