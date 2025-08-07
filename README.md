@@ -42,9 +42,9 @@ lib/
 
 | Light Mode                                                                                                           | Dark Mode                                                                                                        |
 |:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/84376348-c38f-4a78-8af7-3223ad0b1011" width="300">               | <img src="https://github.com/user-attachments/assets/1e508857-c86d-4fd1-8b80-3192aff952bc" width="300">               |
-| <img src="https://github.com/user-attachments/assets/3a2661c1-9629-49e6-a49b-bbc74ec25cf3" width="300">               | <img src="https://github.com/user-attachments/assets/10f2aa80-0f13-4a38-bc97-fe53603f34ed" width="300">               |
-| <img src="https://github.com/user-attachments/assets/b61f9e63-c534-418b-a833-4a676faebc2e" width="300">               | <img src="https://github.com/user-attachments/assets/a94554de-12fa-4c81-88d0-6f5f88e4d86f" width="300">               |
+| <img src="https://github.com/user-attachments/assets/a656e209-d623-4b43-9eba-68db6bd3b55b" width="300">               | <img src="https://github.com/user-attachments/assets/a58d306e-bf12-457e-8dad-368fcd3d0b5b" width="300">               |
+| <img src="https://github.com/user-attachments/assets/37cdc07e-275e-461e-b411-f3e6c1a693f8" width="300">               | <img src="https://github.com/user-attachments/assets/2811acf3-6577-42f3-8bb9-58bcd848ccef" width="300">               |
+| <img src="https://github.com/user-attachments/assets/d8565bf3-1391-401d-a866-67e171af2508" width="300">               | <img src="https://github.com/user-attachments/assets/488628b1-3cf9-4475-9536-e091d915cbac" width="300">               |
 
 </div>
 
