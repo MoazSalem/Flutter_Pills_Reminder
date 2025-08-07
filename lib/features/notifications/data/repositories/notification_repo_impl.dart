@@ -155,7 +155,10 @@ void notificationBackgroundHandler(NotificationResponse response) async {
       android: androidInit,
     );
     tz.initializeTimeZones();
-    await plugin.initialize(initSettings);
+    await plugin.initialize(
+      initSettings,
+      onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
+    );
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
     final now = DateTime.now().add(const Duration(minutes: 30));
@@ -167,7 +170,18 @@ void notificationBackgroundHandler(NotificationResponse response) async {
       '30 minutes has passed. It\'s time to take your medication!',
       tzTime,
       const NotificationDetails(
-        android: AndroidNotificationDetails('med_channel', 'Medications'),
+        android: AndroidNotificationDetails(
+          'med_channel',
+          'Medications',
+          actions: [
+            AndroidNotificationAction(
+              'remind_again',
+              'Remind Again in 30 minutes',
+              showsUserInterface: false,
+              cancelNotification: true,
+            ),
+          ],
+        ),
       ),
       androidScheduleMode: AndroidScheduleMode.alarmClock,
     );
