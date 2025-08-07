@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,13 +14,7 @@ class NotificationServiceImpl implements NotificationService {
     AndroidNotificationAction(
       'remind_again',
       'Remind Again in 30 minutes',
-      showsUserInterface: true,
-      cancelNotification: true,
-    ),
-    AndroidNotificationAction(
-      'mark_as_done',
-      'Mark as Taken',
-      showsUserInterface: true,
+      showsUserInterface: false,
       cancelNotification: true,
     ),
   ];
@@ -69,11 +62,6 @@ class NotificationServiceImpl implements NotificationService {
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.inexactAllowWhileIdle,
-      // add the id to the payload so we can access it in actions
-      payload: jsonEncode({
-        'id': id,
-        'pill time': '${dateTime.hour}:${dateTime.minute}',
-      }),
     );
   }
 
@@ -167,11 +155,6 @@ class NotificationServiceImpl implements NotificationService {
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.inexactAllowWhileIdle,
-        // add the id to the payload so we can access it in actions
-        payload: jsonEncode({
-          'id': id,
-          'pill time': '${scheduledDate.hour}:${scheduledDate.minute}',
-        }),
       );
     } else {
       // Schedule on each selected weekday
@@ -209,11 +192,6 @@ class NotificationServiceImpl implements NotificationService {
           androidScheduleMode:
               notificationType?.androidScheduleMode ??
               AndroidScheduleMode.inexactAllowWhileIdle,
-          // add the id to the payload so we can access it in actions
-          payload: jsonEncode({
-            'id': id,
-            'pill time': '${scheduledDate.hour}:${scheduledDate.minute}',
-          }),
         );
       }
     }

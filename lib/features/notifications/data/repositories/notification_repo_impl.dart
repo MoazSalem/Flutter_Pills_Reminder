@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
@@ -7,10 +7,10 @@ import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationRepoImpl implements NotificationRepo {
@@ -26,29 +26,7 @@ class NotificationRepoImpl implements NotificationRepo {
         android: AndroidInitializationSettings('@drawable/icon'),
         iOS: DarwinInitializationSettings(),
       ),
-      onDidReceiveNotificationResponse: (response) async {
-        if (response.notificationResponseType ==
-            NotificationResponseType.selectedNotificationAction) {
-          final medicationController = Get.find<MedicationController>();
-          final String actionId = response.actionId!;
-          final data = jsonDecode(response.payload!);
-          // Reschedule in 30 minutes
-          if (actionId == 'remind_again') {
-            await reschedule(
-              data: data,
-              medicationController: medicationController,
-              notificationService: notificationService,
-            );
-          }
-          // Mark the medication as taken and decrement the count by 1
-          else if (actionId == 'mark_as_done') {
-            await markAsDone(
-              data: data,
-              medicationController: medicationController,
-            );
-          }
-        }
-      },
+      onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
     );
     notificationService = NotificationServiceImpl(notificationsPlugin);
   }
@@ -165,45 +143,33 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 }
 
-Future<void> reschedule({
-  required data,
-  required MedicationController medicationController,
-  required NotificationService notificationService,
-}) async {
-  final newTime = tz.TZDateTime.now(tz.local).add(const Duration(minutes: 30));
-  final int id = data['id'] ?? 600;
-  final medication = await medicationController.getMedication(id);
+@pragma('vm:entry-point')
+void notificationBackgroundHandler(NotificationResponse response) async {
+  if (response.actionId == 'remind_again') {
+    final plugin = FlutterLocalNotificationsPlugin();
 
-  await notificationService.scheduleMedicationNotification(
-    id: id + 60302, // use a different ID to avoid conflicts
-    title: 'Reminder for ${medication.name}',
-    body: 'please take your pill 30 minutes has passed.',
-    dateTime: newTime,
-    notificationType: medication.notificationType,
-    isRepeating: false,
-  );
-}
+    const AndroidInitializationSettings androidInit =
+        AndroidInitializationSettings('@drawable/icon');
 
-Future<void> markAsDone({required data, required medicationController}) async {
-  final int id = data['id'] ?? 700;
-  final time = TimeOfDay(
-    hour: int.parse(data['pill time'].split(':')[0]),
-    minute: int.parse(data['pill time'].split(':')[1]),
-  );
-  final medication = await medicationController.getMedication(id);
-  final timesPillTaken = List.generate(medication.times.length, (i) {
-    if (medication.times[i] == time) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  medicationController.updateMedication(
-    medication.copyWith(
-      amount: medication.amount != null && medication.amount! > 0
-          ? medication.amount! - 1
-          : null,
-      timesPillTaken: timesPillTaken,
-    ),
-  );
+    final InitializationSettings initSettings = InitializationSettings(
+      android: androidInit,
+    );
+    tz.initializeTimeZones();
+    await plugin.initialize(initSettings);
+    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
+    final now = DateTime.now().add(const Duration(minutes: 30));
+    final tzTime = tz.TZDateTime.from(now, tz.local);
+
+    await plugin.zonedSchedule(
+      UniqueKey().hashCode,
+      'Reminder',
+      '30 minutes has passed. It\'s time to take your medication!',
+      tzTime,
+      const NotificationDetails(
+        android: AndroidNotificationDetails('med_channel', 'Medications'),
+      ),
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
+    );
+  }
 }
