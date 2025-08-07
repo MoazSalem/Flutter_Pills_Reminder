@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pills_reminder/core/controllers/theme_controller.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/theme.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/theme_controller.dart';
 
 class CustomThemeDropdown extends StatelessWidget {
   const CustomThemeDropdown({super.key, required this.themeController});

@@ -9,7 +9,7 @@ import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
-import 'package:pills_reminder/features/medications/presentation/controllers/notifications_controller.dart';
+import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
