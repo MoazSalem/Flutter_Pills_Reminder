@@ -9,6 +9,7 @@ class ThemeController extends GetxController {
   final Rx<ThemeMode> themeMode = ThemeMode.system.obs;
   final Rx<ThemeData> lightTheme = ThemeData().obs;
   final Rx<ThemeData> darkTheme = ThemeData().obs;
+  final Rx<Locale> locale = Locale('en').obs;
   late Box box;
 
   @override
@@ -16,6 +17,7 @@ class ThemeController extends GetxController {
     super.onInit();
     box = Hive.box('Themes');
     themeIndex = box.get('themeIndex') ?? 15;
+    locale.value = Locale(box.get('lang') ?? 'en');
     themeMode.value = getThemeMode(box.get('themeMode') ?? 0);
     lightTheme.value = AppThemes.lightThemes[themeIndex];
     darkTheme.value = AppThemes.darkThemes[themeIndex];
@@ -44,6 +46,13 @@ class ThemeController extends GetxController {
   void changeThemeMode(ThemeMode mode) {
     box.put('themeMode', mode.index);
     themeMode.value = mode;
+    update();
+  }
+
+  void changeLocale(String lang) {
+    box.put('lang', lang);
+    locale.value = Locale(lang);
+    Get.updateLocale(locale.value);
     update();
   }
 

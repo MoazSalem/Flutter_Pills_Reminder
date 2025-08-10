@@ -57,6 +57,9 @@ class AppTranslations extends Translations {
       'reminderDescription':
           '30 minutes has passed. It\'s time to take your medication! ',
       'remindAgain': 'Remind Again in 30 minutes',
+      'appLange': 'Apps Language',
+      'en': 'English',
+      'ar': 'Arabic',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -110,6 +113,9 @@ class AppTranslations extends Translations {
       'reminder': 'تذكير',
       'reminderDescription': 'مرّت 30 دقيقة. حان وقت تناول دوائك!',
       'remindAgain': 'ذكّرني بعد 30 دقيقة',
+      'appLange': 'لغة الاتطبيق',
+      'en': 'الإنجليزية',
+      'ar': 'العربية',
     },
   };
 }

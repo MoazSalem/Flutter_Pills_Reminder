@@ -19,7 +19,16 @@ class SettingsScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
         child: Column(
+          spacing: AppSizes.largePadding,
           children: [
+            CustomDropDown(
+              label: 'appLange'.tr,
+              value: themeController.locale.value.languageCode,
+              items: ['en', 'ar'],
+              onChanged: (locale) =>
+                  themeController.changeLocale(locale!.toString()),
+              customNames: {'en': 'en'.tr, 'ar': 'ar'.tr},
+            ),
             CustomDropDown(
               label: 'themeMode'.tr,
               value: themeController.themeMode.value,
@@ -31,7 +40,6 @@ class SettingsScreen extends StatelessWidget {
                 ThemeMode.dark: 'dark'.tr,
               },
             ),
-            const SizedBox(height: AppSizes.largePadding),
             CustomThemeDropdown(themeController: themeController),
           ],
         ),

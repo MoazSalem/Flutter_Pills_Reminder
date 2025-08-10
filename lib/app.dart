@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return Obx(
       () => GetMaterialApp(
         translations: AppTranslations(),
-        locale: Locale('en'),
+        locale: themeController.locale.value,
         initialBinding: AppBindings(),
         debugShowCheckedModeBanner: false,
         title: 'appName'.tr,
