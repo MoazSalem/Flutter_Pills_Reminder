@@ -1,7 +1,13 @@
-class AppStrings {
-  static const String appName = 'Pills Reminder';
-  static const String noPills = 'No Pills Scheduled for Reminder';
-  static const String remaining = 'Remaining Pills:';
-  static const String add = 'Add';
-  static const String settings = 'Settings';
+import 'package:get/get_navigation/src/root/internacionalization.dart';
+
+class AppTranslations extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+    'en': {
+      'appName': 'Pills Reminder',
+      'noPills': 'No Pills Scheduled for Reminder',
+      'remaining': 'Remaining Pills:',
+      'settings': 'Settings',
+    },
+  };
 }

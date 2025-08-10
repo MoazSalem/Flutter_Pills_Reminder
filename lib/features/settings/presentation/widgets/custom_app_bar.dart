@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/core/widgets/custom_button.dart';
 
@@ -27,7 +26,7 @@ PreferredSizeWidget customAppBar({required ColorScheme theme}) {
       ),
     ),
     title: Text(
-      AppStrings.settings,
+      'settings'.tr,
       style: AppStyles.title.copyWith(
         color: theme.onPrimaryContainer,
         fontSize: AppSizes.titleTextSize,

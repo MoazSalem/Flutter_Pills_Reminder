@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/main_screen/widgets/fab.dart';
@@ -39,7 +38,7 @@ class MainScreen extends StatelessWidget {
                 horizontal: AppSizes.normalPadding,
               ),
               child: Text(
-                AppStrings.appName,
+                'appName'.tr,
                 style: AppStyles.title.copyWith(
                   color: theme.colorScheme.onPrimaryContainer,
                   fontSize: AppSizes.titleTextSize,
@@ -60,7 +59,7 @@ class MainScreen extends StatelessWidget {
           body: Obx(() {
             final medications = controller.medications;
             return medications.isEmpty
-                ? const Center(child: Text(AppStrings.noPills))
+                ? Center(child: Text('noPills'.tr))
                 : MedicationList(medicationList: medications);
           }),
           floatingActionButton: Fab(theme: theme.colorScheme),

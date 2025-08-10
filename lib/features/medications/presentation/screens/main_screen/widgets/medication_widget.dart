@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
-import 'package:pills_reminder/core/styles/strings.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/domain/entities/medication.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
@@ -51,7 +50,7 @@ class MedicationWidget extends StatelessWidget {
               ),
               if (medication.amount != null)
                 Text(
-                  '${AppStrings.remaining} ${medication.amount}',
+                  ' ${'remaining'.tr} ${medication.amount}',
                   style: AppStyles.subTitle,
                 ),
             ],
