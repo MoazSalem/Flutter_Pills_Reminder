@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 
 class DayPicker extends StatelessWidget {
@@ -24,10 +25,10 @@ class DayPicker extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(
               horizontal: AppSizes.largePadding,
             ),
-            title: Text('Date'),
+            title: Text('date'.tr),
             subtitle: Text(
               selectedDate == null
-                  ? 'Not Set'
+                  ? 'notSet'.tr
                   : "${selectedDate!.year}/${selectedDate!.month}/${selectedDate!.day}",
             ),
             trailing: InkWell(
@@ -55,7 +56,7 @@ Future<DateTime?> pickDate(BuildContext context) async {
     initialDate: today,
     firstDate: DateTime(today.year - 1),
     lastDate: DateTime(today.year + 2),
-    helpText: 'Select Date',
+    helpText: 'selectDate'.tr,
   );
 
   return pickedDate; // Will be null if user cancels

@@ -1,3 +1,4 @@
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 part 'medication_frequency.g.dart';
 
@@ -12,7 +13,7 @@ enum MedicationFrequency {
 }
 
 Map<MedicationFrequency, String> frequencies = {
-  MedicationFrequency.daily: "Daily",
-  MedicationFrequency.daysPerWeek: "Certain Days",
-  MedicationFrequency.once: "Once",
+  MedicationFrequency.daily: 'daily'.tr,
+  MedicationFrequency.daysPerWeek: 'specificDays'.tr,
+  MedicationFrequency.once: 'once'.tr,
 };

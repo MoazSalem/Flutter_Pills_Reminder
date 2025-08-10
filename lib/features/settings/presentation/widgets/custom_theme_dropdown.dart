@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/theme.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
@@ -11,7 +12,7 @@ class CustomThemeDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomDropDown(
-      label: 'Apps Theme',
+      label: 'appsTheme'.tr,
       value: AppThemes.themeColors.keys.toList()[themeController.themeIndex],
       items: AppThemes.themeColors.keys.toList(),
       onChanged: (index) => themeController.changeTheme(

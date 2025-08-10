@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
@@ -46,7 +47,7 @@ class TimesItem extends StatelessWidget {
           ),
         ),
         title: Text(
-          medication.timesPillTaken[index] ? "Taken" : "Not Taken",
+          medication.timesPillTaken[index] ? 'taken'.tr : 'notTaken'.tr,
           style: AppStyles.subTitle.copyWith(
             fontSize: AppSizes.normalTextSize,
             fontFamily: 'Gambarino',

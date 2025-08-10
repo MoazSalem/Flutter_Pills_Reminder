@@ -33,7 +33,7 @@ class WeekdayPicker extends StatelessWidget {
             ).colorScheme.surfaceContainerLowest,
             side: BorderSide(
               color: Theme.of(context).colorScheme.primaryFixedDim,
-              width: 4,
+              width: AppSizes.borderWidth,
             ),
             selectedColor: Theme.of(context).colorScheme.primaryContainer,
             label: Text(day.label),

@@ -21,14 +21,14 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           children: [
             CustomDropDown(
-              label: 'Theme Mode',
+              label: 'themeMode'.tr,
               value: themeController.themeMode.value,
               items: const [ThemeMode.system, ThemeMode.light, ThemeMode.dark],
               onChanged: (mode) => themeController.changeThemeMode(mode!),
-              customNames: const {
-                ThemeMode.system: 'Follow System',
-                ThemeMode.light: 'Light',
-                ThemeMode.dark: 'Dark',
+              customNames: {
+                ThemeMode.system: 'followSystem'.tr,
+                ThemeMode.light: 'light'.tr,
+                ThemeMode.dark: 'dark'.tr,
               },
             ),
             const SizedBox(height: AppSizes.largePadding),

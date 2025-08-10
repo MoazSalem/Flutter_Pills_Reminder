@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 
@@ -14,7 +15,7 @@ class NotificationTypeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomDropDown(
-      label: 'Notification Type',
+      label: 'notificationType'.tr,
       value: notificationType,
       items: NotificationType.values,
       customNames: Map.fromEntries(

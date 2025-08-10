@@ -73,7 +73,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       notificationType = widget.medication!.notificationType;
     }
     if (Platform.isAndroid && notificationType == null) {
-      notificationType = NotificationType.inexact;
+      notificationType = NotificationType.alarmClock;
     }
   }
 
@@ -103,10 +103,10 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                 /// Medication name
                 CustomTextFormField(
                   controller: nameController,
-                  labelText: 'Medication Name',
+                  labelText: 'medicationName'.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a medication name';
+                      return 'medicationNameHint'.tr;
                     }
                     return null;
                   },
@@ -115,14 +115,14 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                 /// Amount of pills available
                 CustomTextFormField(
                   controller: amountController,
-                  labelText: 'Amount (Optional)',
+                  labelText: 'pAmount'.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return null;
                     }
                     final number = num.tryParse(value);
                     if (number == null) {
-                      return 'Please enter a valid number';
+                      return 'pAmountHint'.tr;
                     }
                     return null;
                   },
@@ -139,7 +139,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     selectedDays.clear();
                     monthlyDay = null;
                   }),
-                  label: 'Frequency',
+                  label: 'frequency'.tr,
                 ),
 
                 /// Days selection
@@ -189,7 +189,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                       ];
                     }
                   }),
-                  label: 'Pills Per Day',
+                  label: 'repeat'.tr,
                 ),
 
                 /// Pills times selection
@@ -199,7 +199,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     i: i,
                     validator: (value) {
                       if (value == null) {
-                        return 'Please select a time';
+                        return 'timesHint'.tr;
                       }
                       return null;
                     },

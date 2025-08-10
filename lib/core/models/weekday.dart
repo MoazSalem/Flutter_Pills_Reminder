@@ -1,3 +1,4 @@
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 part 'weekday.g.dart';
 
@@ -23,19 +24,19 @@ extension WeekdayExtension on Weekday {
   String get label {
     switch (this) {
       case Weekday.saturday:
-        return 'Sat';
+        return 'sat'.tr;
       case Weekday.sunday:
-        return 'Sun';
+        return 'sun'.tr;
       case Weekday.monday:
-        return 'Mon';
+        return 'mon'.tr;
       case Weekday.tuesday:
-        return 'Tue';
+        return 'tue'.tr;
       case Weekday.wednesday:
-        return 'Wed';
+        return 'wed'.tr;
       case Weekday.thursday:
-        return 'Thu';
+        return 'thu'.tr;
       case Weekday.friday:
-        return 'Fri';
+        return 'fri'.tr;
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 part 'notification_type.g.dart';
 
@@ -16,22 +17,22 @@ extension WeekdayExtension on NotificationType {
   String get description {
     switch (this) {
       case NotificationType.inexact:
-        return 'Shows notification at roughly specified time, might not work on devices with heavy battery optimizations';
+        return 'inexactDescription'.tr;
       case NotificationType.exact:
-        return 'Shows notification at exact time, might not work on devices with heavy battery optimizations';
+        return 'exactDescription'.tr;
       case NotificationType.alarmClock:
-        return 'Shows notification at exact time, Use on devices with heavy battery optimizations';
+        return 'alarmClockDescription'.tr;
     }
   }
 
   String get label {
     switch (this) {
       case NotificationType.inexact:
-        return 'Inexact';
+        return 'inexact'.tr;
       case NotificationType.exact:
-        return 'Exact';
+        return 'exact'.tr;
       case NotificationType.alarmClock:
-        return 'Alarm Clock';
+        return 'alarmClock'.tr;
     }
   }
 

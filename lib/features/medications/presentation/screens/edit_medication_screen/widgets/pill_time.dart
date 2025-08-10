@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 
 class PillTime extends StatelessWidget {
@@ -50,10 +51,10 @@ class PillTime extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: AppSizes.largePadding,
                 ),
-                title: Text('Pill ${i + 1} Time'),
+                title: Text('${'toPill'.tr} ${i + 1}'),
                 subtitle: time != null
                     ? Text(time!.format(context))
-                    : const Text("Not Set"),
+                    : Text('notSet'.tr),
                 trailing: InkWell(
                   borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
                   onTap: () async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
@@ -22,7 +23,7 @@ class FrequencyAndDays extends StatelessWidget {
           if (medication.frequency != MedicationFrequency.daysPerWeek)
             Chip(
               label: Text(
-                "${frequencies[medication.frequency]!}${medication.frequency == MedicationFrequency.once ? " On Day ${medication.monthlyDay!.day}" : ''}",
+                "${frequencies[medication.frequency]!}${medication.frequency == MedicationFrequency.once ? " ${'onDay'.tr} ${medication.monthlyDay!.day}" : ''}",
                 style: AppStyles.subTitle.copyWith(
                   color: theme.onPrimaryContainer,
                   fontFamily: 'Gambarino',

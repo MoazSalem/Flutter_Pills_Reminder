@@ -74,7 +74,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
                       },
                     ),
                     Text(
-                      "Pills Left: ${widget.medication.amount}",
+                      "${'remaining'.tr} ${widget.medication.amount}",
                       style: AppStyles.subTitle.copyWith(
                         color: theme.onPrimaryContainer,
                       ),

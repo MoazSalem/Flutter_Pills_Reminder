@@ -43,8 +43,8 @@ class NotificationRepoImpl implements NotificationRepo {
       isNotificationPermissionGranted = false;
       Get.snackbar(
         duration: const Duration(seconds: 5),
-        'Permission Denied',
-        'Notifications will not work until permission is granted.',
+        'permissionDenied'.tr,
+        'notificationsWillNotWork'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.theme.colorScheme.error,
         colorText: Get.theme.colorScheme.onError,
@@ -53,7 +53,7 @@ class NotificationRepoImpl implements NotificationRepo {
             openAppSettings();
           },
           child: Text(
-            'Open Settings',
+            'openSettings'.tr,
             style: TextStyle(color: Get.theme.colorScheme.onError),
           ),
         ),
@@ -106,8 +106,8 @@ class NotificationRepoImpl implements NotificationRepo {
     }
     await notificationService.scheduleMedicationNotification(
       id: id,
-      title: title ?? 'Take Your $medicationName',
-      body: body ?? 'Time to take your pill',
+      title: title ?? '${'notificationTitle'.tr} $medicationName',
+      body: body ?? 'notificationBody'.tr,
       dateTime: dateTime,
       notificationType: notificationType,
       isRepeating: isRepeating,
@@ -131,8 +131,8 @@ class NotificationRepoImpl implements NotificationRepo {
     }
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
-      title: title ?? 'Take Your $medicationName',
-      body: body ?? 'Time to take your pill',
+      title: title ?? '${"notificationTitle".tr} $medicationName',
+      body: body ?? 'notificationBody'.tr,
       time: time,
       weekdays: weekdays,
       notificationType: notificationType,
@@ -166,17 +166,17 @@ void notificationBackgroundHandler(NotificationResponse response) async {
 
     await plugin.zonedSchedule(
       UniqueKey().hashCode,
-      'Reminder',
-      '30 minutes has passed. It\'s time to take your medication!',
+      'reminder'.tr,
+      'reminderDescription'.tr,
       tzTime,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'med_channel',
           'Medications',
           actions: [
             AndroidNotificationAction(
               'remind_again',
-              'Remind Again in 30 minutes',
+              'remindAgain'.tr,
               showsUserInterface: false,
               cancelNotification: true,
             ),
