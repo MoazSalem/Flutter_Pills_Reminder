@@ -4,7 +4,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/app.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/hive_registrar.g.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
-import 'package:pills_reminder/features/settings/presentation/controllers/theme_controller.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
@@ -13,7 +13,7 @@ Future<void> main() async {
   Hive.registerAdapters();
   await Hive.openBox<MedicationModel>('medications');
   tz.initializeTimeZones();
-  await Hive.openBox('Themes');
-  Get.put<ThemeController>(ThemeController());
+  await Hive.openBox('Settings');
+  Get.put<SettingsController>(SettingsController());
   runApp(const MyApp());
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/bindings/app_bindings.dart';
 import 'package:pills_reminder/core/styles/strings.dart';
-import 'package:pills_reminder/features/settings/presentation/controllers/theme_controller.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/main_screen/main_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeController = Get.find<ThemeController>();
+    final themeController = Get.find<SettingsController>();
     return Obx(
       () => GetMaterialApp(
         translations: AppTranslations(),

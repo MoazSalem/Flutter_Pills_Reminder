@@ -3,11 +3,11 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/theme.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
-import 'package:pills_reminder/features/settings/presentation/controllers/theme_controller.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 
 class CustomThemeDropdown extends StatelessWidget {
   const CustomThemeDropdown({super.key, required this.themeController});
-  final ThemeController themeController;
+  final SettingsController themeController;
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/styles/theme.dart';
 
-class ThemeController extends GetxController {
-  ThemeController();
+class SettingsController extends GetxController {
+  SettingsController();
   late int themeIndex;
   final Rx<ThemeMode> themeMode = ThemeMode.system.obs;
   final Rx<ThemeData> lightTheme = ThemeData().obs;
@@ -15,7 +15,7 @@ class ThemeController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    box = Hive.box('Themes');
+    box = Hive.box('Settings');
     themeIndex = box.get('themeIndex') ?? 15;
     locale.value = Locale(box.get('lang') ?? 'en');
     themeMode.value = getThemeMode(box.get('themeMode') ?? 0);
