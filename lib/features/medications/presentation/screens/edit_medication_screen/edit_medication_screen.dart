@@ -282,6 +282,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         if (!formKey.currentState!.validate()) {
                           return;
                         }
+
+                        /// create medication model
                         final medication = MedicationModel(
                           name: nameController.text,
                           amount: int.tryParse(amountController.text),
@@ -298,67 +300,28 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           id: widget.medication?.id ?? UniqueKey().hashCode,
                           notificationType: notificationType,
                         );
+
+                        /// if this is edit medication
                         if (widget.medication != null) {
                           medicationsController.updateMedication(medication);
-                          frequency == MedicationFrequency.once
-                              ? [
-                                  for (
-                                    int i = 0;
-                                    i < medication.times.length;
-                                    i++
-                                  )
-                                    await notificationsController
-                                        .cancelNotification(medication.id + i),
-                                ]
-                              : await notificationsController
-                                    .cancelAllNotificationForMedication(
-                                      medication.id,
-                                    );
+
+                          /// we reset the notifications if the medication is edited
+                          await cancelNotification(
+                            notificationsController: notificationsController,
+                            medication: medication,
+                            frequency: frequency,
+                          );
                         } else {
+                          /// if this is add medication
                           medicationsController.addMedication(medication);
                         }
-                        frequency == MedicationFrequency.once
-                            ? [
-                                for (
-                                  int i = 0;
-                                  i < medication.times.length;
-                                  i++
-                                )
-                                  await notificationsController
-                                      .scheduleNotification(
-                                        id: medication.id + i,
-                                        medicationName: medication.name,
-                                        dateTime: DateTime(
-                                          medication.monthlyDay!.year,
-                                          medication.monthlyDay!.month,
-                                          medication.monthlyDay!.day,
-                                          medication.times[i].hour,
-                                          medication.times[i].minute,
-                                        ),
-                                        notificationType:
-                                            medication.notificationType,
-                                        isRepeating: true,
-                                      ),
-                              ]
-                            : {
-                                for (
-                                  int i = 0;
-                                  i < medication.times.length;
-                                  i++
-                                )
-                                  {
-                                    await notificationsController
-                                        .scheduleDailyOrWeeklyNotification(
-                                          id: medication.id,
-                                          medicationName: medication.name,
-                                          time: medication.times[i],
-                                          weekdays:
-                                              medication.selectedDays ?? [],
-                                          notificationType:
-                                              medication.notificationType,
-                                        ),
-                                  },
-                              };
+
+                        /// setup notifications for both add medication and edit medication
+                        setupNotification(
+                          notificationsController: notificationsController,
+                          medication: medication,
+                          frequency: frequency,
+                        );
                         Get.until((route) => route.isFirst);
                       },
                     ),
@@ -372,4 +335,55 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       ),
     );
   }
+}
+
+Future<void> cancelNotification({
+  required MedicationModel medication,
+  required MedicationFrequency frequency,
+  required NotificationsController notificationsController,
+}) async {
+  frequency == MedicationFrequency.once
+      ? [
+          for (int i = 0; i < medication.times.length; i++)
+            await notificationsController.cancelNotification(medication.id + i),
+        ]
+      : await notificationsController.cancelAllNotificationForMedication(
+          medication.id,
+        );
+}
+
+setupNotification({
+  required MedicationModel medication,
+  required MedicationFrequency frequency,
+  required NotificationsController notificationsController,
+}) async {
+  frequency == MedicationFrequency.once
+      ? [
+          for (int i = 0; i < medication.times.length; i++)
+            await notificationsController.scheduleNotification(
+              id: medication.id + i,
+              medicationName: medication.name,
+              dateTime: DateTime(
+                medication.monthlyDay!.year,
+                medication.monthlyDay!.month,
+                medication.monthlyDay!.day,
+                medication.times[i].hour,
+                medication.times[i].minute,
+              ),
+              notificationType: medication.notificationType,
+              isRepeating: true,
+            ),
+        ]
+      : {
+          for (int i = 0; i < medication.times.length; i++)
+            {
+              await notificationsController.scheduleDailyOrWeeklyNotification(
+                id: medication.id,
+                medicationName: medication.name,
+                time: medication.times[i],
+                weekdays: medication.selectedDays ?? [],
+                notificationType: medication.notificationType,
+              ),
+            },
+        };
 }
