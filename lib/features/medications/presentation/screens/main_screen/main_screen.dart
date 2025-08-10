@@ -30,8 +30,8 @@ class MainScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: theme.colorScheme.surface,
           appBar: AppBar(
-            actionsPadding: const EdgeInsets.only(
-              right: AppSizes.normalPadding,
+            actionsPadding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.normalPadding,
             ),
             title: Padding(
               padding: const EdgeInsets.symmetric(

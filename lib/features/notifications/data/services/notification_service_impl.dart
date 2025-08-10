@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
@@ -10,10 +11,10 @@ import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
-  static const List<AndroidNotificationAction> actionsList = [
+  static List<AndroidNotificationAction> actionsList = [
     AndroidNotificationAction(
       'remind_again',
-      'Remind Again in 30 minutes',
+      'remindAgain'.tr,
       showsUserInterface: false,
       cancelNotification: true,
     ),
@@ -49,7 +50,7 @@ class NotificationServiceImpl implements NotificationService {
       title,
       body,
       tz.TZDateTime.from(dateTime.toUtc(), tz.local),
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'med_channel',
           'Medications',
@@ -141,7 +142,7 @@ class NotificationServiceImpl implements NotificationService {
         title,
         body,
         tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             'daily_channel',
             'Daily Notifications',
@@ -178,7 +179,7 @@ class NotificationServiceImpl implements NotificationService {
           title,
           body,
           tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-          const NotificationDetails(
+          NotificationDetails(
             android: AndroidNotificationDetails(
               'weekly_channel',
               'Weekly Notifications',

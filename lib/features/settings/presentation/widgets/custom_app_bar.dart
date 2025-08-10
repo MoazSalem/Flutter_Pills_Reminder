@@ -14,13 +14,10 @@ PreferredSizeWidget customAppBar({required ColorScheme theme}) {
         horizontal: AppSizes.normalPadding,
       ),
       child: CustomButton(
-        icon: Padding(
-          padding: const EdgeInsets.only(right: 3.0),
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            size: AppSizes.normalIconSize,
-            color: theme.onPrimaryContainer,
-          ),
+        icon: Icon(
+          Icons.arrow_back,
+          size: AppSizes.largeIconSize,
+          color: theme.onPrimaryContainer,
         ),
         onTap: () => Get.back(),
       ),
