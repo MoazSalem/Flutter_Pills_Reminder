@@ -45,24 +45,41 @@ class NotificationServiceImpl implements NotificationService {
   @override
   Future<void> scheduleMedicationNotification({
     required int id,
-    String? title,
+    required String title,
     required String body,
     required DateTime dateTime,
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
-    await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(dateTime.toUtc(), tz.local),
-      details,
-      matchDateTimeComponents: isRepeating
+    final NotificationModel notification = NotificationModel(
+      id: id,
+      title: title,
+      body: body,
+      time: tz.TZDateTime.from(dateTime.toUtc(), tz.local),
+      matchComponents: isRepeating
           ? DateTimeComponents.dayOfMonthAndTime
           : null,
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
-          AndroidScheduleMode.inexactAllowWhileIdle,
+          AndroidScheduleMode.alarmClock,
+    );
+
+    /// Add notification to box if repeating
+    if (isRepeating) {
+      var box = await Hive.openBox('notifications');
+      final List<NotificationModel> notifications = box.get(id) ?? [];
+      notifications.add(notification);
+      await box.put(id, notifications);
+    }
+
+    await _plugin.zonedSchedule(
+      notification.id,
+      notification.title,
+      notification.body,
+      notification.time,
+      details,
+      matchDateTimeComponents: notification.matchComponents,
+      androidScheduleMode: notification.androidScheduleMode,
     );
   }
 
@@ -93,7 +110,7 @@ class NotificationServiceImpl implements NotificationService {
         matchComponents: DateTimeComponents.time,
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
-            AndroidScheduleMode.inexactAllowWhileIdle,
+            AndroidScheduleMode.alarmClock,
       );
       // Store notification, for later handling
       notifications.add(notification);
@@ -158,5 +175,21 @@ class NotificationServiceImpl implements NotificationService {
           ?.requestNotificationsPermission();
       debugPrint(granted.toString());
     }
+  }
+
+  @override
+  Future<void> rescheduleNotification({
+    required NotificationModel notification,
+  }) async {
+    await _plugin.zonedSchedule(
+      notification.id, // unique ID per weekday and time
+      notification.title,
+      notification.body,
+      notification.time,
+      details,
+      matchDateTimeComponents: notification.matchComponents,
+      androidScheduleMode: notification.androidScheduleMode,
+    );
+    debugPrint('Notification rescheduled');
   }
 }
