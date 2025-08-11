@@ -48,8 +48,10 @@ class MainScreen extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () => Get.to(() => const SettingsScreen()),
-                icon: Icon(
-                  Icons.settings_rounded,
+                icon: Image.asset(
+                  'assets/icons/settings.png',
+                  width: AppSizes.largeIconSize,
+                  height: AppSizes.largeIconSize,
                   color: theme.colorScheme.onPrimaryContainer,
                 ),
               ),
