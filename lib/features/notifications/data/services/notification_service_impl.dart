@@ -23,12 +23,14 @@ class NotificationServiceImpl implements NotificationService {
   ];
   static final details = NotificationDetails(
     android: AndroidNotificationDetails(
-      'meds_channel',
+      'medications_channel',
       'Medications Notifications',
       channelDescription: 'medication reminders',
       importance: Importance.max,
       priority: Priority.high,
       actions: actionsList,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('notification_sound'),
     ),
   );
 
