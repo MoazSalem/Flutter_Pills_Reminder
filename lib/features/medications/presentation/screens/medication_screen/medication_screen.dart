@@ -8,6 +8,7 @@ import 'package:pills_reminder/features/medications/presentation/controllers/med
 import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/edit_medication_screen.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/frequency_and_days.dart';
+import 'package:pills_reminder/core/widgets/reset_notifications.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/medication_screen/widgets/times_item.dart';
 
 class MedicationScreen extends StatefulWidget {
@@ -126,6 +127,12 @@ class _MedicationScreenState extends State<MedicationScreen> {
                     setState(() {});
                   },
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppSizes.normalPadding,
+                ),
+                child: ResetNotifications(id: widget.medication.id),
               ),
             ],
           ),

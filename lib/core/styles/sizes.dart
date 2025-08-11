@@ -5,6 +5,7 @@ class AppSizes {
   static const double smallPadding = 8.0;
   static const double normalPadding = 16.0;
   static const double largePadding = 24.0;
+  static const double tinyTextSize = 12.0;
   static const double smallTextSize = 14.0;
   static const double normalTextSize = 18.0;
   static const double largeTextSize = 24.0;
