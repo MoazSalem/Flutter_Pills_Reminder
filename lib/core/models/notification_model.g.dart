@@ -20,7 +20,7 @@ class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
       id: (fields[0] as num).toInt(),
       title: fields[1] as String,
       body: fields[2] as String,
-      time: fields[3] as TZDateTime,
+      time: fields[3] as tz.TZDateTime,
       matchComponents: fields[4] as DateTimeComponents?,
       androidScheduleMode: fields[5] == null
           ? AndroidScheduleMode.exactAllowWhileIdle

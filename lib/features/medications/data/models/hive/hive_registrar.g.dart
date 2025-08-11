@@ -18,6 +18,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(DateTimeComponentsAdapter());
     registerAdapter(AndroidScheduleModeAdapter());
     registerAdapter(WeekdayAdapter());
+    registerAdapter(TZDateTimeAdapter());
   }
 }
 
@@ -30,5 +31,6 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(DateTimeComponentsAdapter());
     registerAdapter(AndroidScheduleModeAdapter());
     registerAdapter(WeekdayAdapter());
+    registerAdapter(TZDateTimeAdapter());
   }
 }
