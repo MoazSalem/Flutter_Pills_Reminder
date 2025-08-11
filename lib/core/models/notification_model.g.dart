@@ -6,9 +6,43 @@ part of 'notification_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
+class NotificationListAdapter extends TypeAdapter<NotificationList> {
   @override
   final typeId = 5;
+
+  @override
+  NotificationList read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return NotificationList(
+      items: (fields[0] as List).cast<NotificationModel>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, NotificationList obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.items);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationListAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
+  @override
+  final typeId = 9;
 
   @override
   NotificationModel read(BinaryReader reader) {
