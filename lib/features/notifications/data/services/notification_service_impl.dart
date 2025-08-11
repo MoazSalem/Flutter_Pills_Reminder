@@ -66,9 +66,10 @@ class NotificationServiceImpl implements NotificationService {
 
     /// Add notification to box if repeating
     if (isRepeating) {
-      var box = await Hive.openBox('notifications');
-      final List<NotificationModel> notifications = box.get(id) ?? [];
-      notifications.add(notification);
+      Box box = await Hive.openBox<NotificationList>('notifications');
+      final NotificationList notifications =
+          box.get(id) ?? NotificationList(items: []);
+      notifications.items.add(notification);
       await box.put(id, notifications);
     }
 
@@ -96,8 +97,9 @@ class NotificationServiceImpl implements NotificationService {
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
     /// Initialize the notifications box
-    var box = await Hive.openBox('notifications');
-    final List<NotificationModel> notifications = box.get(id) ?? [];
+    Box box = await Hive.openBox<NotificationList>('notifications');
+    final NotificationList notifications =
+        box.get(id) ?? NotificationList(items: []);
 
     /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
@@ -113,7 +115,7 @@ class NotificationServiceImpl implements NotificationService {
             AndroidScheduleMode.alarmClock,
       );
       // Store notification, for later handling
-      notifications.add(notification);
+      notifications.items.add(notification);
       box.put(id, notifications);
 
       await _plugin.zonedSchedule(
@@ -143,7 +145,7 @@ class NotificationServiceImpl implements NotificationService {
         );
 
         // Store notification, for later handling
-        notifications.add(notification);
+        notifications.items.add(notification);
         box.put(id, notifications);
 
         await _plugin.zonedSchedule(

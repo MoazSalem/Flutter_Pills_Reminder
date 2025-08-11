@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
@@ -71,5 +72,19 @@ class NotificationsController extends GetxController {
       weekdays: weekdays,
       notificationType: notificationType,
     );
+  }
+
+  Future<void> rescheduleNotification({
+    required NotificationModel notification,
+  }) async {
+    notificationRepo.rescheduleNotification(notification: notification);
+  }
+
+  Future<void> rescheduleMedicationsNotifications({required int id}) async {
+    notificationRepo.rescheduleMedicationsNotifications(id: id);
+  }
+
+  Future<void> rescheduleAllNotifications() async {
+    notificationRepo.rescheduleAllNotifications();
   }
 }

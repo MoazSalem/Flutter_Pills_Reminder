@@ -60,6 +60,12 @@ class AppTranslations extends Translations {
       'appLange': 'Apps Language',
       'en': 'English',
       'ar': 'Arabic',
+      'resetNotifications': 'Reset Notifications',
+      'resetNotificationsDescription':
+          'This will reset and reschedule all notifications for this medication. ',
+      'resetAllNotificationsDescription':
+          'This will reset and reschedule all notifications for all medications. ',
+      'resetDone': 'All notifications have been reset and rescheduled.',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -116,6 +122,12 @@ class AppTranslations extends Translations {
       'appLange': 'لغة الاتطبيق',
       'en': 'الإنجليزية',
       'ar': 'العربية',
+      'resetNotifications': 'إعادة تعين الإشعارات',
+      'resetNotificationsDescription':
+          'هذا الخيار سيعيد تعين جميع الإشعارات الخاصة بهذا الدواء.',
+      'resetAllNotificationsDescription':
+          'هذا الخيار سيعيد تعين جميع الإشعارات لجميع الأدوية.',
+      'resetDone': 'جميع الإشعارات قد تم إعادة تعينها.',
     },
   };
 }

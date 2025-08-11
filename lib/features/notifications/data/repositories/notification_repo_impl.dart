@@ -3,6 +3,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -73,9 +74,9 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   Future<void> cancelAllNotificationForMedication(int id) async {
-    var box = await Hive.openBox('notifications');
-    var notifications = box.get(id) ?? [];
-    for (var notification in notifications) {
+    Box box = await Hive.openBox<NotificationList>('notifications');
+    NotificationList notifications = box.get(id) ?? NotificationList(items: []);
+    for (var notification in notifications.items) {
       await notificationService.cancelNotification(notification.id);
     }
     box.delete(id);
@@ -135,6 +136,47 @@ class NotificationRepoImpl implements NotificationRepo {
       time: time,
       weekdays: weekdays,
       notificationType: notificationType,
+    );
+  }
+
+  @override
+  Future<void> rescheduleNotification({
+    required NotificationModel notification,
+  }) {
+    return notificationService.rescheduleNotification(
+      notification: notification,
+    );
+  }
+
+  @override
+  Future<void> rescheduleMedicationsNotifications({required int id}) async {
+    Box box = await Hive.openBox<NotificationList>('notifications');
+    final NotificationList notifications =
+        box.get(id) ?? NotificationList(items: []);
+    for (var notification in notifications.items) {
+      await rescheduleNotification(notification: notification);
+    }
+    showSnackBar('resetNotifications'.tr, 'resetDone'.tr);
+  }
+
+  @override
+  Future<void> rescheduleAllNotifications() async {
+    Box box = await Hive.openBox<NotificationList>('notifications');
+    final allNotifications = box.values.toList();
+    for (var notifications in allNotifications) {
+      for (var notification in notifications.items) {
+        await rescheduleNotification(notification: notification);
+      }
+    }
+    showSnackBar('resetNotifications'.tr, 'resetDone'.tr);
+  }
+
+  showSnackBar(String title, String message) {
+    Get.snackbar(
+      duration: const Duration(seconds: 3),
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
     );
   }
 }
