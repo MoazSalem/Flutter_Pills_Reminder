@@ -15,12 +15,12 @@ class SettingsScreen extends StatelessWidget {
     final themeController = Get.find<SettingsController>();
     return Scaffold(
       backgroundColor: theme.surface,
-      appBar: customAppBar(theme: theme),
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
         child: Column(
           spacing: AppSizes.largePadding,
           children: [
+            CustomAppBar(),
             CustomDropDown(
               label: 'appLange'.tr,
               value: themeController.locale.value.languageCode,

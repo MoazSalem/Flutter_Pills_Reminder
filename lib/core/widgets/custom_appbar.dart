@@ -11,7 +11,10 @@ class CustomAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSizes.normalPadding),
+      padding: const EdgeInsets.only(
+        top: AppSizes.largePadding,
+        bottom: AppSizes.normalPadding,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

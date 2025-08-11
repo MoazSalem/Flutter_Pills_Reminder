@@ -4,31 +4,38 @@ import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/core/widgets/custom_button.dart';
 
-PreferredSizeWidget customAppBar({required ColorScheme theme}) {
-  return AppBar(
-    automaticallyImplyLeading: false,
-    leadingWidth: 90,
-    leading: Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSizes.normalPadding + 5,
-        horizontal: AppSizes.normalPadding,
+class CustomAppBar extends StatelessWidget {
+  const CustomAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: AppSizes.largePadding,
+        bottom: AppSizes.normalPadding,
       ),
-      child: CustomButton(
-        icon: Icon(
-          Icons.arrow_back,
-          size: AppSizes.largeIconSize,
-          color: theme.onPrimaryContainer,
-        ),
-        onTap: () => Get.back(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: AppSizes.largePadding,
+        children: [
+          CustomButton(
+            icon: Icon(
+              Icons.arrow_back,
+              size: AppSizes.largeIconSize,
+              color: theme.onPrimaryContainer,
+            ),
+            onTap: () => Get.back(),
+          ),
+          Text(
+            'settings'.tr,
+            style: AppStyles.title.copyWith(
+              color: theme.onPrimaryContainer,
+              fontSize: AppSizes.titleTextSize,
+            ),
+          ),
+        ],
       ),
-    ),
-    title: Text(
-      'settings'.tr,
-      style: AppStyles.title.copyWith(
-        color: theme.onPrimaryContainer,
-        fontSize: AppSizes.titleTextSize,
-      ),
-    ),
-    toolbarHeight: AppSizes.appBarHeight,
-  );
+    );
+  }
 }
