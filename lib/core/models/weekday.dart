@@ -40,3 +40,25 @@ extension WeekdayExtension on Weekday {
     }
   }
 }
+
+/// Helper function to get the weekday from the index
+timeZonesDayToWeekday(int index) {
+  switch (index) {
+    case 1:
+      return Weekday.monday;
+    case 2:
+      return Weekday.tuesday;
+    case 3:
+      return Weekday.wednesday;
+    case 4:
+      return Weekday.thursday;
+    case 5:
+      return Weekday.friday;
+    case 6:
+      return Weekday.saturday;
+    case 7:
+      return Weekday.sunday;
+    default:
+      return Weekday.monday;
+  }
+}

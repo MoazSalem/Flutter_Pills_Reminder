@@ -112,7 +112,6 @@ class NotificationRepoImpl implements NotificationRepo {
       notificationType: notificationType,
       isRepeating: isRepeating,
     );
-    debugPrint("Notification scheduled with id $id at $dateTime");
   }
 
   @override
@@ -136,9 +135,6 @@ class NotificationRepoImpl implements NotificationRepo {
       time: time,
       weekdays: weekdays,
       notificationType: notificationType,
-    );
-    debugPrint(
-      "Weekly Notification scheduled with id $id at $time at $weekdays",
     );
   }
 }
@@ -169,20 +165,7 @@ void notificationBackgroundHandler(NotificationResponse response) async {
       'reminder'.tr,
       'reminderDescription'.tr,
       tzTime,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'med_channel',
-          'Medications',
-          actions: [
-            AndroidNotificationAction(
-              'remind_again',
-              'remindAgain'.tr,
-              showsUserInterface: false,
-              cancelNotification: true,
-            ),
-          ],
-        ),
-      ),
+      NotificationServiceImpl.details,
       androidScheduleMode: AndroidScheduleMode.alarmClock,
     );
   }

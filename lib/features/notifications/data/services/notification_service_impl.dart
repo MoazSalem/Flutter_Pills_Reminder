@@ -6,12 +6,13 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/core/utils/tz_date_helper.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
-  static List<AndroidNotificationAction> actionsList = [
+  static final List<AndroidNotificationAction> actionsList = [
     AndroidNotificationAction(
       'remind_again',
       'remindAgain'.tr,
@@ -19,6 +20,17 @@ class NotificationServiceImpl implements NotificationService {
       cancelNotification: true,
     ),
   ];
+  static final details = NotificationDetails(
+    android: AndroidNotificationDetails(
+      'meds_channel',
+      'Medications Notifications',
+      channelDescription: 'medication reminders',
+      importance: Importance.max,
+      priority: Priority.high,
+      actions: actionsList,
+    ),
+  );
+
   NotificationServiceImpl(this._plugin);
 
   @override
@@ -26,14 +38,7 @@ class NotificationServiceImpl implements NotificationService {
     required String title,
     required String body,
   }) {
-    return _plugin.show(
-      0,
-      title,
-      body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails('med_channel', 'Medications'),
-      ),
-    );
+    return _plugin.show(0, title, body, details);
   }
 
   @override
@@ -50,13 +55,7 @@ class NotificationServiceImpl implements NotificationService {
       title,
       body,
       tz.TZDateTime.from(dateTime.toUtc(), tz.local),
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'med_channel',
-          'Medications',
-          actions: actionsList,
-        ),
-      ),
+      details,
       matchDateTimeComponents: isRepeating
           ? DateTimeComponents.dayOfMonthAndTime
           : null,
@@ -82,57 +81,9 @@ class NotificationServiceImpl implements NotificationService {
     var box = await Hive.openBox('notificationsIds');
     final List subIds = box.get(id) ?? [];
 
-    /// Helper function to get the next notification time
-    tz.TZDateTime nextInstanceOfTime(TimeOfDay time) {
-      final now = tz.TZDateTime.now(tz.local);
-      tz.TZDateTime scheduled = tz.TZDateTime(
-        tz.local,
-        now.year,
-        now.month,
-        now.day,
-        time.hour,
-        time.minute,
-      );
-      if (scheduled.isBefore(now)) {
-        scheduled = scheduled.add(const Duration(days: 1));
-      }
-      return scheduled;
-    }
-
-    /// Helper function to get the weekday from the index
-    timeZonesDayToWeekday(int index) {
-      switch (index) {
-        case 1:
-          return Weekday.monday;
-        case 2:
-          return Weekday.tuesday;
-        case 3:
-          return Weekday.wednesday;
-        case 4:
-          return Weekday.thursday;
-        case 5:
-          return Weekday.friday;
-        case 6:
-          return Weekday.saturday;
-        case 7:
-          return Weekday.sunday;
-        default:
-          return Weekday.monday;
-      }
-    }
-
-    /// Helper function to get the notifications for each weekday
-    tz.TZDateTime nextInstanceOfDayAndTime(Weekday weekday, TimeOfDay time) {
-      tz.TZDateTime scheduled = nextInstanceOfTime(time);
-      while (timeZonesDayToWeekday(scheduled.weekday) != weekday) {
-        scheduled = scheduled.add(const Duration(days: 1));
-      }
-      return scheduled;
-    }
-
-    // If no weekdays selected => schedule daily
+    /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
-      final tz.TZDateTime scheduledDate = nextInstanceOfTime(time);
+      final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
       // Store sub ids to cancel later
       subIds.add(id + scheduledDate.hour + scheduledDate.minute);
       box.put(id, subIds);
@@ -142,28 +93,17 @@ class NotificationServiceImpl implements NotificationService {
         title,
         body,
         tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            'daily_channel',
-            'Daily Notifications',
-            channelDescription: 'Daily medication reminders',
-            importance: Importance.max,
-            priority: Priority.high,
-            actions: actionsList,
-          ),
-        ),
+        details,
         matchDateTimeComponents: DateTimeComponents.time,
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.inexactAllowWhileIdle,
       );
     } else {
-      // Schedule on each selected weekday
+      /// Schedule on each selected weekday
       for (final weekday in weekdays) {
-        final tz.TZDateTime scheduledDate = nextInstanceOfDayAndTime(
-          weekday,
-          time,
-        );
+        final tz.TZDateTime scheduledDate =
+            TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
 
         // Store sub ids for each weekday to cancel later
         subIds.add(
@@ -179,16 +119,7 @@ class NotificationServiceImpl implements NotificationService {
           title,
           body,
           tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              'weekly_channel',
-              'Weekly Notifications',
-              channelDescription: 'Weekly medication reminders',
-              importance: Importance.max,
-              priority: Priority.high,
-              actions: actionsList,
-            ),
-          ),
+          details,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
           androidScheduleMode:
               notificationType?.androidScheduleMode ??
