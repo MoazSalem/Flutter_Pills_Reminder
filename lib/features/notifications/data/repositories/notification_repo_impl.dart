@@ -73,10 +73,10 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   Future<void> cancelAllNotificationForMedication(int id) async {
-    var box = await Hive.openBox('notificationsIds');
-    var ids = box.get(id) ?? [];
-    for (var id in ids) {
-      await notificationService.cancelNotification(id);
+    var box = await Hive.openBox('notifications');
+    var notifications = box.get(id) ?? [];
+    for (var notification in notifications) {
+      await notificationService.cancelNotification(notification.id);
     }
     box.delete(id);
   }

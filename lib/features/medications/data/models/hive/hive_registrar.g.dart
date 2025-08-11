@@ -4,6 +4,7 @@
 
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/medication_model_adapter.dart';
@@ -12,7 +13,10 @@ extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(MedicationFrequencyAdapter());
     registerAdapter(MedicationModelAdapter());
+    registerAdapter(NotificationModelAdapter());
     registerAdapter(NotificationTypeAdapter());
+    registerAdapter(DateTimeComponentsAdapter());
+    registerAdapter(AndroidScheduleModeAdapter());
     registerAdapter(WeekdayAdapter());
   }
 }
@@ -21,7 +25,10 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(MedicationFrequencyAdapter());
     registerAdapter(MedicationModelAdapter());
+    registerAdapter(NotificationModelAdapter());
     registerAdapter(NotificationTypeAdapter());
+    registerAdapter(DateTimeComponentsAdapter());
+    registerAdapter(AndroidScheduleModeAdapter());
     registerAdapter(WeekdayAdapter());
   }
 }

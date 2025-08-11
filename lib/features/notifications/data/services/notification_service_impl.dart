@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/utils/tz_date_helper.dart';
@@ -77,27 +78,35 @@ class NotificationServiceImpl implements NotificationService {
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
-    /// Initialize the notificationsIds box
-    var box = await Hive.openBox('notificationsIds');
-    final List subIds = box.get(id) ?? [];
+    /// Initialize the notifications box
+    var box = await Hive.openBox('notifications');
+    final List<NotificationModel> notifications = box.get(id) ?? [];
 
     /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
-      // Store sub ids to cancel later
-      subIds.add(id + scheduledDate.hour + scheduledDate.minute);
-      box.put(id, subIds);
-
-      await _plugin.zonedSchedule(
-        id + scheduledDate.hour + scheduledDate.minute, // unique ID per time
-        title,
-        body,
-        tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-        details,
-        matchDateTimeComponents: DateTimeComponents.time,
+      final NotificationModel notification = NotificationModel(
+        id: (id + scheduledDate.hour + scheduledDate.minute).toInt(),
+        title: title,
+        body: body,
+        time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+        matchComponents: DateTimeComponents.time,
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.inexactAllowWhileIdle,
+      );
+      // Store notification, for later handling
+      notifications.add(notification);
+      box.put(id, notifications);
+
+      await _plugin.zonedSchedule(
+        notification.id, // unique ID per weekday and time
+        notification.title,
+        notification.body,
+        notification.time,
+        details,
+        matchDateTimeComponents: notification.matchComponents,
+        androidScheduleMode: notification.androidScheduleMode,
       );
     } else {
       /// Schedule on each selected weekday
@@ -105,25 +114,29 @@ class NotificationServiceImpl implements NotificationService {
         final tz.TZDateTime scheduledDate =
             TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
 
-        // Store sub ids for each weekday to cancel later
-        subIds.add(
-          id + weekday.index + scheduledDate.hour + scheduledDate.minute,
-        );
-        box.put(id, subIds);
-
-        await _plugin.zonedSchedule(
-          id +
-              weekday.index +
-              scheduledDate.hour +
-              scheduledDate.minute, // unique ID per weekday and time
-          title,
-          body,
-          tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-          details,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        final NotificationModel notification = NotificationModel(
+          id: id + weekday.index + scheduledDate.hour + scheduledDate.minute,
+          title: title,
+          body: body,
+          time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+          matchComponents: DateTimeComponents.dayOfWeekAndTime,
           androidScheduleMode:
               notificationType?.androidScheduleMode ??
-              AndroidScheduleMode.inexactAllowWhileIdle,
+              AndroidScheduleMode.alarmClock,
+        );
+
+        // Store notification, for later handling
+        notifications.add(notification);
+        box.put(id, notifications);
+
+        await _plugin.zonedSchedule(
+          notification.id, // unique ID per weekday and time
+          notification.title,
+          notification.body,
+          notification.time,
+          details,
+          matchDateTimeComponents: notification.matchComponents,
+          androidScheduleMode: notification.androidScheduleMode,
         );
       }
     }
