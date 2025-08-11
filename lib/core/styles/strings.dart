@@ -68,6 +68,12 @@ class AppTranslations extends Translations {
       'resetDone': 'All notifications have been reset and rescheduled.',
       'resetWrong':
           'No notifications to reset. Please add a medication first or edit an existing one to register its notifications.',
+      'deleteMedication': 'Delete Medication',
+      'deleteMedicationDescription':
+          'This will delete the medication and its notifications, this action cannot be undone.',
+      'deleteDone': 'The medication has been deleted.',
+      'cancel': 'Cancel',
+      'delete': 'Delete',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -132,6 +138,12 @@ class AppTranslations extends Translations {
       'resetDone': 'جميع الإشعارات قد تم إعادة تعينها.',
       'resetWrong':
           'لا توجد إشعارات لإعادة ضبطها. يُرجى إضافة دواء أولاً أو تعديل دواء موجود لتسجيل إشعاراته.',
+      'deleteMedication': 'حذف الدواء',
+      'deleteMedicationDescription':
+          'هذا الخيار سيحذف الدواء وجميع الإشعارات الخاصة به. لا يمكن اعادة الدواء بعد الغاءة',
+      'deleteDone': 'تم حذف الدواء وجميع الإشعارات الخاصة به.',
+      'cancel': 'الغاء',
+      'delete': 'حذف',
     },
   };
 }

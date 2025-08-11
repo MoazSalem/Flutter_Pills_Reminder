@@ -9,6 +9,7 @@ import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_appbar.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/delete_dialog.dart';
 import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
 import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
@@ -246,28 +247,13 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           Icons.delete_forever_outlined,
                           color: theme.onErrorContainer,
                         ),
-                        onTap: () async {
-                          frequency == MedicationFrequency.once
-                              ? {
-                                  for (
-                                    int i = 0;
-                                    i < widget.medication!.times.length;
-                                    i++
-                                  )
-                                    await notificationsController
-                                        .cancelNotification(
-                                          widget.medication!.id + i,
-                                        ),
-                                }
-                              : await notificationsController
-                                    .cancelAllNotificationForMedication(
-                                      widget.medication!.id,
-                                    );
-                          medicationsController.deleteMedication(
-                            widget.medication!.id,
-                          );
-                          Get.until((route) => route.isFirst);
-                        },
+                        onTap: () => showDeleteDialog(
+                          context: context,
+                          medicationsController: medicationsController,
+                          medication: widget.medication!,
+                          frequency: frequency,
+                          notificationsController: notificationsController,
+                        ),
                       ),
 
                     /// Save medication
