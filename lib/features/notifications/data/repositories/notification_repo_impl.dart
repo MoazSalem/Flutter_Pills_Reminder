@@ -153,27 +153,36 @@ class NotificationRepoImpl implements NotificationRepo {
     Box box = await Hive.openBox<NotificationList>('notifications');
     final NotificationList notifications =
         box.get(id) ?? NotificationList(items: []);
-    for (var notification in notifications.items) {
-      await rescheduleNotification(notification: notification);
-    }
-    showSnackBar('resetNotifications'.tr, 'resetDone'.tr);
+    notifications.items.isEmpty
+        ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+        : {
+            for (var notification in notifications.items)
+              {
+                await rescheduleNotification(notification: notification),
+                showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+              },
+          };
   }
 
   @override
   Future<void> rescheduleAllNotifications() async {
     Box box = await Hive.openBox<NotificationList>('notifications');
     final allNotifications = box.values.toList();
-    for (var notifications in allNotifications) {
-      for (var notification in notifications.items) {
-        await rescheduleNotification(notification: notification);
-      }
-    }
-    showSnackBar('resetNotifications'.tr, 'resetDone'.tr);
+    allNotifications.isEmpty
+        ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+        : {
+            for (var notifications in allNotifications)
+              {
+                for (var notification in notifications.items)
+                  {await rescheduleNotification(notification: notification)},
+              },
+            showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+          };
   }
 
   showSnackBar(String title, String message) {
     Get.snackbar(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
       title,
       message,
       snackPosition: SnackPosition.BOTTOM,

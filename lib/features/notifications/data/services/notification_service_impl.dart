@@ -192,6 +192,5 @@ class NotificationServiceImpl implements NotificationService {
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
     );
-    debugPrint('Notification rescheduled');
   }
 }

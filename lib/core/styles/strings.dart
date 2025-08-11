@@ -66,6 +66,8 @@ class AppTranslations extends Translations {
       'resetAllNotificationsDescription':
           'This will reset and reschedule all notifications for all medications. ',
       'resetDone': 'All notifications have been reset and rescheduled.',
+      'resetWrong':
+          'No notifications to reset. Please add a medication first or edit an existing one to register its notifications.',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -128,6 +130,8 @@ class AppTranslations extends Translations {
       'resetAllNotificationsDescription':
           'هذا الخيار سيعيد تعين جميع الإشعارات لجميع الأدوية.',
       'resetDone': 'جميع الإشعارات قد تم إعادة تعينها.',
+      'resetWrong':
+          'لا توجد إشعارات لإعادة ضبطها. يُرجى إضافة دواء أولاً أو تعديل دواء موجود لتسجيل إشعاراته.',
     },
   };
 }
