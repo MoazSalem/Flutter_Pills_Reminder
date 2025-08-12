@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
@@ -11,8 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:pills_reminder/features/notifications/entrypoints/notification_background_handler.dart';
 
 class NotificationRepoImpl implements NotificationRepo {
   bool isNotificationPermissionGranted = false;
@@ -186,38 +184,6 @@ class NotificationRepoImpl implements NotificationRepo {
       title,
       message,
       snackPosition: SnackPosition.BOTTOM,
-    );
-  }
-}
-
-@pragma('vm:entry-point')
-void notificationBackgroundHandler(NotificationResponse response) async {
-  if (response.actionId == 'remind_again') {
-    final plugin = FlutterLocalNotificationsPlugin();
-
-    const AndroidInitializationSettings androidInit =
-        AndroidInitializationSettings('@drawable/icon');
-
-    final InitializationSettings initSettings = InitializationSettings(
-      android: androidInit,
-    );
-    tz.initializeTimeZones();
-    await plugin.initialize(
-      initSettings,
-      onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
-    );
-    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
-    final now = DateTime.now().add(const Duration(minutes: 30));
-    final tzTime = tz.TZDateTime.from(now, tz.local);
-
-    await plugin.zonedSchedule(
-      UniqueKey().hashCode,
-      'reminder'.tr,
-      'reminderDescription'.tr,
-      tzTime,
-      NotificationServiceImpl.details,
-      androidScheduleMode: AndroidScheduleMode.alarmClock,
     );
   }
 }
