@@ -74,7 +74,7 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   Future<void> cancelAllNotificationForMedication(int id) async {
-    Box box = await Hive.openBox<NotificationList>('notifications');
+    Box box = Hive.box<NotificationList>('notifications');
     NotificationList notifications = box.get(id) ?? NotificationList(items: []);
     for (var notification in notifications.items) {
       await notificationService.cancelNotification(notification.id);
@@ -150,7 +150,7 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   Future<void> rescheduleMedicationsNotifications({required int id}) async {
-    Box box = await Hive.openBox<NotificationList>('notifications');
+    Box box = Hive.box<NotificationList>('notifications');
     final NotificationList notifications =
         box.get(id) ?? NotificationList(items: []);
     notifications.items.isEmpty
@@ -166,7 +166,7 @@ class NotificationRepoImpl implements NotificationRepo {
 
   @override
   Future<void> rescheduleAllNotifications() async {
-    Box box = await Hive.openBox<NotificationList>('notifications');
+    Box box = Hive.box<NotificationList>('notifications');
     final allNotifications = box.values.toList();
     allNotifications.isEmpty
         ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)

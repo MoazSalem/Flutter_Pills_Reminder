@@ -68,7 +68,7 @@ class NotificationServiceImpl implements NotificationService {
 
     /// Add notification to box if repeating
     if (isRepeating) {
-      Box box = await Hive.openBox<NotificationList>('notifications');
+      Box box = Hive.box<NotificationList>('notifications');
       final NotificationList notifications =
           box.get(id) ?? NotificationList(items: []);
       notifications.items.add(notification);
@@ -99,7 +99,7 @@ class NotificationServiceImpl implements NotificationService {
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
     /// Initialize the notifications box
-    Box box = await Hive.openBox<NotificationList>('notifications');
+    Box box = Hive.box<NotificationList>('notifications');
     final NotificationList notifications =
         box.get(id) ?? NotificationList(items: []);
 

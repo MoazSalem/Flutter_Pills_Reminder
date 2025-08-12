@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/app.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/hive_registrar.g.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
@@ -12,8 +13,9 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
   await Hive.openBox<MedicationModel>('medications');
-  tz.initializeTimeZones();
   await Hive.openBox('Settings');
+  await Hive.openBox<NotificationList>('notifications');
+  tz.initializeTimeZones();
   Get.put<SettingsController>(SettingsController());
   runApp(const MyApp());
 }
