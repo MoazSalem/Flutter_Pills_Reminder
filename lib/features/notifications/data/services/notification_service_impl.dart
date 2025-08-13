@@ -1,39 +1,19 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/core/utils/tz_date_helper.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
-  static final List<AndroidNotificationAction> actionsList = [
-    AndroidNotificationAction(
-      'remind_again',
-      'remindAgain'.tr,
-      showsUserInterface: false,
-      cancelNotification: true,
-    ),
-  ];
-  static final details = NotificationDetails(
-    android: AndroidNotificationDetails(
-      'medications_channel',
-      'Medications Notifications',
-      channelDescription: 'medication reminders',
-      importance: Importance.max,
-      priority: Priority.high,
-      actions: actionsList,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('notification_sound'),
-    ),
-  );
-
   NotificationServiceImpl(this._plugin);
 
   @override
@@ -41,7 +21,7 @@ class NotificationServiceImpl implements NotificationService {
     required String title,
     required String body,
   }) {
-    return _plugin.show(0, title, body, details);
+    return _plugin.show(0, title, body, NotificationDetails());
   }
 
   @override
@@ -64,6 +44,7 @@ class NotificationServiceImpl implements NotificationService {
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.alarmClock,
+      payload: Get.locale?.languageCode ?? '',
     );
 
     /// Add notification to box if repeating
@@ -80,9 +61,10 @@ class NotificationServiceImpl implements NotificationService {
       notification.title,
       notification.body,
       notification.time,
-      details,
+      NotificationsHelper.getNotificationDetails(locale: notification.payload),
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
+      payload: notification.payload,
     );
   }
 
@@ -115,6 +97,7 @@ class NotificationServiceImpl implements NotificationService {
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.alarmClock,
+        payload: Get.locale?.languageCode ?? '',
       );
       // Store notification, for later handling
       notifications.items.add(notification);
@@ -125,9 +108,12 @@ class NotificationServiceImpl implements NotificationService {
         notification.title,
         notification.body,
         notification.time,
-        details,
+        NotificationsHelper.getNotificationDetails(
+          locale: notification.payload,
+        ),
         matchDateTimeComponents: notification.matchComponents,
         androidScheduleMode: notification.androidScheduleMode,
+        payload: notification.payload,
       );
     } else {
       /// Schedule on each selected weekday
@@ -144,6 +130,7 @@ class NotificationServiceImpl implements NotificationService {
           androidScheduleMode:
               notificationType?.androidScheduleMode ??
               AndroidScheduleMode.alarmClock,
+          payload: Get.locale?.languageCode ?? '',
         );
 
         // Store notification, for later handling
@@ -155,9 +142,12 @@ class NotificationServiceImpl implements NotificationService {
           notification.title,
           notification.body,
           notification.time,
-          details,
+          NotificationsHelper.getNotificationDetails(
+            locale: notification.payload,
+          ),
           matchDateTimeComponents: notification.matchComponents,
           androidScheduleMode: notification.androidScheduleMode,
+          payload: notification.payload,
         );
       }
     }
@@ -190,9 +180,12 @@ class NotificationServiceImpl implements NotificationService {
       notification.title,
       notification.body,
       notification.time,
-      details,
+      NotificationsHelper.getNotificationDetails(
+        locale: Get.locale?.languageCode ?? '',
+      ),
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
+      payload: Get.locale?.languageCode ?? '',
     );
   }
 }

@@ -1,6 +1,5 @@
-import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
+import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -24,16 +23,18 @@ void notificationBackgroundHandler(NotificationResponse response) async {
     );
     final String localTimeZone = await tz.FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
-    final now = DateTime.now().add(const Duration(minutes: 30));
+    final now = DateTime.now().add(const Duration(minutes: 2));
     final tzTime = tz.TZDateTime.from(now, tz.local);
-
     await plugin.zonedSchedule(
       UniqueKey().hashCode,
-      'reminder'.tr,
-      'reminderDescription'.tr,
+      NotificationsHelper.getReminderTitle(locale: response.payload),
+      NotificationsHelper.getReminderBody(locale: response.payload),
       tzTime,
-      NotificationServiceImpl.details,
+      NotificationsHelper.getNotificationDetails(locale: response.payload),
       androidScheduleMode: AndroidScheduleMode.alarmClock,
+      payload: response.payload,
     );
+
+    debugPrint('notification reminder set');
   }
 }

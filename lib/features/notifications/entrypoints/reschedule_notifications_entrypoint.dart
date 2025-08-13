@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
+import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/hive_registrar.g.dart';
-import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 @pragma('vm:entry-point')
@@ -34,7 +34,9 @@ void rescheduleAllNotifications() async {
         notification.title,
         notification.body,
         notification.time,
-        NotificationServiceImpl.details,
+        NotificationsHelper.getNotificationDetails(
+          locale: notification.payload,
+        ),
         matchDateTimeComponents: notification.matchComponents,
         androidScheduleMode: notification.androidScheduleMode,
       );
