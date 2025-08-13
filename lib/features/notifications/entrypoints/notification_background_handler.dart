@@ -1,11 +1,10 @@
+import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart' as tz;
-import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-
-import '../data/services/notification_service_impl.dart';
 
 @pragma('vm:entry-point')
 void notificationBackgroundHandler(NotificationResponse response) async {

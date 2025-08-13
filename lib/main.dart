@@ -8,14 +8,17 @@ import 'package:pills_reminder/features/medications/data/models/medication_model
 import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+/// this is the entrypoint to the background rescheduling process, if not imported flutter will remove it when compiling.
+import 'package:pills_reminder/features/notifications/entrypoints/reschedule_notifications_entrypoint.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
   await Hive.initFlutter();
   Hive.registerAdapters();
   await Hive.openBox<MedicationModel>('medications');
   await Hive.openBox('Settings');
   await Hive.openBox<NotificationList>('notifications');
-  tz.initializeTimeZones();
   Get.put<SettingsController>(SettingsController());
   runApp(const MyApp());
 }
