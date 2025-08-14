@@ -1,5 +1,3 @@
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-
 class OnboardingData {
   static final List<Map<String, String>> pages = [
     {

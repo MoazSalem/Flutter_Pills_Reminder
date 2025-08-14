@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
@@ -17,6 +19,10 @@ class NotificationsController extends GetxController {
 
   Future<void> requestNotificationPermission() async {
     await notificationRepo.requestNotificationPermission();
+  }
+
+  Future<void> requestExactAlarmPermission() async {
+    await notificationRepo.requestExactAlarmPermission();
   }
 
   Future<void> cancelNotification(int id) async {

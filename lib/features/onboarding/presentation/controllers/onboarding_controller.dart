@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/main_screen/main_screen.dart';
+import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
 
 class OnboardingController extends GetxController {
   var currentPage = 0.obs;
@@ -22,8 +23,12 @@ class OnboardingController extends GetxController {
     }
   }
 
-  void finishOnboarding() {
+  void finishOnboarding() async {
     Hive.box('Settings').put('onboarded', '1');
+    final NotificationsController controller =
+        Get.find<NotificationsController>();
+    await controller.requestNotificationPermission();
+    await controller.requestExactAlarmPermission();
     Get.offAll(MainScreen());
   }
 }

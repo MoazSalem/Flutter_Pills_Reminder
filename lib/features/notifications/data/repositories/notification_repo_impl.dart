@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
@@ -99,10 +98,6 @@ class NotificationRepoImpl implements NotificationRepo {
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
-    await requestNotificationPermission();
-    if (Platform.isAndroid && notificationType != NotificationType.inexact) {
-      await requestExactAlarmPermission();
-    }
     await notificationService.scheduleMedicationNotification(
       id: id,
       title: title ?? '${'notificationTitle'.tr} $medicationName',
@@ -123,10 +118,6 @@ class NotificationRepoImpl implements NotificationRepo {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
-    await requestNotificationPermission();
-    if (Platform.isAndroid && notificationType != NotificationType.inexact) {
-      await requestExactAlarmPermission();
-    }
     await notificationService.scheduleDailyOrWeeklyNotification(
       id: id,
       title: title ?? '${"notificationTitle".tr} $medicationName',
