@@ -70,6 +70,16 @@ class AppTranslations extends Translations {
       'deleteDone': 'The medication has been deleted.',
       'cancel': 'Cancel',
       'delete': 'Delete',
+      'onboardingTitle1': 'Welcome to Pills Reminder',
+      'onboardingTitle2': 'Reminders that fit your life',
+      'onboardingTitle3': 'Stay on track',
+      'onboardingDescription1': 'Never Forget to take your pills again.',
+      'onboardingDescription2':
+          'Daily, on specific days, or monthly — we’ll remind you right on time.',
+      'onboardingDescription3':
+          'Consistent medication keeps you healthy — we’re here to help.',
+      'getStarted': 'Get Started',
+      'next': 'Next',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -137,6 +147,16 @@ class AppTranslations extends Translations {
       'deleteDone': 'تم حذف الدواء وجميع الإشعارات الخاصة به.',
       'cancel': 'الغاء',
       'delete': 'حذف',
+      'onboardingTitle1': 'مرحبا بك في منبّه الحبوب',
+      'onboardingTitle2': 'التذكيرات التي تناسب حياتك',
+      'onboardingTitle3': 'البقاء على المسار الصحيح',
+      'onboardingDescription1': 'لن تنسى تناول الحبوب مجدداً.',
+      'onboardingDescription2':
+          'يوميًا، في أيام محددة، او شهريًا — سوف نذكرك بالوقت الصحيح.',
+      'onboardingDescription3':
+          'تناول الدواء بشكل منتظم يحافظ على صحتك — نحن هنا لمساعدتك.',
+      'getStarted': 'ابدء',
+      'next': 'التالي',
     },
   };
 }
