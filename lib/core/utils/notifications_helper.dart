@@ -11,6 +11,12 @@ class NotificationsHelper {
         priority: Priority.high,
         actions: [
           AndroidNotificationAction(
+            'mark_done',
+            locale == 'ar' ? 'تم التناول' : 'Mark as taken',
+            showsUserInterface: false,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
             'remind_again',
             locale == 'ar' ? 'ذكّرني بعد 30 دقيقة' : 'Remind me in 30 minutes',
             showsUserInterface: false,

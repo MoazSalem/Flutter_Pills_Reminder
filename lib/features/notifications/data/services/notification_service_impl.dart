@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,11 @@ class NotificationServiceImpl implements NotificationService {
       androidScheduleMode:
           notificationType?.androidScheduleMode ??
           AndroidScheduleMode.alarmClock,
-      payload: Get.locale?.languageCode ?? '',
+      payload: jsonEncode({
+        "locale": Get.locale?.languageCode ?? '',
+        "id": "$id",
+        "pill time": "${dateTime.hour}:${dateTime.minute}",
+      }),
     );
 
     /// Add notification to box if repeating
@@ -61,7 +66,9 @@ class NotificationServiceImpl implements NotificationService {
       notification.title,
       notification.body,
       notification.time,
-      NotificationsHelper.getNotificationDetails(locale: notification.payload),
+      NotificationsHelper.getNotificationDetails(
+        locale: json.decode(notification.payload!)['locale'],
+      ),
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
       payload: notification.payload,
@@ -97,7 +104,11 @@ class NotificationServiceImpl implements NotificationService {
         androidScheduleMode:
             notificationType?.androidScheduleMode ??
             AndroidScheduleMode.alarmClock,
-        payload: Get.locale?.languageCode ?? '',
+        payload: jsonEncode({
+          "locale": Get.locale?.languageCode ?? '',
+          "id": "$id",
+          "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
+        }),
       );
       // Store notification, for later handling
       notifications.items.add(notification);
@@ -109,7 +120,7 @@ class NotificationServiceImpl implements NotificationService {
         notification.body,
         notification.time,
         NotificationsHelper.getNotificationDetails(
-          locale: notification.payload,
+          locale: json.decode(notification.payload!)['locale'],
         ),
         matchDateTimeComponents: notification.matchComponents,
         androidScheduleMode: notification.androidScheduleMode,
@@ -143,7 +154,7 @@ class NotificationServiceImpl implements NotificationService {
           notification.body,
           notification.time,
           NotificationsHelper.getNotificationDetails(
-            locale: notification.payload,
+            locale: json.decode(notification.payload!)['locale'],
           ),
           matchDateTimeComponents: notification.matchComponents,
           androidScheduleMode: notification.androidScheduleMode,
@@ -161,13 +172,11 @@ class NotificationServiceImpl implements NotificationService {
   @override
   Future<void> requestExactAlarmPermission() async {
     if (Platform.isAndroid) {
-      final bool? granted;
-      granted = await _plugin
+      await _plugin
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
           >()
           ?.requestNotificationsPermission();
-      debugPrint(granted.toString());
     }
   }
 
@@ -181,11 +190,11 @@ class NotificationServiceImpl implements NotificationService {
       notification.body,
       notification.time,
       NotificationsHelper.getNotificationDetails(
-        locale: Get.locale?.languageCode ?? '',
+        locale: json.decode(notification.payload!)['locale'],
       ),
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
-      payload: Get.locale?.languageCode ?? '',
+      payload: notification.payload,
     );
   }
 }
