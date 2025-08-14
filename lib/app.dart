@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/bindings/app_bindings.dart';
 import 'package:pills_reminder/core/styles/strings.dart';
+import 'package:pills_reminder/features/onboarding/presentation/screens/onboarding_page.dart';
 import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/main_screen/main_screen.dart';
 
@@ -21,7 +23,9 @@ class MyApp extends StatelessWidget {
         theme: themeController.lightTheme.value,
         darkTheme: themeController.darkTheme.value,
         themeMode: themeController.themeMode.value,
-        home: MainScreen(),
+        home: Hive.box('Settings').get('onboarded') == '1'
+            ? const MainScreen()
+            : OnboardingPage(),
       ),
     );
   }

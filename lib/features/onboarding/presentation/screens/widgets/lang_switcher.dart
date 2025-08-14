@@ -31,7 +31,7 @@ class _LangSwitcherState extends State<LangSwitcher> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: theme.primary,
+            color: theme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
             border: Border.all(
               color: theme.primaryFixedDim,
@@ -42,7 +42,10 @@ class _LangSwitcherState extends State<LangSwitcher> {
             padding: const EdgeInsets.all(AppSizes.smallPadding),
             child: Text(
               isEng ? 'ar'.tr : 'en'.tr,
-              style: AppStyles.subTitle.copyWith(color: theme.onPrimary),
+              style: AppStyles.subTitle.copyWith(
+                color: theme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

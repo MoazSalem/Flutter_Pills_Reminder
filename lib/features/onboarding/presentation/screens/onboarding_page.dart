@@ -101,12 +101,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         children: [
                           Obx(
                             () => FilledButton(
-                              onPressed: () => controller.nextPage(
-                                OnboardingData.pages.length,
-                              ),
+                              onPressed: () =>
+                                  index == OnboardingData.pages.length - 1
+                                  ? controller.finishOnboarding()
+                                  : controller.nextPage(
+                                      OnboardingData.pages.length,
+                                    ),
                               style: FilledButton.styleFrom(
-                                backgroundColor: theme.primaryContainer,
-                                foregroundColor: theme.onPrimaryContainer,
+                                backgroundColor: theme.surfaceContainerLowest,
+                                foregroundColor: theme.onSurface,
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide(
                                     width: AppSizes.borderWidth,
