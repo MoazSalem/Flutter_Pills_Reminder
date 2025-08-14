@@ -28,9 +28,12 @@ lib/
 
 - ⏰ **Schedule custom medication reminders**
 - 📅 **Supports one-time, daily, or weekly notifications**
+- 🎯 **Notifcations Presistance to never miss your pills**
 - 🧠 **Clean architecture & GetX-based controllers**
 - ⚡ **Blazing fast local storage with Hive**
 - 🔔 **Precise local notifications using Flutter Local Notifications**
+- 🦾 **Notification Actions to make life easier**
+- 📱 **Full English and Arabic Translations**
 - 🌗 **Dark & light theme support**
 - ✅ **Offline-first experience**
 
@@ -42,10 +45,11 @@ lib/
 
 | Light Mode                                                                                                           | Dark Mode                                                                                                        |
 |:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/a656e209-d623-4b43-9eba-68db6bd3b55b" width="300">               | <img src="https://github.com/user-attachments/assets/a58d306e-bf12-457e-8dad-368fcd3d0b5b" width="300">               |
-| <img src="https://github.com/user-attachments/assets/37cdc07e-275e-461e-b411-f3e6c1a693f8" width="300">               | <img src="https://github.com/user-attachments/assets/2811acf3-6577-42f3-8bb9-58bcd848ccef" width="300">               |
-| <img src="https://github.com/user-attachments/assets/d8565bf3-1391-401d-a866-67e171af2508" width="300">               | <img src="https://github.com/user-attachments/assets/488628b1-3cf9-4475-9536-e091d915cbac" width="300">               |
-
+| <img src="https://github.com/user-attachments/assets/eca6371a-17aa-455a-abc0-1eb79f58c9ff" width="300">               | <img src="https://github.com/user-attachments/assets/0dccd0b9-03bf-4ff5-904d-a9a9b24114bf" width="300">               |
+| <img src="https://github.com/user-attachments/assets/c660351a-633d-495b-9752-4a5fc2362bd9" width="300">               | <img src="https://github.com/user-attachments/assets/bc34c485-2770-4f3b-8534-e9e5993bcf88" width="300">               |
+| <img src="https://github.com/user-attachments/assets/8901093f-9d33-4e19-b34a-f021084549d3" width="300">               | <img src="https://github.com/user-attachments/assets/eba14a5b-4ec2-4242-99c4-81693bd60910" width="300">               |
+| <img src="https://github.com/user-attachments/assets/c26cfc8c-69d0-4b23-9f62-81e708fb1fce" width="300">               | <img src="https://github.com/user-attachments/assets/6ac20333-c385-41eb-a75c-11e5189bb68c" width="300">               |
+| <img src="https://github.com/user-attachments/assets/4ddfd49f-79c5-451a-87bd-836d0658bbea" width="300">               | <img src="https://github.com/user-attachments/assets/21341588-3d4a-49fd-8869-984c328c2e17" width="300">               |
 </div>
 
 ---
@@ -141,15 +145,6 @@ If you like this project:
 - 📢 Share with others
 
 Feel free to suggest or request features via [issues](https://github.com/MoazSalem/Flutter_Pills_Reminder/issues)!
-
----
-
-## 🛠️ To Be Done
-
-- ❇️ Improvments and New Features
-
-- 🔄 Write Tests
-
 
 ---
 
