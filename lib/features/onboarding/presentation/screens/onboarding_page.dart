@@ -4,6 +4,7 @@ import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/features/onboarding/data/datasources/onboarding_data.dart';
 import 'package:pills_reminder/features/onboarding/presentation/controllers/onboarding_controller.dart';
+import 'package:pills_reminder/features/onboarding/presentation/screens/widgets/lang_switcher.dart';
 import 'widgets/page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -21,7 +22,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
     return Scaffold(
       backgroundColor: theme.surface,
       body: Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Get.locale!.languageCode == 'ar'
+            ? Alignment.topRight
+            : Alignment.topLeft,
         children: [
           PageView.builder(
             controller: controller.pageController,
@@ -73,7 +76,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            OnboardingData.pages[index]['title']!,
+                            OnboardingData.pages[index]['title']!.tr,
                             style: AppStyles.title.copyWith(
                               fontSize: AppSizes.titleTextSize,
                             ),
@@ -83,7 +86,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               horizontal: 30.0,
                             ),
                             child: Text(
-                              OnboardingData.pages[index]['subtitle']!,
+                              OnboardingData.pages[index]['subtitle']!.tr,
                               textAlign: TextAlign.center,
                               style: AppStyles.subTitle.copyWith(),
                             ),
@@ -147,6 +150,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               });
             },
           ),
+          LangSwitcher(),
         ],
       ),
     );
