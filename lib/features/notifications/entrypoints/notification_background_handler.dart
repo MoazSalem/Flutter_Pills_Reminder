@@ -25,7 +25,7 @@ void notificationBackgroundHandler(NotificationResponse response) async {
     tz.initializeTimeZones();
     final String localTimeZone = await tz.FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
-    final now = DateTime.now().add(const Duration(minutes: 2));
+    final now = DateTime.now().add(const Duration(minutes: 30));
     final tzTime = tz.TZDateTime.from(now, tz.local);
     final String locale = json.decode(response.payload!)['locale'];
 
