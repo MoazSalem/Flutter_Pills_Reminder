@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
@@ -57,6 +58,10 @@ class ResetNotifications extends StatelessWidget {
               color: theme.onPrimaryContainer,
             ),
             onTap: () async {
+              await controller.requestNotificationPermission();
+              if (Platform.isAndroid) {
+                await controller.requestExactAlarmPermission();
+              }
               id != null
                   ? await controller.rescheduleMedicationsNotifications(id: id!)
                   : await controller.rescheduleAllNotifications();

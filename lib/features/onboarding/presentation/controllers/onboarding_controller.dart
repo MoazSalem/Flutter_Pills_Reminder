@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -28,7 +29,9 @@ class OnboardingController extends GetxController {
     final NotificationsController controller =
         Get.find<NotificationsController>();
     await controller.requestNotificationPermission();
-    await controller.requestExactAlarmPermission();
+    if (Platform.isAndroid) {
+      await controller.requestExactAlarmPermission();
+    }
     Get.offAll(MainScreen());
   }
 }
