@@ -80,5 +80,12 @@ void notificationBackgroundHandler(NotificationResponse response) async {
       int.parse(data['id']),
       medication.copyWith(amount: amount, timesPillTaken: timesPillTaken),
     );
+
+    /// update last opened date
+    var dateBox = await Hive.openBox('date');
+    dateBox.put('lastOpenedDate', DateTime.now().weekday);
+
+    box.close();
+    dateBox.close();
   }
 }
