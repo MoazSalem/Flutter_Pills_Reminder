@@ -37,7 +37,7 @@ void notificationBackgroundHandler(NotificationResponse response) async {
       tzTime,
       NotificationsHelper.getNotificationDetails(locale: locale),
       androidScheduleMode: AndroidScheduleMode.alarmClock,
-      payload: locale,
+      payload: response.payload,
     );
   }
   if (response.actionId == 'mark_done') {
