@@ -51,7 +51,7 @@ class AppTranslations extends Translations {
       'notificationsWillNotWork':
           'Notifications will not work until permission is granted.',
       'openSettings': 'Open Settings',
-      'notificationTitle': 'Take Your ',
+      'notificationTitle': 'Take Your',
       'notificationBody': 'Time to take your pill',
       'appLange': 'Apps Language',
       'en': 'English',
@@ -128,7 +128,7 @@ class AppTranslations extends Translations {
       'permissionDenied': 'تم رفض الإذن',
       'notificationsWillNotWork': 'لن تعمل الإشعارات حتى يتم منح الإذن.',
       'openSettings': 'فتح الإعدادات',
-      'notificationTitle': 'تناول ',
+      'notificationTitle': 'تناول',
       'notificationBody': 'حان وقت تناول الحبة',
       'appLange': 'لغة الاتطبيق',
       'en': 'الإنجليزية',
