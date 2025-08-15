@@ -122,7 +122,15 @@ dependencies:
 
  You can download the latest APK builds from the [Releases](https://github.com/MoazSalem/Flutter_Pills_Reminder/releases) section.
 
+ <p>
+  <a href="https://play.google.com/store/apps/details?id=com.moazsalem.pills_reminder" target="_blank">
+  <img src="https://github.com/user-attachments/assets/103a79d8-5189-46fc-b8af-2584d3ff238a" alt="Google_Play_Store_badge" />
+    </a>
+</p>
+
 ---
+
+
 
 ## 🤝 Contributing
 
