@@ -13,6 +13,7 @@ abstract class NotificationRepo {
     required String title,
     required String body,
   });
+
   Future<void> scheduleNotification({
     required DateTime dateTime,
     required int id,
@@ -22,6 +23,7 @@ abstract class NotificationRepo {
     NotificationType? notificationType,
     required bool isRepeating,
   });
+
   Future<void> scheduleDailyOrWeeklyNotification({
     required int id,
     String? title,
@@ -31,9 +33,22 @@ abstract class NotificationRepo {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   });
+
+  Future<void> scheduleGroupedDailyOrWeeklyNotification({
+    required int id,
+    String? title,
+    String? body,
+    required String medicationName,
+    required TimeOfDay time,
+    required List<Weekday> weekdays,
+    NotificationType? notificationType,
+  });
+
   Future<void> rescheduleNotification({
     required NotificationModel notification,
   });
+
   Future<void> rescheduleMedicationsNotifications({required int id});
+
   Future<void> rescheduleAllNotifications();
 }

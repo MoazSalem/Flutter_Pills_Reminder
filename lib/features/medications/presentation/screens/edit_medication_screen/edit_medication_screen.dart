@@ -1,22 +1,24 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
+import 'package:pills_reminder/core/widgets/custom_appbar.dart';
 import 'package:pills_reminder/core/widgets/custom_button.dart';
+import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/core/widgets/custom_appbar.dart';
-import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/delete_dialog.dart';
-import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
-import 'package:pills_reminder/core/widgets/custom_drop_down.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/custom_text_formfield.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/day_picker.dart';
+import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/delete_dialog.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/notification_type_title.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/pill_time.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/weekday_picker.dart';
+import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 
 class EditMedicationScreen extends StatefulWidget {
   const EditMedicationScreen({super.key, this.medication});
@@ -343,6 +345,8 @@ setupNotification({
   required MedicationFrequency frequency,
   required NotificationsController notificationsController,
 }) async {
+  final groupedNotifications =
+      Get.find<SettingsController>().groupedNotifications.value;
   frequency == MedicationFrequency.once
       ? [
           for (int i = 0; i < medication.times.length; i++)
@@ -363,13 +367,28 @@ setupNotification({
       : {
           for (int i = 0; i < medication.times.length; i++)
             {
-              await notificationsController.scheduleDailyOrWeeklyNotification(
-                id: medication.id,
-                medicationName: medication.name,
-                time: medication.times[i],
-                weekdays: medication.selectedDays ?? [],
-                notificationType: medication.notificationType,
-              ),
+              if (groupedNotifications)
+                {
+                  await notificationsController
+                      .scheduleGroupedDailyOrWeeklyNotification(
+                        id: medication.id,
+                        medicationName: medication.name,
+                        time: medication.times[i],
+                        weekdays: medication.selectedDays ?? [],
+                        notificationType: medication.notificationType,
+                      ),
+                }
+              else
+                {
+                  await notificationsController
+                      .scheduleDailyOrWeeklyNotification(
+                        id: medication.id,
+                        medicationName: medication.name,
+                        time: medication.times[i],
+                        weekdays: medication.selectedDays ?? [],
+                        notificationType: medication.notificationType,
+                      ),
+                },
             },
         };
 }

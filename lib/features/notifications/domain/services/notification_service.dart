@@ -27,6 +27,16 @@ abstract class NotificationService {
     NotificationType? notificationType,
   });
 
+  Future<void> scheduleGroupedDailyOrWeeklyNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String medicationName,
+    required TimeOfDay time,
+    required List<Weekday> weekdays,
+    NotificationType? notificationType,
+  });
+
   Future<void> rescheduleNotification({
     required NotificationModel notification,
   });

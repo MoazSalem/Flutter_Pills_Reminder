@@ -44,6 +44,26 @@ class NotificationModel {
     this.androidScheduleMode = AndroidScheduleMode.exactAllowWhileIdle,
     this.payload,
   });
+
+  NotificationModel copyWith({
+    int? id,
+    String? title,
+    String? body,
+    tz.TZDateTime? time,
+    DateTimeComponents? matchComponents,
+    AndroidScheduleMode? androidScheduleMode,
+    String? payload,
+  }) {
+    return NotificationModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      time: time ?? this.time,
+      matchComponents: matchComponents ?? this.matchComponents,
+      androidScheduleMode: androidScheduleMode ?? this.androidScheduleMode,
+      payload: payload ?? this.payload,
+    );
+  }
 }
 
 class DateTimeComponentsAdapter extends TypeAdapter<DateTimeComponents> {

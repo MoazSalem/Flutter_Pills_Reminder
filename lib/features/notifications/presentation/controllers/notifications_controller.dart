@@ -78,6 +78,26 @@ class NotificationsController extends GetxController {
     );
   }
 
+  Future<void> scheduleGroupedDailyOrWeeklyNotification({
+    required int id,
+    String? title,
+    String? body,
+    required String medicationName,
+    required TimeOfDay time,
+    required List<Weekday> weekdays,
+    NotificationType? notificationType,
+  }) async {
+    notificationRepo.scheduleGroupedDailyOrWeeklyNotification(
+      id: id,
+      title: title,
+      body: body,
+      medicationName: medicationName,
+      time: time,
+      weekdays: weekdays,
+      notificationType: notificationType,
+    );
+  }
+
   Future<void> rescheduleNotification({
     required NotificationModel notification,
   }) async {

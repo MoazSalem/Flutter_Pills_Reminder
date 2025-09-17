@@ -1,11 +1,11 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
@@ -122,6 +122,27 @@ class NotificationRepoImpl implements NotificationRepo {
       id: id,
       title: title ?? '${"notificationTitle".tr} $medicationName',
       body: body ?? 'notificationBody'.tr,
+      time: time,
+      weekdays: weekdays,
+      notificationType: notificationType,
+    );
+  }
+
+  @override
+  Future<void> scheduleGroupedDailyOrWeeklyNotification({
+    required int id,
+    String? title,
+    String? body,
+    required String medicationName,
+    required TimeOfDay time,
+    required List<Weekday> weekdays,
+    NotificationType? notificationType,
+  }) async {
+    await notificationService.scheduleGroupedDailyOrWeeklyNotification(
+      id: id,
+      title: title ?? '${"notificationTitle".tr} $medicationName',
+      body: body ?? 'notificationBody'.tr,
+      medicationName: medicationName,
       time: time,
       weekdays: weekdays,
       notificationType: notificationType,

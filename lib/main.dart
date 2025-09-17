@@ -14,8 +14,10 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
   await Hive.openBox<MedicationModel>('medications');
-  await Hive.openBox<NotificationList>('notifications');
   final settingsBox = await Hive.openBox('Settings');
+  settingsBox.get('groupedNotifications', defaultValue: false)
+      ? await Hive.openBox('groupedNotifications')
+      : await Hive.openBox<NotificationList>('notifications');
   Get.put<SettingsController>(SettingsController(settingsBox));
   runApp(const MyApp());
 }
