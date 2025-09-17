@@ -37,9 +37,7 @@ abstract class NotificationService {
     NotificationType? notificationType,
   });
 
-  Future<void> rescheduleNotification({
-    required NotificationModel notification,
-  });
+  Future<void> scheduleNotification({required NotificationModel notification});
 
   Future<void> cancelNotification(int id);
 

@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
+import 'package:pills_reminder/core/models/notification_type.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationsHelper {
   static NotificationDetails getNotificationDetails({String? locale}) {
@@ -72,5 +78,44 @@ class NotificationsHelper {
 
     // Rebuild into string
     return list.join(',');
+  }
+
+  static NotificationModel buildNotification({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime time,
+    required DateTimeComponents? matchComponents,
+    NotificationType? type,
+    bool isGrouped = false,
+    String? medicationId,
+  }) {
+    return NotificationModel(
+      id: id,
+      title: title,
+      body: body,
+      time: time,
+      matchComponents: matchComponents,
+      androidScheduleMode:
+          type?.androidScheduleMode ?? AndroidScheduleMode.alarmClock,
+      payload: buildPayload(
+        id: medicationId ?? "$id",
+        time: '${time.hour}:${time.minute}',
+        isGrouped: isGrouped,
+      ),
+    );
+  }
+
+  static String buildPayload({
+    required String id,
+    required String time,
+    bool isGrouped = false,
+  }) {
+    return jsonEncode({
+      "locale": Get.locale?.languageCode ?? '',
+      "id": id,
+      "pill time": time,
+      if (isGrouped) "is Grouped": "true",
+    });
   }
 }

@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
@@ -35,23 +34,17 @@ class NotificationServiceImpl implements NotificationService {
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
-    final NotificationModel notification = NotificationModel(
-      id: id,
-      title: title,
-      body: body,
-      time: tz.TZDateTime.from(dateTime.toUtc(), tz.local),
-      matchComponents: isRepeating
-          ? DateTimeComponents.dayOfMonthAndTime
-          : null,
-      androidScheduleMode:
-          notificationType?.androidScheduleMode ??
-          AndroidScheduleMode.alarmClock,
-      payload: jsonEncode({
-        "locale": Get.locale?.languageCode ?? '',
-        "id": "$id",
-        "pill time": "${dateTime.hour}:${dateTime.minute}",
-      }),
-    );
+    final NotificationModel notification =
+        NotificationsHelper.buildNotification(
+          id: id,
+          title: title,
+          body: body,
+          time: tz.TZDateTime.from(dateTime.toUtc(), tz.local),
+          matchComponents: isRepeating
+              ? DateTimeComponents.dayOfMonthAndTime
+              : null,
+          type: notificationType,
+        );
 
     /// Add notification to box if repeating
     if (isRepeating) {
@@ -62,18 +55,7 @@ class NotificationServiceImpl implements NotificationService {
       await box.put(id, notifications);
     }
 
-    await _plugin.zonedSchedule(
-      notification.id,
-      notification.title,
-      notification.body,
-      notification.time,
-      NotificationsHelper.getNotificationDetails(
-        locale: json.decode(notification.payload!)['locale'],
-      ),
-      matchDateTimeComponents: notification.matchComponents,
-      androidScheduleMode: notification.androidScheduleMode,
-      payload: notification.payload,
-    );
+    await scheduleNotification(notification: notification);
   }
 
   @override
@@ -97,75 +79,41 @@ class NotificationServiceImpl implements NotificationService {
     /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
-      final NotificationModel notification = NotificationModel(
-        id: (id + scheduledDate.hour + scheduledDate.minute).toInt(),
-        title: title,
-        body: body,
-        time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-        matchComponents: DateTimeComponents.time,
-        androidScheduleMode:
-            notificationType?.androidScheduleMode ??
-            AndroidScheduleMode.alarmClock,
-        payload: jsonEncode({
-          "locale": Get.locale?.languageCode ?? '',
-          "id": "$id",
-          "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-        }),
-      );
+      final NotificationModel notification =
+          NotificationsHelper.buildNotification(
+            id: id + scheduledDate.hour + scheduledDate.minute,
+            medicationId: "$id",
+            title: title,
+            body: body,
+            time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+            matchComponents: DateTimeComponents.time,
+            type: notificationType,
+          );
       // Store notification, for later handling
       notifications.items.add(notification);
       box.put(id, notifications);
       // Schedule the notification
-      await _plugin.zonedSchedule(
-        notification.id, // unique ID per weekday and time
-        notification.title,
-        notification.body,
-        notification.time,
-        NotificationsHelper.getNotificationDetails(
-          locale: json.decode(notification.payload!)['locale'],
-        ),
-        matchDateTimeComponents: notification.matchComponents,
-        androidScheduleMode: notification.androidScheduleMode,
-        payload: notification.payload,
-      );
+      await scheduleNotification(notification: notification);
     } else {
       /// Schedule on each selected weekday
       for (final weekday in weekdays) {
         final tz.TZDateTime scheduledDate =
             TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
-
-        final NotificationModel notification = NotificationModel(
+        final NotificationModel
+        notification = NotificationsHelper.buildNotification(
           id: id + weekday.index + scheduledDate.hour + scheduledDate.minute,
+          medicationId: "$id",
           title: title,
           body: body,
           time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
           matchComponents: DateTimeComponents.dayOfWeekAndTime,
-          androidScheduleMode:
-              notificationType?.androidScheduleMode ??
-              AndroidScheduleMode.alarmClock,
-          payload: jsonEncode({
-            "locale": Get.locale?.languageCode ?? '',
-            "id": "$id",
-            "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-          }),
+          type: notificationType,
         );
-
         // Store notification, for later handling
         notifications.items.add(notification);
         box.put(id, notifications);
         // Schedule the notification
-        await _plugin.zonedSchedule(
-          notification.id, // unique ID per weekday and time
-          notification.title,
-          notification.body,
-          notification.time,
-          NotificationsHelper.getNotificationDetails(
-            locale: json.decode(notification.payload!)['locale'],
-          ),
-          matchDateTimeComponents: notification.matchComponents,
-          androidScheduleMode: notification.androidScheduleMode,
-          payload: notification.payload,
-        );
+        await scheduleNotification(notification: notification);
       }
     }
   }
@@ -191,6 +139,10 @@ class NotificationServiceImpl implements NotificationService {
     /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
+      final tz.TZDateTime finalTime = tz.TZDateTime.from(
+        scheduledDate.toUtc(),
+        tz.local,
+      );
       NotificationModel? groupedNotification = box.get(
         '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
       );
@@ -198,29 +150,22 @@ class NotificationServiceImpl implements NotificationService {
       groupedNotification != null
           ? notification = groupedNotification.copyWith(
               title: '${groupedNotification.title}, $medicationName',
-              payload: jsonEncode({
-                "locale": Get.locale?.languageCode ?? '',
-                "id": jsonDecode(groupedNotification.payload!)['id'] + ',$id',
-                "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-                "is Grouped": "true",
-              }),
+              payload: NotificationsHelper.buildPayload(
+                id: jsonDecode(groupedNotification.payload!)['id'] + ',$id',
+                time: '${finalTime.hour}:${finalTime.minute}',
+                isGrouped: true,
+              ),
             )
           : // If grouped notification doesn't exist => create it
-            notification = NotificationModel(
-              id: (id + scheduledDate.hour + scheduledDate.minute).toInt(),
+            notification = NotificationsHelper.buildNotification(
+              id: id + scheduledDate.hour + scheduledDate.minute,
+              medicationId: "$id",
               title: title,
               body: body,
-              time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+              time: finalTime,
               matchComponents: DateTimeComponents.time,
-              androidScheduleMode:
-                  notificationType?.androidScheduleMode ??
-                  AndroidScheduleMode.alarmClock,
-              payload: jsonEncode({
-                "locale": Get.locale?.languageCode ?? '',
-                "id": "$id",
-                "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-                "is Grouped": "true",
-              }),
+              type: notificationType,
+              isGrouped: true,
             );
       // Store notification, for later handling
       box.put(
@@ -228,23 +173,16 @@ class NotificationServiceImpl implements NotificationService {
         notification,
       );
       // Schedule the notification
-      await _plugin.zonedSchedule(
-        notification.id, // unique ID per weekday and time
-        notification.title,
-        notification.body,
-        notification.time,
-        NotificationsHelper.getNotificationDetails(
-          locale: json.decode(notification.payload!)['locale'],
-        ),
-        matchDateTimeComponents: notification.matchComponents,
-        androidScheduleMode: notification.androidScheduleMode,
-        payload: notification.payload,
-      );
+      await scheduleNotification(notification: notification);
     } else {
       /// Schedule on each selected weekday
       for (final weekday in weekdays) {
         final tz.TZDateTime scheduledDate =
             TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
+        final tz.TZDateTime finalTime = tz.TZDateTime.from(
+          scheduledDate.toUtc(),
+          tz.local,
+        );
         NotificationModel? groupedNotification = box.get(
           '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
         );
@@ -252,15 +190,14 @@ class NotificationServiceImpl implements NotificationService {
         groupedNotification != null
             ? notification = groupedNotification.copyWith(
                 title: '${groupedNotification.title}, $medicationName',
-                payload: jsonEncode({
-                  "locale": Get.locale?.languageCode ?? '',
-                  "id": jsonDecode(groupedNotification.payload!)['id'] + ',$id',
-                  "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-                  "is Grouped": "true",
-                }),
+                payload: NotificationsHelper.buildPayload(
+                  id: jsonDecode(groupedNotification.payload!)['id'] + ',$id',
+                  time: '${finalTime.hour}:${finalTime.minute}',
+                  isGrouped: true,
+                ),
               )
             : // If grouped notification doesn't exist => create it
-              notification = NotificationModel(
+              notification = NotificationsHelper.buildNotification(
                 id:
                     id +
                     weekday.index +
@@ -268,35 +205,17 @@ class NotificationServiceImpl implements NotificationService {
                     scheduledDate.minute,
                 title: title,
                 body: body,
-                time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+                time: finalTime,
                 matchComponents: DateTimeComponents.dayOfWeekAndTime,
-                androidScheduleMode:
-                    notificationType?.androidScheduleMode ??
-                    AndroidScheduleMode.alarmClock,
-                payload: jsonEncode({
-                  "locale": Get.locale?.languageCode ?? '',
-                  "id": "$id",
-                  "pill time": '${scheduledDate.hour}:${scheduledDate.minute}',
-                  "is Grouped": "true",
-                }),
+                type: notificationType,
+                isGrouped: true,
               );
         // Store notification, for later handling
         box.put(
           '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
           notification,
         );
-        await _plugin.zonedSchedule(
-          notification.id, // unique ID per weekday and time
-          notification.title,
-          notification.body,
-          notification.time,
-          NotificationsHelper.getNotificationDetails(
-            locale: json.decode(notification.payload!)['locale'],
-          ),
-          matchDateTimeComponents: notification.matchComponents,
-          androidScheduleMode: notification.androidScheduleMode,
-          payload: notification.payload,
-        );
+        await scheduleNotification(notification: notification);
       }
     }
   }
@@ -318,7 +237,7 @@ class NotificationServiceImpl implements NotificationService {
   }
 
   @override
-  Future<void> rescheduleNotification({
+  Future<void> scheduleNotification({
     required NotificationModel notification,
   }) async {
     await _plugin.zonedSchedule(

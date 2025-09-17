@@ -202,9 +202,7 @@ class NotificationRepoImpl implements NotificationRepo {
   Future<void> rescheduleNotification({
     required NotificationModel notification,
   }) {
-    return notificationService.rescheduleNotification(
-      notification: notification,
-    );
+    return notificationService.scheduleNotification(notification: notification);
   }
 
   @override
