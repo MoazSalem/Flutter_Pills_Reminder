@@ -10,6 +10,7 @@ class SettingsController extends GetxController {
   final Rx<ThemeMode> themeMode = ThemeMode.system.obs;
   final Rx<ThemeData> lightTheme = ThemeData().obs;
   final Rx<ThemeData> darkTheme = ThemeData().obs;
+  final Rx<bool> groupedNotifications = false.obs;
   final Rx<Locale> locale = Locale('en').obs;
 
   @override
@@ -20,6 +21,7 @@ class SettingsController extends GetxController {
     themeMode.value = getThemeMode(box.get('themeMode') ?? 0);
     lightTheme.value = AppThemes.lightThemes[themeIndex];
     darkTheme.value = AppThemes.darkThemes[themeIndex];
+    groupedNotifications.value = box.get('groupedNotifications') ?? false;
     update();
   }
 
@@ -60,6 +62,12 @@ class SettingsController extends GetxController {
     themeIndex = index;
     lightTheme.value = AppThemes.lightThemes[themeIndex];
     darkTheme.value = AppThemes.darkThemes[themeIndex];
+    update();
+  }
+
+  void changeNotificationMode(bool value) {
+    groupedNotifications.value = value;
+    box.put('groupedNotifications', groupedNotifications.value);
     update();
   }
 }

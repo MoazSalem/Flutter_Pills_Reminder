@@ -47,6 +47,9 @@ class AppTranslations extends Translations {
       'light': 'Light',
       'dark': 'Dark',
       'appsTheme': 'Apps Theme',
+      'groupNotifications': 'Group Notifications',
+      'groupNotificationsDescription':
+          'Group notifications per time taken instead of per medication',
       'permissionDenied': 'Permission Denied',
       'notificationsWillNotWork':
           'Notifications will not work until permission is granted.',
@@ -125,6 +128,9 @@ class AppTranslations extends Translations {
       'light': 'فاتح',
       'dark': 'داكن',
       'appsTheme': 'مظهر التطبيق',
+      'groupNotifications': 'تجميع الإشعارات',
+      'groupNotificationsDescription':
+          'تجميع الإشعارات بالوقت بدلاً من اشعار لكل دواء',
       'permissionDenied': 'تم رفض الإذن',
       'notificationsWillNotWork': 'لن تعمل الإشعارات حتى يتم منح الإذن.',
       'openSettings': 'فتح الإعدادات',
