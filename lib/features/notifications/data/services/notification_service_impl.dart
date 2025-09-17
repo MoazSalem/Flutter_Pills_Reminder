@@ -85,6 +85,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
+    debugPrint('scheduleDailyOrWeeklyNotification');
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
@@ -179,6 +180,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
+    debugPrint('scheduleGroupedDailyOrWeeklyNotification');
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
     late final NotificationModel notification;
@@ -190,7 +192,7 @@ class NotificationServiceImpl implements NotificationService {
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
       NotificationModel? groupedNotification = box.get(
-        'daily at ${scheduledDate.hour}:${scheduledDate.minute}',
+        '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
       );
       // If grouped notification exists => update it
       groupedNotification != null
@@ -222,7 +224,7 @@ class NotificationServiceImpl implements NotificationService {
             );
       // Store notification, for later handling
       box.put(
-        'daily at ${scheduledDate.hour}:${scheduledDate.minute}',
+        '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
         notification,
       );
       // Schedule the notification
@@ -244,7 +246,7 @@ class NotificationServiceImpl implements NotificationService {
         final tz.TZDateTime scheduledDate =
             TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
         NotificationModel? groupedNotification = box.get(
-          '$weekday/${scheduledDate.hour}:${scheduledDate.minute}',
+          '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
         );
         // If grouped notification exists => update it
         groupedNotification != null
@@ -280,7 +282,7 @@ class NotificationServiceImpl implements NotificationService {
               );
         // Store notification, for later handling
         box.put(
-          '$weekday/${scheduledDate.hour}:${scheduledDate.minute}',
+          '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
           notification,
         );
         await _plugin.zonedSchedule(

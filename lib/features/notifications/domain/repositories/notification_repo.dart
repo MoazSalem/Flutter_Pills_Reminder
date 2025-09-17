@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 
 abstract class NotificationRepo {
   Future<void> initNotificationService();
   Future<void> requestNotificationPermission();
   Future<void> requestExactAlarmPermission();
   Future<void> cancelNotification(int id);
-  Future<void> cancelAllNotificationForMedication(int id);
+  Future<void> cancelAllNotificationForMedication(MedicationModel medication);
   Future<void> normalNotification({
     required String title,
     required String body,

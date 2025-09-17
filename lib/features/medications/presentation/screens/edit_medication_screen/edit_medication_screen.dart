@@ -336,7 +336,7 @@ Future<void> cancelNotification({
             await notificationsController.cancelNotification(medication.id + i),
         ]
       : await notificationsController.cancelAllNotificationForMedication(
-          medication.id,
+          medication,
         );
 }
 

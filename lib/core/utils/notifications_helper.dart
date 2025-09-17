@@ -38,4 +38,39 @@ class NotificationsHelper {
         ? 'مرّت 30 دقيقة. حان وقت تناول دوائك!'
         : '30 minutes has passed. It\'s time to take your medication! ';
   }
+
+  static String removeNameFromTitle(
+    String text,
+    String nameToRemove,
+    String locale,
+  ) {
+    // Remove the prefix
+    String prefix = getReminderTitle(locale: locale);
+    String withoutPrefix = text.startsWith(prefix)
+        ? text.substring(prefix.length)
+        : text;
+
+    // Split names by comma, trim spaces
+    List<String> names = withoutPrefix.split(',').map((n) => n.trim()).toList();
+
+    // Remove the target name (case insensitive)
+    names.removeWhere((n) => n.toLowerCase() == nameToRemove.toLowerCase());
+
+    // Rebuild the string
+    return names.isEmpty
+        ? prefix
+              .trim() // return just "reminder for" if no names left
+        : "$prefix${names.join(', ')}";
+  }
+
+  static String removeIdFromList(String ids, String idToRemove) {
+    // Split by comma and trim spaces
+    List<String> list = ids.split(',').map((e) => e.trim()).toList();
+
+    // Remove the given id
+    list.removeWhere((e) => e == idToRemove);
+
+    // Rebuild into string
+    return list.join(',');
+  }
 }

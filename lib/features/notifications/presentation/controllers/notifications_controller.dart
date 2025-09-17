@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 
 class NotificationsController extends GetxController {
@@ -27,8 +28,10 @@ class NotificationsController extends GetxController {
     await notificationRepo.cancelNotification(id);
   }
 
-  Future<void> cancelAllNotificationForMedication(int id) async {
-    await notificationRepo.cancelAllNotificationForMedication(id);
+  Future<void> cancelAllNotificationForMedication(
+    MedicationModel medication,
+  ) async {
+    await notificationRepo.cancelAllNotificationForMedication(medication);
   }
 
   Future<void> normalNotification({

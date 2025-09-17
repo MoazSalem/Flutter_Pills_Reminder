@@ -29,7 +29,7 @@ Future<bool?> showDeleteDialog({
                       ),
                   }
                 : await notificationsController
-                      .cancelAllNotificationForMedication(medication.id);
+                      .cancelAllNotificationForMedication(medication);
             medicationsController.deleteMedication(medication.id);
             Get.until((route) => route.isFirst);
             Get.snackbar(
