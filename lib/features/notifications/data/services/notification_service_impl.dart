@@ -131,13 +131,13 @@ class NotificationServiceImpl implements NotificationService {
     debugPrint('scheduleGroupedDailyOrWeeklyNotification');
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
-    late final NotificationModel notification;
 
     /// Initialize the grouped notifications box
     final Box box = Hive.box('groupedNotifications');
 
     /// If no weekdays selected => schedule daily
     if (weekdays.isEmpty) {
+      late final NotificationModel notification;
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
       final tz.TZDateTime finalTime = tz.TZDateTime.from(
         scheduledDate.toUtc(),
@@ -177,6 +177,7 @@ class NotificationServiceImpl implements NotificationService {
     } else {
       /// Schedule on each selected weekday
       for (final weekday in weekdays) {
+        late final NotificationModel notification;
         final tz.TZDateTime scheduledDate =
             TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
         final tz.TZDateTime finalTime = tz.TZDateTime.from(
