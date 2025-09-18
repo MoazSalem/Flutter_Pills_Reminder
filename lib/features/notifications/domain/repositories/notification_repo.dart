@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
@@ -52,4 +53,14 @@ abstract class NotificationRepo {
   Future<void> rescheduleMedicationsNotifications({required int id});
 
   Future<void> rescheduleAllNotifications();
+
+  Future<void> convertNormalToGrouped({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  });
+
+  Future<void> convertGroupedToNormal({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  });
 }

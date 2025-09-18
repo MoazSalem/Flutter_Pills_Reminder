@@ -258,4 +258,82 @@ class NotificationRepoImpl implements NotificationRepo {
       snackPosition: SnackPosition.BOTTOM,
     );
   }
+
+  @override
+  Future<void> convertNormalToGrouped({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  }) async {
+    for (var notificationList in normalBox.values) {
+      for (var notification in notificationList.items) {
+        final payload = jsonDecode(notification.payload!);
+        final key =
+            '${notification.time.day}/${notification.time.hour}/${notification.time.second}';
+        final id = int.parse(payload['id']);
+
+        // check if a grouped notification for this time exists
+        final existing = groupedBox.get(key);
+
+        if (existing != null) {
+          final existingPayload = jsonDecode(existing.payload!);
+          final List ids = existingPayload['id']
+              .split(',')
+              .map(int.parse)
+              .toList();
+
+          if (!ids.contains(id)) {
+            ids.add(id);
+          }
+
+          final updated = existing.copyWith(
+            title: "${existing.title}, ${notification.title}", // concat
+            payload: jsonEncode({
+              ...existingPayload,
+              "id": ids.join(", "),
+              "is Grouped": "true",
+            }),
+          );
+
+          await groupedBox.put(key, updated);
+        } else {
+          final grouped = notification.copyWith(
+            payload: jsonEncode({...payload, "is Grouped": "true"}),
+          );
+          await groupedBox.put(key, grouped);
+        }
+      }
+    }
+  }
+
+  @override
+  Future<void> convertGroupedToNormal({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  }) async {
+    for (NotificationModel notification in groupedBox.values) {
+      final payload = jsonDecode(notification.payload!);
+      final List ids = payload['id'].split(',').map(int.parse).toList();
+
+      final titles = notification.title
+          .split(',')
+          .map((t) => t.trim())
+          .where((t) => t.isNotEmpty)
+          .toList();
+
+      for (int i = 0; i < ids.length; i++) {
+        final id = ids[i];
+        final title = i < titles.length ? titles[i] : notification.title;
+
+        final single = notification.copyWith(
+          title: title,
+          payload: jsonEncode({...payload, "id": "$id", "is Grouped": "false"}),
+        );
+
+        NotificationList existingList = NotificationList(items: []);
+        existingList.items = normalBox.get(id)?.items ?? [];
+        existingList.items.add(single);
+        await normalBox.put(id, existingList);
+      }
+    }
+  }
 }

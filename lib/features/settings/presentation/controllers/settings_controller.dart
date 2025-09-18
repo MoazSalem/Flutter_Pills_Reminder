@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/styles/theme.dart';
+import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
 
 class SettingsController extends GetxController {
   final Box box;
@@ -65,7 +67,18 @@ class SettingsController extends GetxController {
     update();
   }
 
-  void changeNotificationMode(bool value) {
+  Future<void> changeNotificationMode(bool value) async {
+    if (value) {
+      Get.find<NotificationsController>().convertNormalToGrouped(
+        normalBox: await Hive.openBox<NotificationList>('notifications'),
+        groupedBox: await Hive.openBox('groupedNotifications'),
+      );
+    } else {
+      Get.find<NotificationsController>().convertGroupedToNormal(
+        normalBox: await Hive.openBox<NotificationList>('notifications'),
+        groupedBox: await Hive.openBox('groupedNotifications'),
+      );
+    }
     groupedNotifications.value = value;
     box.put('groupedNotifications', groupedNotifications.value);
     update();

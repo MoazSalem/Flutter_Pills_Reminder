@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
@@ -113,5 +114,25 @@ class NotificationsController extends GetxController {
 
   Future<void> rescheduleAllNotifications() async {
     notificationRepo.rescheduleAllNotifications();
+  }
+
+  Future<void> convertNormalToGrouped({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  }) async {
+    notificationRepo.convertNormalToGrouped(
+      normalBox: normalBox,
+      groupedBox: groupedBox,
+    );
+  }
+
+  Future<void> convertGroupedToNormal({
+    required Box<NotificationList> normalBox,
+    required Box groupedBox,
+  }) async {
+    notificationRepo.convertGroupedToNormal(
+      normalBox: normalBox,
+      groupedBox: groupedBox,
+    );
   }
 }
