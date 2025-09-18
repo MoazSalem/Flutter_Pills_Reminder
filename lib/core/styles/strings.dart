@@ -83,6 +83,11 @@ class AppTranslations extends Translations {
           'Consistent medication keeps you healthy — we’re here to help.',
       'getStarted': 'Get Started',
       'next': 'Next',
+      'conversionDone': 'Conversion done',
+      'conversionGroupedDoneMessage':
+          'All notifications with similar time have been grouped.',
+      'conversionNormalDoneMessage':
+          'All notifications with similar time have been separated.',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -163,6 +168,11 @@ class AppTranslations extends Translations {
           'تناول الدواء بشكل منتظم يحافظ على صحتك — نحن هنا لمساعدتك.',
       'getStarted': 'ابدء',
       'next': 'التالي',
+      'conversionDone': 'تم التحويل',
+      'conversionGroupedDoneMessage':
+          'كل الإشعارات المتشابهة في التوقيت تم تجميعها.',
+      'conversionNormalDoneMessage':
+          'كل الإشعارات المتشابهة في التوقيت قد تم تفريقها.',
     },
   };
 }

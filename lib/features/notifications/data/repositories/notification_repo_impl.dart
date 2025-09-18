@@ -235,19 +235,32 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
-  Future<void> rescheduleAllNotifications() async {
-    Box box = Hive.box<NotificationList>('notifications');
-    final allNotifications = box.values.toList();
-    allNotifications.isEmpty
-        ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
-        : {
-            for (var notifications in allNotifications)
-              {
-                for (var notification in notifications.items)
-                  {await rescheduleNotification(notification: notification)},
-              },
-            showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
-          };
+  Future<void> rescheduleAllNotifications({required bool isGrouped}) async {
+    late final Box box;
+    if (isGrouped) {
+      box = Hive.box('groupedNotifications');
+      final allNotifications = box.values.toList();
+      allNotifications.isEmpty
+          ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+          : {
+              for (var notification in allNotifications)
+                {await rescheduleNotification(notification: notification)},
+              showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+            };
+    } else {
+      box = Hive.box<NotificationList>('notifications');
+      final allNotifications = box.values.toList();
+      allNotifications.isEmpty
+          ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+          : {
+              for (var notifications in allNotifications)
+                {
+                  for (var notification in notifications.items)
+                    {await rescheduleNotification(notification: notification)},
+                },
+              showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+            };
+    }
   }
 
   showSnackBar(String title, String message) {
@@ -286,7 +299,8 @@ class NotificationRepoImpl implements NotificationRepo {
           }
 
           final updated = existing.copyWith(
-            title: "${existing.title}, ${notification.title}", // concat
+            title:
+                "${existing.title}, ${NotificationsHelper.stripPrefix(notification.title)}", // concat
             payload: jsonEncode({
               ...existingPayload,
               "id": ids.join(", "),
@@ -303,6 +317,14 @@ class NotificationRepoImpl implements NotificationRepo {
         }
       }
     }
+    // cancel all grouped notifications
+    await notificationsPlugin.cancelAll();
+    // schedule all normal notifications
+    await rescheduleAllNotifications(isGrouped: true);
+    // delete all normal notifications
+    normalBox.clear();
+    // show snackbar that the conversion is done
+    showSnackBar('conversionDone'.tr, 'conversionGroupedDoneMessage'.tr);
   }
 
   @override
@@ -314,15 +336,15 @@ class NotificationRepoImpl implements NotificationRepo {
       final payload = jsonDecode(notification.payload!);
       final List ids = payload['id'].split(',').map(int.parse).toList();
 
-      final titles = notification.title
-          .split(',')
-          .map((t) => t.trim())
-          .where((t) => t.isNotEmpty)
-          .toList();
+      final titles = NotificationsHelper.stripPrefix(
+        notification.title,
+      ).split(',').map((t) => t.trim()).where((t) => t.isNotEmpty).toList();
 
       for (int i = 0; i < ids.length; i++) {
         final id = ids[i];
-        final title = i < titles.length ? titles[i] : notification.title;
+        final title = i < titles.length
+            ? "${NotificationsHelper.getTitlePrefix(locale: Get.locale?.languageCode ?? "")} ${titles[i]}"
+            : notification.title;
 
         final single = notification.copyWith(
           title: title,
@@ -335,5 +357,13 @@ class NotificationRepoImpl implements NotificationRepo {
         await normalBox.put(id, existingList);
       }
     }
+    // cancel all grouped notifications
+    await notificationsPlugin.cancelAll();
+    // schedule all normal notifications
+    await rescheduleAllNotifications(isGrouped: false);
+    // delete all grouped notifications
+    groupedBox.clear();
+    // show snackbar that the conversion is done
+    showSnackBar('conversionDone'.tr, 'conversionNormalDoneMessage'.tr);
   }
 }

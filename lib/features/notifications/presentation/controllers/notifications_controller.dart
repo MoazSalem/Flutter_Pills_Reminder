@@ -112,8 +112,8 @@ class NotificationsController extends GetxController {
     notificationRepo.rescheduleMedicationsNotifications(id: id);
   }
 
-  Future<void> rescheduleAllNotifications() async {
-    notificationRepo.rescheduleAllNotifications();
+  Future<void> rescheduleAllNotifications(bool isGrouped) async {
+    notificationRepo.rescheduleAllNotifications(isGrouped: isGrouped);
   }
 
   Future<void> convertNormalToGrouped({

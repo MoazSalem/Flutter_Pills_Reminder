@@ -52,7 +52,7 @@ abstract class NotificationRepo {
 
   Future<void> rescheduleMedicationsNotifications({required int id});
 
-  Future<void> rescheduleAllNotifications();
+  Future<void> rescheduleAllNotifications({required bool isGrouped});
 
   Future<void> convertNormalToGrouped({
     required Box<NotificationList> normalBox,

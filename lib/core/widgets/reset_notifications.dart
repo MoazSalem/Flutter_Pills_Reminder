@@ -1,10 +1,12 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 import 'package:pills_reminder/core/styles/styles.dart';
 import 'package:pills_reminder/core/widgets/custom_button.dart';
 import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 
 class ResetNotifications extends StatelessWidget {
   const ResetNotifications({super.key, this.id});
@@ -64,7 +66,9 @@ class ResetNotifications extends StatelessWidget {
               }
               id != null
                   ? await controller.rescheduleMedicationsNotifications(id: id!)
-                  : await controller.rescheduleAllNotifications();
+                  : await controller.rescheduleAllNotifications(
+                      Get.find<SettingsController>().groupedNotifications.value,
+                    );
             },
           ),
         ),

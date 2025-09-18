@@ -50,6 +50,14 @@ class NotificationsHelper {
     return locale == 'ar' ? 'تناول' : 'Take Your';
   }
 
+  static String stripPrefix(String title) {
+    final prefix = NotificationsHelper.getTitlePrefix();
+    if (title.startsWith(prefix)) {
+      return title.substring(prefix.length).trim();
+    }
+    return title;
+  }
+
   static String removeWithPrefix(
     String original,
     String toRemove,
