@@ -13,6 +13,7 @@ abstract class NotificationService {
     required int id,
     required String title,
     required String body,
+    required String medicationName,
     required DateTime dateTime,
     NotificationType? notificationType,
     required bool isRepeating,

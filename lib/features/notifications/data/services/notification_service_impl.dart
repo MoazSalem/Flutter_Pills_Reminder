@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
@@ -11,6 +12,7 @@ import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/core/utils/tz_date_helper.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
@@ -30,29 +32,53 @@ class NotificationServiceImpl implements NotificationService {
     required int id,
     required String title,
     required String body,
+    required String medicationName,
     required DateTime dateTime,
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
-    final NotificationModel notification =
-        NotificationsHelper.buildNotification(
-          id: id,
-          title: title,
-          body: body,
-          time: tz.TZDateTime.from(dateTime.toUtc(), tz.local),
-          matchComponents: isRepeating
-              ? DateTimeComponents.dayOfMonthAndTime
-              : null,
-          type: notificationType,
-        );
+    NotificationModel notification = NotificationsHelper.buildNotification(
+      id: id,
+      title: title,
+      body: body,
+      time: tz.TZDateTime.from(dateTime.toUtc(), tz.local),
+      matchComponents: isRepeating
+          ? DateTimeComponents.dayOfMonthAndTime
+          : null,
+      type: notificationType,
+    );
 
     /// Add notification to box if repeating
     if (isRepeating) {
-      Box box = Hive.box<NotificationList>('notifications');
-      final NotificationList notifications =
-          box.get(id) ?? NotificationList(items: []);
-      notifications.items.add(notification);
-      await box.put(id, notifications);
+      final bool isGrouped =
+          Get.find<SettingsController>().groupedNotifications.value;
+      if (isGrouped) {
+        final Box box = Hive.box('groupedNotifications');
+        NotificationModel? groupedNotification = box.get(
+          '${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
+        );
+        groupedNotification != null
+            ? notification = groupedNotification.copyWith(
+                title: '${groupedNotification.title}, $medicationName',
+                payload: NotificationsHelper.buildPayload(
+                  id: jsonDecode(groupedNotification.payload!)['id'] + ',$id',
+                  time:
+                      '${groupedNotification.time.hour}:${groupedNotification.time.minute}',
+                  isGrouped: true,
+                ),
+              )
+            : box.put(
+                '${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
+                notification,
+              );
+      } else {
+        Box box = Hive.box<NotificationList>('notifications');
+
+        final NotificationList notifications =
+            box.get(id) ?? NotificationList(items: []);
+        notifications.items.add(notification);
+        await box.put(id, notifications);
+      }
     }
 
     await scheduleNotification(notification: notification);

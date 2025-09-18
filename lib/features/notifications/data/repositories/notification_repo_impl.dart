@@ -163,6 +163,7 @@ class NotificationRepoImpl implements NotificationRepo {
       id: id,
       title: title ?? '${'notificationTitle'.tr} $medicationName',
       body: body ?? 'notificationBody'.tr,
+      medicationName: medicationName,
       dateTime: dateTime,
       notificationType: notificationType,
       isRepeating: isRepeating,
