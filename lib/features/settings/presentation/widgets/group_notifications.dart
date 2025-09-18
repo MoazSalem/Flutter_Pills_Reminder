@@ -30,11 +30,26 @@ class GroupNotifications extends StatelessWidget {
             ),
             value: themeController.groupedNotifications.value,
             onChanged: (value) => themeController.changeNotificationMode(value),
-            title: Text(
-              'groupNotifications'.tr,
-              style: AppStyles.title.copyWith(
-                fontSize: AppSizes.normalTextSize,
-              ),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'groupNotifications'.tr,
+                  style: AppStyles.title.copyWith(
+                    fontSize: AppSizes.normalTextSize,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Text(
+                    "beta".tr,
+                    style: TextStyle(
+                      color: theme.tertiary,
+                      fontSize: AppSizes.tinyTextSize,
+                    ),
+                  ),
+                ),
+              ],
             ),
             subtitle: Text(
               'groupNotificationsDescription'.tr,

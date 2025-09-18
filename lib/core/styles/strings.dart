@@ -88,6 +88,7 @@ class AppTranslations extends Translations {
           'All notifications with similar time have been grouped.',
       'conversionNormalDoneMessage':
           'All notifications with similar time have been separated.',
+      'beta': 'Beta',
     },
     'ar': {
       'appName': 'منبّه الحبوب',
@@ -173,6 +174,7 @@ class AppTranslations extends Translations {
           'كل الإشعارات المتشابهة في التوقيت تم تجميعها.',
       'conversionNormalDoneMessage':
           'كل الإشعارات المتشابهة في التوقيت قد تم تفريقها.',
+      'beta': 'تجريبي',
     },
   };
 }
