@@ -5,7 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
@@ -82,39 +81,52 @@ class NotificationRepoImpl implements NotificationRepo {
     final isGrouped = Get.find<SettingsController>().groupedNotifications.value;
     if (isGrouped) {
       Box box = Hive.box('groupedNotifications');
-      for (var time in medication.times) {
-        late final String key;
-        late final NotificationModel notification;
-        medication.frequency == MedicationFrequency.daily
-            ? {
-                key = '${DateTime.now().day}/${time.hour}:${time.minute}',
-                notification = box.get(key),
-                notification.copyWith(
-                  title: NotificationsHelper.removeNameFromTitle(
-                    notification.title,
-                    medication.name,
-                    Get.locale?.languageCode ?? '',
-                  ),
-                  payload: jsonEncode({
-                    "locale": Get.locale?.languageCode ?? '',
-                    "id": NotificationsHelper.removeIdFromList(
-                      jsonDecode(notification.payload!)['id'],
-                      medication.id.toString(),
-                    ),
-                    "pill time": '${time.hour}:${time.minute}',
-                    "is Grouped": "true",
-                  }),
-                ),
-                await notificationService.cancelNotification(notification.id),
-                // TODO: re-schedule the notification
-                box.put(key, notification),
-              }
-            : {
-                for (var weekday in medication.selectedDays!)
-                  {
-                    // TODO: write the code to handle the weekly notifications
-                  },
-              };
+      // loop through all the notifications, and check if the medication id is in the notifications payload, not the best way but its the easiest way with current implementation
+      for (NotificationModel notification in box.values) {
+        final payloadMap = jsonDecode(notification.payload!);
+        final List ids = payloadMap['id']
+            .split(',')
+            .map((e) => e.trim())
+            .toList();
+        if (ids.contains(medication.id.toString())) {
+          // get the key of the notification to schedule it again
+          final key = NotificationsHelper.findKeyByValue(box, notification);
+          // make a new notification with the updated payload that removes the old medication id, and the name from the title
+          final updatedNotification = notification.copyWith(
+            title: NotificationsHelper.removeWithPrefix(
+              notification.title,
+              medication.name,
+              ", ",
+              NotificationsHelper.getTitlePrefix(
+                locale: Get.locale?.languageCode ?? '',
+              ),
+            ),
+            payload: jsonEncode({
+              "locale": Get.locale?.languageCode ?? '',
+              "id": NotificationsHelper.removeFromString(
+                payloadMap['id'],
+                medication.id.toString(),
+                ',',
+              ),
+              "pill time": payloadMap["pill time"],
+              "is Grouped": "true",
+            }),
+          );
+          // remove the medication id from the list
+          ids.remove(medication.id.toString());
+          // cancel the old notification, if it's not empty schedule it again
+          await notificationService.cancelNotification(notification.id);
+          if (ids.isNotEmpty) {
+            await notificationService.scheduleNotification(
+              notification: updatedNotification,
+            );
+            // update the notification in the box
+            box.put(key, updatedNotification);
+          } else {
+            // don't schedule if the notification is empty, delete it
+            box.delete(key);
+          }
+        }
       }
     } else {
       final id = medication.id;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -45,39 +46,41 @@ class NotificationsHelper {
         : '30 minutes has passed. It\'s time to take your medication! ';
   }
 
-  static String removeNameFromTitle(
-    String text,
-    String nameToRemove,
-    String locale,
-  ) {
-    // Remove the prefix
-    String prefix = getReminderTitle(locale: locale);
-    String withoutPrefix = text.startsWith(prefix)
-        ? text.substring(prefix.length)
-        : text;
-
-    // Split names by comma, trim spaces
-    List<String> names = withoutPrefix.split(',').map((n) => n.trim()).toList();
-
-    // Remove the target name (case insensitive)
-    names.removeWhere((n) => n.toLowerCase() == nameToRemove.toLowerCase());
-
-    // Rebuild the string
-    return names.isEmpty
-        ? prefix
-              .trim() // return just "reminder for" if no names left
-        : "$prefix${names.join(', ')}";
+  static String getTitlePrefix({String? locale}) {
+    return locale == 'ar' ? 'تناول' : 'Take Your';
   }
 
-  static String removeIdFromList(String ids, String idToRemove) {
-    // Split by comma and trim spaces
-    List<String> list = ids.split(',').map((e) => e.trim()).toList();
+  static String removeWithPrefix(
+    String original,
+    String toRemove,
+    String separator,
+    String prefix,
+  ) {
+    // strip prefix if present
+    String withoutPrefix = original.startsWith(prefix)
+        ? original.substring(prefix.length).trim()
+        : original;
 
-    // Remove the given id
-    list.removeWhere((e) => e == idToRemove);
+    // remove the item
+    String cleaned = removeFromString(withoutPrefix, toRemove, separator);
+
+    // add prefix back if there's anything left
+    return cleaned.isNotEmpty ? "$prefix $cleaned" : prefix.trim();
+  }
+
+  static String removeFromString(
+    String original,
+    String toRemove,
+    String separator,
+  ) {
+    // Split by comma and trim spaces
+    List<String> list = original.split(separator).map((e) => e.trim()).toList();
+
+    // Remove the given string
+    list.removeWhere((e) => e == toRemove);
 
     // Rebuild into string
-    return list.join(',');
+    return list.join(separator);
   }
 
   static NotificationModel buildNotification({
@@ -117,5 +120,12 @@ class NotificationsHelper {
       "pill time": time,
       if (isGrouped) "is Grouped": "true",
     });
+  }
+
+  static dynamic findKeyByValue(Box box, dynamic target) {
+    for (final key in box.keys) {
+      if (box.get(key) == target) return key;
+    }
+    return null;
   }
 }

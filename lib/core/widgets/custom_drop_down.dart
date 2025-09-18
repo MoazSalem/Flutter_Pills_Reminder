@@ -50,7 +50,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
         child: DropdownButtonFormField<T>(
           iconEnabledColor: theme.colorScheme.primaryFixedDim,
           menuMaxHeight: 600,
-          value: selectedValue,
+          initialValue: selectedValue,
           onChanged: widget.onChanged,
           selectedItemBuilder: widget.selectedWidget != null
               ? (context) => widget.selectedWidget!

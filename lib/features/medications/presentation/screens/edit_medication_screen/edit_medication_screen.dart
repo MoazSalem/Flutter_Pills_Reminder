@@ -71,7 +71,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
         Weekday.thursday: selectedDays.contains(Weekday.thursday),
         Weekday.friday: selectedDays.contains(Weekday.friday),
       };
-      times = widget.medication!.times;
+      times.assignAll(widget.medication!.times);
       monthlyDay = widget.medication!.monthlyDay;
       notificationType = widget.medication!.notificationType;
     }
@@ -296,7 +296,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           /// we reset the notifications if the medication is edited
                           await cancelNotification(
                             notificationsController: notificationsController,
-                            medication: medication,
+                            medication: widget.medication!,
                             frequency: frequency,
                           );
                         } else {

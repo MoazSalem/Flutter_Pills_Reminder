@@ -67,7 +67,6 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
-    debugPrint('scheduleDailyOrWeeklyNotification');
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
@@ -128,7 +127,6 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
-    debugPrint('scheduleGroupedDailyOrWeeklyNotification');
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
@@ -204,6 +202,7 @@ class NotificationServiceImpl implements NotificationService {
                     weekday.index +
                     scheduledDate.hour +
                     scheduledDate.minute,
+                medicationId: "$id",
                 title: title,
                 body: body,
                 time: finalTime,
@@ -223,6 +222,7 @@ class NotificationServiceImpl implements NotificationService {
 
   @override
   Future<void> cancelNotification(int id) async {
+    debugPrint("Canceling notification with id: $id");
     await _plugin.cancel(id);
   }
 
@@ -252,6 +252,9 @@ class NotificationServiceImpl implements NotificationService {
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
       payload: notification.payload,
+    );
+    debugPrint(
+      "Scheduled notification with id: ${notification.id} with title: ${notification.title} with payload: ${jsonDecode(notification.payload!)["id"]}",
     );
   }
 }
