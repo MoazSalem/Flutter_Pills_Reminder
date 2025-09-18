@@ -55,7 +55,7 @@ class NotificationServiceImpl implements NotificationService {
       if (isGrouped) {
         final Box box = Hive.box('groupedNotifications');
         NotificationModel? groupedNotification = box.get(
-          '${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
+          'M${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
         );
         groupedNotification != null
             ? notification = groupedNotification.copyWith(
@@ -67,8 +67,9 @@ class NotificationServiceImpl implements NotificationService {
                   isGrouped: true,
                 ),
               )
+            // If grouped notification doesn't exist => create it, M is add for specifying that this is monthly notification
             : box.put(
-                '${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
+                'M${notification.time.day}/${notification.time.hour}:${notification.time.minute}',
                 notification,
               );
       } else {
@@ -209,7 +210,7 @@ class NotificationServiceImpl implements NotificationService {
           tz.local,
         );
         NotificationModel? groupedNotification = box.get(
-          '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
+          'W${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
         );
         // If grouped notification exists => update it
         groupedNotification != null
@@ -236,9 +237,9 @@ class NotificationServiceImpl implements NotificationService {
                 type: notificationType,
                 isGrouped: true,
               );
-        // Store notification, for later handling
+        // Store notification, for later handling, for weekly notifications we add W to separate them from daily notifications
         box.put(
-          '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
+          'W${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
           notification,
         );
         await scheduleNotification(notification: notification);

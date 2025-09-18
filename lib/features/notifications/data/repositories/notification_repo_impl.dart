@@ -280,8 +280,15 @@ class NotificationRepoImpl implements NotificationRepo {
     for (var notificationList in normalBox.values) {
       for (var notification in notificationList.items) {
         final payload = jsonDecode(notification.payload!);
+        String specificKey;
+        notification.matchComponents == DateTimeComponents.dayOfWeekAndTime
+            ? specificKey = "W"
+            : notification.matchComponents ==
+                  DateTimeComponents.dayOfMonthAndTime
+            ? specificKey = "M"
+            : specificKey = '';
         final key =
-            '${notification.time.day}/${notification.time.hour}:${notification.time.second}';
+            '$specificKey${notification.time.day}/${notification.time.hour}:${notification.time.second}';
 
         final id = int.parse(payload['id']);
 
