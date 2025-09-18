@@ -281,7 +281,8 @@ class NotificationRepoImpl implements NotificationRepo {
       for (var notification in notificationList.items) {
         final payload = jsonDecode(notification.payload!);
         final key =
-            '${notification.time.day}/${notification.time.hour}/${notification.time.second}';
+            '${notification.time.day}/${notification.time.hour}:${notification.time.second}';
+
         final id = int.parse(payload['id']);
 
         // check if a grouped notification for this time exists
