@@ -282,13 +282,13 @@ class NotificationRepoImpl implements NotificationRepo {
         final payload = jsonDecode(notification.payload!);
         String specificKey;
         notification.matchComponents == DateTimeComponents.dayOfWeekAndTime
-            ? specificKey = "W"
+            ? specificKey = "${notification.time.weekday}/"
             : notification.matchComponents ==
                   DateTimeComponents.dayOfMonthAndTime
-            ? specificKey = "M"
+            ? specificKey = "M${notification.time.day}/"
             : specificKey = '';
         final key =
-            '$specificKey${notification.time.day}/${notification.time.hour}:${notification.time.second}';
+            '$specificKey${notification.time.hour}:${notification.time.minute}';
 
         final id = int.parse(payload['id']);
 

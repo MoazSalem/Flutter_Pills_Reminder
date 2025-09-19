@@ -169,7 +169,7 @@ class NotificationServiceImpl implements NotificationService {
         tz.local,
       );
       NotificationModel? groupedNotification = box.get(
-        '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
+        '${scheduledDate.hour}:${scheduledDate.minute}',
       );
       // If grouped notification exists => update it
       groupedNotification != null
@@ -193,10 +193,7 @@ class NotificationServiceImpl implements NotificationService {
               isGrouped: true,
             );
       // Store notification, for later handling
-      box.put(
-        '${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
-        notification,
-      );
+      box.put('${scheduledDate.hour}:${scheduledDate.minute}', notification);
       // Schedule the notification
       await scheduleNotification(notification: notification);
     } else {
@@ -210,7 +207,7 @@ class NotificationServiceImpl implements NotificationService {
           tz.local,
         );
         NotificationModel? groupedNotification = box.get(
-          'W${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
+          '${scheduledDate.weekday}/${scheduledDate.hour}:${scheduledDate.minute}',
         );
         // If grouped notification exists => update it
         groupedNotification != null
@@ -239,7 +236,7 @@ class NotificationServiceImpl implements NotificationService {
               );
         // Store notification, for later handling, for weekly notifications we add W to separate them from daily notifications
         box.put(
-          'W${scheduledDate.day}/${scheduledDate.hour}:${scheduledDate.minute}',
+          '${scheduledDate.weekday}/${scheduledDate.hour}:${scheduledDate.minute}',
           notification,
         );
         await scheduleNotification(notification: notification);
