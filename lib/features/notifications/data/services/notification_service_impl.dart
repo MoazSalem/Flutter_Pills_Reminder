@@ -9,6 +9,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/core/utils/debug_print.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/core/utils/tz_date_helper.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
@@ -246,7 +247,7 @@ class NotificationServiceImpl implements NotificationService {
 
   @override
   Future<void> cancelNotification(int id) async {
-    debugPrint("Canceling notification with id: $id");
+    debugOnlyPrint("Canceling notification with id: $id");
     await _plugin.cancel(id);
   }
 
@@ -277,7 +278,7 @@ class NotificationServiceImpl implements NotificationService {
       androidScheduleMode: notification.androidScheduleMode,
       payload: notification.payload,
     );
-    debugPrint(
+    debugOnlyPrint(
       "Scheduled notification with id: ${notification.id} with title: ${notification.title} with payload: ${jsonDecode(notification.payload!)["id"]}",
     );
   }
