@@ -360,6 +360,7 @@ class NotificationRepoImpl implements NotificationRepo {
             : notification.title;
 
         final single = notification.copyWith(
+          id: id,
           title: title,
           payload: jsonEncode({...payload, "id": "$id", "is Grouped": "false"}),
         );
