@@ -11,7 +11,7 @@ class MedicationList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.largePadding,
-        vertical: AppSizes.tinyPadding,
+        vertical: AppSizes.normalPadding,
       ),
       child: ListView.separated(
         separatorBuilder: (context, index) => const SizedBox(height: 10),

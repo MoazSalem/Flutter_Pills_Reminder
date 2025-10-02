@@ -5,6 +5,8 @@ class AppTranslations extends Translations {
   Map<String, Map<String, String>> get keys => {
     'en': {
       'appName': 'Pills Reminder',
+      'medications': 'Medications',
+      'notifications': 'Notifications',
       'noPills': 'No Pills Scheduled for Reminder',
       'remaining': 'Remaining Pills:',
       'settings': 'Settings',
@@ -92,6 +94,8 @@ class AppTranslations extends Translations {
     },
     'ar': {
       'appName': 'منبّه الحبوب',
+      'medications': 'الأدوية',
+      'notifications': 'الإشعارات',
       'noPills': 'لا توجد حبوب مجدولة للتذكير',
       'remaining': 'الكمية المتبقية:',
       'settings': 'الإعدادات',
