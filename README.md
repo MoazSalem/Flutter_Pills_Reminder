@@ -28,7 +28,7 @@ lib/
 
 - ⏰ **Schedule custom medication reminders**
 - 📅 **Supports one-time, daily, or weekly notifications**
-- 🎯 **Notifcations Presistance to never miss your pills**
+- 🎯 **Notifications Persistence to never miss your pills**
 - 🧠 **Clean architecture & GetX-based controllers**
 - ⚡ **Blazing fast local storage with Hive**
 - 🔔 **Precise local notifications using Flutter Local Notifications**
@@ -45,10 +45,11 @@ lib/
 
 | Light Mode                                                                                                           | Dark Mode                                                                                                        |
 |:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/eca6371a-17aa-455a-abc0-1eb79f58c9ff" width="300">               | <img src="https://github.com/user-attachments/assets/0dccd0b9-03bf-4ff5-904d-a9a9b24114bf" width="300">               |
-| <img src="https://github.com/user-attachments/assets/c660351a-633d-495b-9752-4a5fc2362bd9" width="300">               | <img src="https://github.com/user-attachments/assets/bc34c485-2770-4f3b-8534-e9e5993bcf88" width="300">               |
-| <img src="https://github.com/user-attachments/assets/8901093f-9d33-4e19-b34a-f021084549d3" width="300">               | <img src="https://github.com/user-attachments/assets/eba14a5b-4ec2-4242-99c4-81693bd60910" width="300">               |
-| <img src="https://github.com/user-attachments/assets/c26cfc8c-69d0-4b23-9f62-81e708fb1fce" width="300">               | <img src="https://github.com/user-attachments/assets/6ac20333-c385-41eb-a75c-11e5189bb68c" width="300">               |
+| <img src="https://github.com/user-attachments/assets/adf3c1cf-a773-47a2-89dd-f67084660539" width="300">               | <img src="https://github.com/user-attachments/assets/66112320-5380-4bcc-8786-d272965869c8" width="300">               |
+| <img src="https://github.com/user-attachments/assets/8d1dac5c-b159-45d8-b450-19eae9023dd6" width="300">               | <img src="https://github.com/user-attachments/assets/052d19a8-8463-4d18-a355-21bcf0a8f7d1" width="300">               |
+| <img src="https://github.com/user-attachments/assets/84cb4573-c10d-4f20-a3df-890bfede30a1" width="300">               | <img src="https://github.com/user-attachments/assets/5a9a685f-3b20-4f81-9055-7d767dc60894" width="300">               |
+| <img src="https://github.com/user-attachments/assets/956b39c1-3e25-424b-b361-27b783fcd140" width="300">               | <img src="https://github.com/user-attachments/assets/12917e21-d39f-4a0a-a2be-348f59416323" width="300">               |
+| <img src="https://github.com/user-attachments/assets/4e988582-c20e-429a-8da4-afefebd5ac25" width="300">               | <img src="https://github.com/user-attachments/assets/f711df3b-51bc-4f9e-b40e-acb67050ad01" width="300">               |
 | <img src="https://github.com/user-attachments/assets/4ddfd49f-79c5-451a-87bd-836d0658bbea" width="300">               | <img src="https://github.com/user-attachments/assets/21341588-3d4a-49fd-8869-984c328c2e17" width="300">               |
 </div>
 
