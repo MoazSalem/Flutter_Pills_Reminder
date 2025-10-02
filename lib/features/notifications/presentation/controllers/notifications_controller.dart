@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/core/utils/debug_print.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
 
 class NotificationsController extends GetxController {
   final NotificationRepo notificationRepo;
   NotificationsController(this.notificationRepo);
+  RxList<PendingNotificationRequest> notifications =
+      <PendingNotificationRequest>[].obs;
 
   @override
   void onInit() async {
     super.onInit();
     await notificationRepo.initNotificationService();
+  }
+
+  Future<void> getActiveNotifications() async {
+    notifications.value = await notificationRepo.getPendingNotifications();
+    update();
+    debugOnlyPrint('notifications updated');
   }
 
   Future<void> requestNotificationPermission() async {
@@ -120,19 +130,21 @@ class NotificationsController extends GetxController {
     required Box<NotificationList> normalBox,
     required Box groupedBox,
   }) async {
-    notificationRepo.convertNormalToGrouped(
+    await notificationRepo.convertNormalToGrouped(
       normalBox: normalBox,
       groupedBox: groupedBox,
     );
+    getActiveNotifications();
   }
 
   Future<void> convertGroupedToNormal({
     required Box<NotificationList> normalBox,
     required Box groupedBox,
   }) async {
-    notificationRepo.convertGroupedToNormal(
+    await notificationRepo.convertGroupedToNormal(
       normalBox: normalBox,
       groupedBox: groupedBox,
     );
+    getActiveNotifications();
   }
 }

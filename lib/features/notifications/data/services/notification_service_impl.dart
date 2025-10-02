@@ -21,6 +21,11 @@ class NotificationServiceImpl implements NotificationService {
   NotificationServiceImpl(this._plugin);
 
   @override
+  Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+    return await _plugin.pendingNotificationRequests();
+  }
+
+  @override
   Future<void> normalNotification({
     required String title,
     required String body,
@@ -38,6 +43,10 @@ class NotificationServiceImpl implements NotificationService {
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
+    // Set local timezone
+    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
     NotificationModel notification = NotificationsHelper.buildNotification(
       id: id,
       title: title,
@@ -95,6 +104,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
+    // Set local timezone
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 
@@ -155,6 +165,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
+    // Set local timezone
     final String localTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(localTimeZone));
 

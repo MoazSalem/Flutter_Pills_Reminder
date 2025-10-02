@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
@@ -8,6 +9,8 @@ abstract class NotificationService {
     required String title,
     required String body,
   });
+
+  Future<List<PendingNotificationRequest>> getPendingNotifications();
 
   Future<void> scheduleMedicationNotification({
     required int id,

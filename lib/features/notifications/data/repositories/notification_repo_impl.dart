@@ -70,6 +70,11 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
+  Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+    return await notificationService.getPendingNotifications();
+  }
+
+  @override
   Future<void> cancelNotification(int id) async {
     await notificationService.cancelNotification(id);
   }
@@ -219,46 +224,64 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
-  Future<void> rescheduleMedicationsNotifications({required int id}) async {
+  Future<void> rescheduleMedicationsNotifications({
+    required int id,
+    bool skipSnackBar = false,
+  }) async {
     Box box = Hive.box<NotificationList>('notifications');
     final NotificationList notifications =
         box.get(id) ?? NotificationList(items: []);
     notifications.items.isEmpty
-        ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+        ? skipSnackBar
+              ? null
+              : showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
         : {
             for (var notification in notifications.items)
               {
                 await rescheduleNotification(notification: notification),
-                showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+                skipSnackBar
+                    ? null
+                    : showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
               },
           };
   }
 
   @override
-  Future<void> rescheduleAllNotifications({required bool isGrouped}) async {
+  Future<void> rescheduleAllNotifications({
+    required bool isGrouped,
+    bool skipSnackBar = false,
+  }) async {
     late final Box box;
     if (isGrouped) {
       box = Hive.box('groupedNotifications');
       final allNotifications = box.values.toList();
       allNotifications.isEmpty
-          ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+          ? skipSnackBar
+                ? null
+                : showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
           : {
               for (var notification in allNotifications)
                 {await rescheduleNotification(notification: notification)},
-              showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+              skipSnackBar
+                  ? null
+                  : showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
             };
     } else {
       box = Hive.box<NotificationList>('notifications');
       final allNotifications = box.values.toList();
       allNotifications.isEmpty
-          ? showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
+          ? skipSnackBar
+                ? null
+                : showSnackBar('resetNotifications'.tr, 'resetWrong'.tr)
           : {
               for (var notifications in allNotifications)
                 {
                   for (var notification in notifications.items)
                     {await rescheduleNotification(notification: notification)},
                 },
-              showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
+              skipSnackBar
+                  ? null
+                  : showSnackBar('resetNotifications'.tr, 'resetDone'.tr),
             };
     }
   }
@@ -328,7 +351,7 @@ class NotificationRepoImpl implements NotificationRepo {
     // cancel all grouped notifications
     await notificationsPlugin.cancelAll();
     // schedule all normal notifications
-    await rescheduleAllNotifications(isGrouped: true);
+    await rescheduleAllNotifications(isGrouped: true, skipSnackBar: true);
     // delete all normal notifications
     normalBox.clear();
     // show snackbar that the conversion is done
@@ -355,6 +378,7 @@ class NotificationRepoImpl implements NotificationRepo {
             : notification.title;
 
         final single = notification.copyWith(
+          id: id,
           title: title,
           payload: jsonEncode({...payload, "id": "$id", "is Grouped": "false"}),
         );
@@ -368,7 +392,7 @@ class NotificationRepoImpl implements NotificationRepo {
     // cancel all grouped notifications
     await notificationsPlugin.cancelAll();
     // schedule all normal notifications
-    await rescheduleAllNotifications(isGrouped: false);
+    await rescheduleAllNotifications(isGrouped: false, skipSnackBar: true);
     // delete all grouped notifications
     groupedBox.clear();
     // show snackbar that the conversion is done
