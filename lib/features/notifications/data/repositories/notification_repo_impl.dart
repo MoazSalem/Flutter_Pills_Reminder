@@ -70,6 +70,11 @@ class NotificationRepoImpl implements NotificationRepo {
   }
 
   @override
+  Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+    return await notificationService.getPendingNotifications();
+  }
+
+  @override
   Future<void> cancelNotification(int id) async {
     await notificationService.cancelNotification(id);
   }

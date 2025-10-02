@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
@@ -10,11 +11,18 @@ import 'package:pills_reminder/features/notifications/domain/repositories/notifi
 class NotificationsController extends GetxController {
   final NotificationRepo notificationRepo;
   NotificationsController(this.notificationRepo);
+  RxList<PendingNotificationRequest> notifications =
+      <PendingNotificationRequest>[].obs;
 
   @override
   void onInit() async {
     super.onInit();
     await notificationRepo.initNotificationService();
+  }
+
+  Future<void> getActiveNotifications() async {
+    notifications.value = await notificationRepo.getPendingNotifications();
+    update();
   }
 
   Future<void> requestNotificationPermission() async {

@@ -21,6 +21,11 @@ class NotificationServiceImpl implements NotificationService {
   NotificationServiceImpl(this._plugin);
 
   @override
+  Future<List<PendingNotificationRequest>> getPendingNotifications() async {
+    return await _plugin.pendingNotificationRequests();
+  }
+
+  @override
   Future<void> normalNotification({
     required String title,
     required String body,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
@@ -15,6 +16,8 @@ abstract class NotificationRepo {
     required String title,
     required String body,
   });
+
+  Future<List<PendingNotificationRequest>> getPendingNotifications();
 
   Future<void> scheduleNotification({
     required DateTime dateTime,
