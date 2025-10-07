@@ -79,8 +79,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       notificationType = NotificationType.alarmClock;
     }
   }
-
-  onDispose() {
+  @override
+  dispose() {
     nameController.dispose();
     amountController.dispose();
     super.dispose();
@@ -340,7 +340,7 @@ Future<void> cancelNotification({
         );
 }
 
-setupNotification({
+Future<void> setupNotification({
   required MedicationModel medication,
   required MedicationFrequency frequency,
   required NotificationsController notificationsController,
