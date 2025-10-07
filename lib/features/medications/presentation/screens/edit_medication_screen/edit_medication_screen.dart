@@ -16,7 +16,6 @@ import 'package:pills_reminder/features/medications/presentation/screens/edit_me
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/pill_time.dart';
 import 'package:pills_reminder/features/medications/presentation/screens/edit_medication_screen/widgets/weekday_picker.dart';
 import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
-import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 
 class EditMedicationScreen extends StatefulWidget {
   const EditMedicationScreen({super.key, this.medication});
@@ -77,7 +76,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       };
       _times.assignAll(widget.medication!.times);
       _monthlyDay = widget.medication!.monthlyDay;
-      _notificationType = widget.medication!.notificationType ?? NotificationType.alarmClock;
+      _notificationType =
+          widget.medication!.notificationType ?? NotificationType.alarmClock;
     }
   }
 
@@ -295,9 +295,8 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           medicationsController.updateMedication(medication);
 
                           /// we reset the notifications if the medication is edited
-                          await cancelNotification(
-                            notificationsController: notificationsController,
-                            medication: widget.medication!,
+                          await notificationsController.cancelNotifications(
+                            medication,
                           );
                         } else {
                           /// if this is add medication
@@ -305,10 +304,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         }
 
                         /// setup notifications for both add medication and edit medication
-                        setupNotification(
-                          notificationsController: notificationsController,
-                          medication: medication,
-                        );
+                        notificationsController.setupNotifications(medication);
                         Get.until((route) => route.isFirst);
                       },
                     ),
@@ -322,70 +318,4 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
       ),
     );
   }
-}
-
-Future<void> cancelNotification({
-  required MedicationModel medication,
-  required NotificationsController notificationsController,
-}) async {
-  medication.frequency == MedicationFrequency.once
-      ? [
-          for (int i = 0; i < medication.times.length; i++)
-            await notificationsController.cancelNotification(medication.id + i),
-        ]
-      : await notificationsController.cancelAllNotificationForMedication(
-          medication,
-        );
-}
-
-Future<void> setupNotification({
-  required MedicationModel medication,
-  required NotificationsController notificationsController,
-}) async {
-  final groupedNotifications =
-      Get.find<SettingsController>().groupedNotifications.value;
-  medication.frequency == MedicationFrequency.once
-      ? [
-          for (int i = 0; i < medication.times.length; i++)
-            await notificationsController.scheduleNotification(
-              id: medication.id + i,
-              medicationName: medication.name,
-              dateTime: DateTime(
-                medication.monthlyDay!.year,
-                medication.monthlyDay!.month,
-                medication.monthlyDay!.day,
-                medication.times[i].hour,
-                medication.times[i].minute,
-              ),
-              notificationType: medication.notificationType,
-              isRepeating: true,
-            ),
-        ]
-      : {
-          for (int i = 0; i < medication.times.length; i++)
-            {
-              if (groupedNotifications)
-                {
-                  await notificationsController
-                      .scheduleGroupedDailyOrWeeklyNotification(
-                        id: medication.id,
-                        medicationName: medication.name,
-                        time: medication.times[i],
-                        weekdays: medication.selectedDays ?? [],
-                        notificationType: medication.notificationType,
-                      ),
-                }
-              else
-                {
-                  await notificationsController
-                      .scheduleDailyOrWeeklyNotification(
-                        id: medication.id,
-                        medicationName: medication.name,
-                        time: medication.times[i],
-                        weekdays: medication.selectedDays ?? [],
-                        notificationType: medication.notificationType,
-                      ),
-                },
-            },
-        };
 }

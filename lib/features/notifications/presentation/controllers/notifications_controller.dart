@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/models/medication_frequency.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/utils/debug_print.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/notifications/domain/repositories/notification_repo.dart';
+import 'package:pills_reminder/features/settings/presentation/controllers/settings_controller.dart';
 
 class NotificationsController extends GetxController {
   final NotificationRepo notificationRepo;
@@ -35,14 +37,61 @@ class NotificationsController extends GetxController {
     await notificationRepo.requestExactAlarmPermission();
   }
 
-  Future<void> cancelNotification(int id) async {
-    await notificationRepo.cancelNotification(id);
+  Future<void> setupNotifications(MedicationModel medication) async {
+    final groupedNotifications =
+        Get.find<SettingsController>().groupedNotifications.value;
+    medication.frequency == MedicationFrequency.once
+        ? [
+      for (int i = 0; i < medication.times.length; i++)
+        await scheduleNotification(
+          id: medication.id + i,
+          medicationName: medication.name,
+          dateTime: DateTime(
+            medication.monthlyDay!.year,
+            medication.monthlyDay!.month,
+            medication.monthlyDay!.day,
+            medication.times[i].hour,
+            medication.times[i].minute,
+          ),
+          notificationType: medication.notificationType,
+          isRepeating: true,
+        ),
+    ]
+        : {
+      for (int i = 0; i < medication.times.length; i++)
+        {
+          if (groupedNotifications)
+            {
+              await scheduleGroupedDailyOrWeeklyNotification(
+                id: medication.id,
+                medicationName: medication.name,
+                time: medication.times[i],
+                weekdays: medication.selectedDays ?? [],
+                notificationType: medication.notificationType,
+              ),
+            }
+          else
+            {
+              await scheduleDailyOrWeeklyNotification(
+                id: medication.id,
+                medicationName: medication.name,
+                time: medication.times[i],
+                weekdays: medication.selectedDays ?? [],
+                notificationType: medication.notificationType,
+              ),
+            },
+        },
+    };
   }
 
-  Future<void> cancelAllNotificationForMedication(
-    MedicationModel medication,
-  ) async {
-    await notificationRepo.cancelAllNotificationForMedication(medication);
+  Future<void> cancelNotifications(MedicationModel medication) async {
+    if (medication.frequency == MedicationFrequency.once) {
+      for (int i = 0; i < medication.times.length; i++) {
+        await notificationRepo.cancelNotification(medication.id + i);
+      }
+    } else {
+      await notificationRepo.cancelAllNotificationForMedication(medication);
+    }
   }
 
   Future<void> normalNotification({

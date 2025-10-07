@@ -21,16 +21,8 @@ Future<bool?> showDeleteDialog({
         TextButton(onPressed: () => Get.back(), child: Text('cancel'.tr)),
         TextButton(
           onPressed: () async {
-            frequency == MedicationFrequency.once
-                ? {
-                    for (int i = 0; i < medication.times.length; i++)
-                      await notificationsController.cancelNotification(
-                        medication.id + i,
-                      ),
-                  }
-                : await notificationsController
-                      .cancelAllNotificationForMedication(medication);
-            medicationsController.deleteMedication(medication.id);
+            await notificationsController.cancelNotifications(medication);
+            await medicationsController.deleteMedication(medication.id);
             Get.until((route) => route.isFirst);
             Get.snackbar(
               'deleteMedication'.tr,
