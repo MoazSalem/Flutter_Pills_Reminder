@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pills_reminder/core/styles/sizes.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final TextEditingController? controller;
   final String labelText;
   final String? Function(String?)? validator;
+  final void Function(String?) onSaved;
   const CustomTextFormField({
     super.key,
-    this.controller,
     required this.labelText,
-    this.validator,
+    this.validator, required this.onSaved,
   });
 
   @override
@@ -23,8 +22,8 @@ class CustomTextFormField extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
     );
     return TextFormField(
+      onSaved: onSaved,
       validator: validator,
-      controller: controller,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       decoration: InputDecoration(
         focusedBorder: border,

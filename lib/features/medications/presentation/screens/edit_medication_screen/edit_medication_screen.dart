@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pills_reminder/core/models/medication_frequency.dart';
@@ -29,19 +27,18 @@ class EditMedicationScreen extends StatefulWidget {
 }
 
 class _EditMedicationScreenState extends State<EditMedicationScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
-  MedicationFrequency frequency = MedicationFrequency.daily;
-  int repeatTimes = 1;
-  List<Weekday> selectedDays = [];
-  List<TimeOfDay?> times = [null];
-  DateTime? monthlyDay;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  /// this is only needed for android
-  NotificationType? notificationType;
+  /// Temporary State Variables
+  String _name = '';
+  String _amount = '';
+  MedicationFrequency _frequency = MedicationFrequency.daily;
+  int _timesRepeated = 1;
+  List<Weekday> _selectedDays = [];
+  List<TimeOfDay?> _times = [null];
+  DateTime? _monthlyDay;
 
-  Map<Weekday, bool> days = {
+  Map<Weekday, bool> _days = {
     Weekday.saturday: false,
     Weekday.sunday: false,
     Weekday.monday: false,
@@ -51,52 +48,50 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
     Weekday.friday: false,
   };
 
+  /// this is only needed for android
+  NotificationType? _notificationType = NotificationType.alarmClock;
+
   @override
   void initState() {
     super.initState();
+    _setupFields();
+  }
+
+  void _setupFields() {
     if (widget.medication != null) {
-      nameController.text = widget.medication!.name;
-      amountController.text = widget.medication!.amount == null
+      _name = widget.medication!.name;
+      _amount = widget.medication!.amount == null
           ? ""
           : widget.medication!.amount.toString();
-      frequency = widget.medication!.frequency;
-      repeatTimes = widget.medication!.times.length;
-      selectedDays = widget.medication!.selectedDays ?? [];
-      days = {
-        Weekday.saturday: selectedDays.contains(Weekday.saturday),
-        Weekday.sunday: selectedDays.contains(Weekday.sunday),
-        Weekday.monday: selectedDays.contains(Weekday.monday),
-        Weekday.tuesday: selectedDays.contains(Weekday.tuesday),
-        Weekday.wednesday: selectedDays.contains(Weekday.wednesday),
-        Weekday.thursday: selectedDays.contains(Weekday.thursday),
-        Weekday.friday: selectedDays.contains(Weekday.friday),
+      _frequency = widget.medication!.frequency;
+      _timesRepeated = widget.medication!.times.length;
+      _selectedDays = widget.medication!.selectedDays ?? [];
+      _days = {
+        Weekday.saturday: _selectedDays.contains(Weekday.saturday),
+        Weekday.sunday: _selectedDays.contains(Weekday.sunday),
+        Weekday.monday: _selectedDays.contains(Weekday.monday),
+        Weekday.tuesday: _selectedDays.contains(Weekday.tuesday),
+        Weekday.wednesday: _selectedDays.contains(Weekday.wednesday),
+        Weekday.thursday: _selectedDays.contains(Weekday.thursday),
+        Weekday.friday: _selectedDays.contains(Weekday.friday),
       };
-      times.assignAll(widget.medication!.times);
-      monthlyDay = widget.medication!.monthlyDay;
-      notificationType = widget.medication!.notificationType;
+      _times.assignAll(widget.medication!.times);
+      _monthlyDay = widget.medication!.monthlyDay;
+      _notificationType = widget.medication!.notificationType ?? NotificationType.alarmClock;
     }
-    if (Platform.isAndroid && notificationType == null) {
-      notificationType = NotificationType.alarmClock;
-    }
-  }
-  @override
-  dispose() {
-    nameController.dispose();
-    amountController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final medicationsController = Get.find<MedicationController>();
     final notificationsController = Get.find<NotificationsController>();
-    final theme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
         child: SingleChildScrollView(
           child: Form(
-            key: formKey,
+            key: _formKey,
             child: Column(
               spacing: AppSizes.normalPadding,
               children: [
@@ -105,7 +100,6 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
 
                 /// Medication name
                 CustomTextFormField(
-                  controller: nameController,
                   labelText: 'medicationName'.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -113,11 +107,11 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     }
                     return null;
                   },
+                  onSaved: (value) => _name = value!,
                 ),
 
                 /// Amount of pills available
                 CustomTextFormField(
-                  controller: amountController,
                   labelText: 'pAmount'.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -129,65 +123,66 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     }
                     return null;
                   },
+                  onSaved: (value) => _amount = value!,
                 ),
 
                 /// Frequency of medication
                 CustomDropDown(
-                  value: frequency,
+                  value: _frequency,
                   items: MedicationFrequency.values,
                   customNames: frequencies,
                   onChanged: (value) => setState(() {
-                    frequency = value!;
-                    days.forEach((key, value) => days[key] = false);
-                    selectedDays.clear();
-                    monthlyDay = null;
+                    _frequency = value!;
+                    _days.forEach((key, value) => _days[key] = false);
+                    _selectedDays.clear();
+                    _monthlyDay = null;
                   }),
                   label: 'frequency'.tr,
                 ),
 
                 /// Days selection
-                if (frequency == MedicationFrequency.daysPerWeek)
+                if (_frequency == MedicationFrequency.daysPerWeek)
                   WeekdayPicker(
-                    key: ValueKey(frequency),
-                    frequency: frequency,
-                    days: days,
+                    key: ValueKey(_frequency),
+                    frequency: _frequency,
+                    days: _days,
                     onChanged: (day, value) => setState(() {
-                      days[day] = value;
-                      selectedDays.clear();
-                      days.forEach((key, value) {
+                      _days[day] = value;
+                      _selectedDays.clear();
+                      _days.forEach((key, value) {
                         if (value) {
-                          selectedDays.add(key);
+                          _selectedDays.add(key);
                         }
                       });
                     }),
                   ),
 
                 /// Day of the month if frequency is once
-                if (frequency == MedicationFrequency.once)
+                if (_frequency == MedicationFrequency.once)
                   DayPicker(
-                    selectedDate: monthlyDay,
+                    selectedDate: _monthlyDay,
                     onTap: (DateTime date) {
                       setState(() {
-                        monthlyDay = date;
+                        _monthlyDay = date;
                       });
                     },
                   ),
 
                 /// Pills per day
                 CustomDropDown(
-                  value: repeatTimes,
+                  value: _timesRepeated,
                   items: List.generate(20, (i) => i + 1),
                   onChanged: (value) => setState(() {
-                    repeatTimes = value!;
-                    if (repeatTimes < times.length) {
-                      final difference = times.length - repeatTimes;
+                    _timesRepeated = value!;
+                    if (_timesRepeated < _times.length) {
+                      final difference = _times.length - _timesRepeated;
                       for (var i = 0; i < difference; i++) {
-                        times.removeAt(times.length - 1);
+                        _times.removeAt(_times.length - 1);
                       }
-                    } else if (repeatTimes > times.length) {
-                      final difference = repeatTimes - times.length;
-                      times = [
-                        ...times,
+                    } else if (_timesRepeated > _times.length) {
+                      final difference = _timesRepeated - _times.length;
+                      _times = [
+                        ..._times,
                         ...List.generate(difference, (_) => null),
                       ];
                     }
@@ -197,7 +192,7 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
 
                 /// Pills times selection
                 ...List.generate(
-                  repeatTimes,
+                  _timesRepeated,
                   (i) => PillTime(
                     i: i,
                     validator: (value) {
@@ -209,27 +204,28 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     onTap: () async {
                       final time = await showTimePicker(
                         context: context,
-                        initialTime: times[i] ?? TimeOfDay(hour: 12, minute: 0),
+                        initialTime:
+                            _times[i] ?? TimeOfDay(hour: 12, minute: 0),
                       );
                       if (time != null) {
-                        setState(() => times[i]);
+                        setState(() => _times[i]);
                       }
                       return time;
                     },
-                    time: i < times.length ? times[i] : null,
+                    time: i < _times.length ? _times[i] : null,
                     onChanged: (newTime) {
-                      setState(() => times[i] = newTime);
+                      setState(() => _times[i] = newTime);
                     },
                   ),
                 ),
 
                 /// Notification type
-                if (notificationType != null)
+                if (_notificationType != null)
                   NotificationTypeTitle(
-                    notificationType: notificationType!,
+                    notificationType: _notificationType!,
                     onChanged: (value) {
                       setState(() {
-                        notificationType = value;
+                        _notificationType = value;
                       });
                     },
                   ),
@@ -242,18 +238,18 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                     if (widget.medication != null)
                       CustomButton(
                         size: AppSizes.buttonSize,
-                        color: theme.errorContainer,
-                        sideColor: theme.onError,
+                        color: colorScheme.errorContainer,
+                        sideColor: colorScheme.onError,
                         icon: Icon(
                           size: AppSizes.largeIconSize,
                           Icons.delete_forever_outlined,
-                          color: theme.onErrorContainer,
+                          color: colorScheme.onErrorContainer,
                         ),
                         onTap: () => showDeleteDialog(
                           context: context,
                           medicationsController: medicationsController,
                           medication: widget.medication!,
-                          frequency: frequency,
+                          frequency: _frequency,
                           notificationsController: notificationsController,
                         ),
                       ),
@@ -264,29 +260,34 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                       icon: Icon(
                         size: AppSizes.largeIconSize,
                         Icons.done,
-                        color: theme.onPrimaryContainer,
+                        color: colorScheme.onPrimaryContainer,
                       ),
                       onTap: () async {
-                        if (!formKey.currentState!.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           return;
                         }
+                        // if valid
+                        _formKey.currentState!.save();
 
                         /// create medication model
                         final medication = MedicationModel(
-                          name: nameController.text,
-                          amount: int.tryParse(amountController.text),
-                          frequency: frequency,
+                          name: _name,
+                          amount: int.tryParse(_amount),
+                          frequency: _frequency,
                           selectedDays:
-                              frequency == MedicationFrequency.daysPerWeek
-                              ? selectedDays
+                              _frequency == MedicationFrequency.daysPerWeek
+                              ? _selectedDays
                               : null,
-                          monthlyDay: frequency == MedicationFrequency.once
-                              ? monthlyDay
+                          monthlyDay: _frequency == MedicationFrequency.once
+                              ? _monthlyDay
                               : null,
-                          times: List<TimeOfDay>.from(times),
-                          timesPillTaken: List<bool>.filled(repeatTimes, false),
+                          times: List<TimeOfDay>.from(_times),
+                          timesPillTaken: List<bool>.filled(
+                            _timesRepeated,
+                            false,
+                          ),
                           id: widget.medication?.id ?? UniqueKey().hashCode,
-                          notificationType: notificationType,
+                          notificationType: _notificationType,
                         );
 
                         /// if this is edit medication
@@ -297,7 +298,6 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                           await cancelNotification(
                             notificationsController: notificationsController,
                             medication: widget.medication!,
-                            frequency: frequency,
                           );
                         } else {
                           /// if this is add medication
@@ -308,7 +308,6 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
                         setupNotification(
                           notificationsController: notificationsController,
                           medication: medication,
-                          frequency: frequency,
                         );
                         Get.until((route) => route.isFirst);
                       },
@@ -327,10 +326,9 @@ class _EditMedicationScreenState extends State<EditMedicationScreen> {
 
 Future<void> cancelNotification({
   required MedicationModel medication,
-  required MedicationFrequency frequency,
   required NotificationsController notificationsController,
 }) async {
-  frequency == MedicationFrequency.once
+  medication.frequency == MedicationFrequency.once
       ? [
           for (int i = 0; i < medication.times.length; i++)
             await notificationsController.cancelNotification(medication.id + i),
@@ -342,12 +340,11 @@ Future<void> cancelNotification({
 
 Future<void> setupNotification({
   required MedicationModel medication,
-  required MedicationFrequency frequency,
   required NotificationsController notificationsController,
 }) async {
   final groupedNotifications =
       Get.find<SettingsController>().groupedNotifications.value;
-  frequency == MedicationFrequency.once
+  medication.frequency == MedicationFrequency.once
       ? [
           for (int i = 0; i < medication.times.length; i++)
             await notificationsController.scheduleNotification(
