@@ -5,10 +5,13 @@ class CustomTextFormField extends StatelessWidget {
   final String labelText;
   final String? Function(String?)? validator;
   final void Function(String?) onSaved;
+  final String? initialValue;
   const CustomTextFormField({
     super.key,
     required this.labelText,
-    this.validator, required this.onSaved,
+    this.validator,
+    required this.onSaved,
+    this.initialValue,
   });
 
   @override
@@ -22,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSizes.roundedRadius),
     );
     return TextFormField(
+      initialValue: initialValue,
       onSaved: onSaved,
       validator: validator,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),

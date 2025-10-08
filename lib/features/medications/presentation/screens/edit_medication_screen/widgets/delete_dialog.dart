@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pills_reminder/core/models/medication_frequency.dart';
-import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
-import 'package:pills_reminder/features/medications/presentation/controllers/medications_controller.dart';
-import 'package:pills_reminder/features/notifications/presentation/controllers/notifications_controller.dart';
 
 Future<bool?> showDeleteDialog({
   required BuildContext context,
-  required MedicationController medicationsController,
-  required MedicationModel medication,
-  required MedicationFrequency frequency,
-  required NotificationsController notificationsController,
+  required Function deleteMedication,
 }) {
   return showDialog<bool>(
     context: context,
@@ -21,8 +14,7 @@ Future<bool?> showDeleteDialog({
         TextButton(onPressed: () => Get.back(), child: Text('cancel'.tr)),
         TextButton(
           onPressed: () async {
-            await notificationsController.cancelNotifications(medication);
-            await medicationsController.deleteMedication(medication.id);
+            await deleteMedication();
             Get.until((route) => route.isFirst);
             Get.snackbar(
               'deleteMedication'.tr,
