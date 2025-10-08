@@ -286,7 +286,7 @@ class NotificationRepoImpl implements NotificationRepo {
     }
   }
 
-  showSnackBar(String title, String message) {
+  void showSnackBar(String title, String message) {
     Get.snackbar(
       duration: const Duration(seconds: 5),
       title,

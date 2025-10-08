@@ -1,5 +1,6 @@
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+
 part 'weekday.g.dart';
 
 @HiveType(typeId: 3)
@@ -42,7 +43,7 @@ extension WeekdayExtension on Weekday {
 }
 
 /// Helper function to get the weekday from the index
-timeZonesDayToWeekday(int index) {
+Weekday timeZonesDayToWeekday(int index) {
   switch (index) {
     case 1:
       return Weekday.monday;

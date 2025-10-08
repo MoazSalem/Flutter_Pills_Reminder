@@ -9,14 +9,38 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val keyProperties = Properties().apply {
-    load(FileInputStream(File("keystore.properties")))
+// Define the helper extension function
+fun Properties.getRequiredProperty(key: String): String {
+    return getProperty(key) ?: throw IllegalArgumentException("'$key' not found in keystore.properties file.")
 }
-val detKeyAlias = keyProperties.getProperty("keyAlias")
-require(detKeyAlias != null) { "keyAlias not found in key.properties file." }
-val detKeyPassword = keyProperties.getProperty("keyPassword")
-val detStoreFile = keyProperties.getProperty("storeFile")
-val detStorePassword = keyProperties.getProperty("storePassword")
+
+// Create an empty Properties object
+val keyProperties = Properties()
+val propertiesFile = File("keystore.properties")
+
+var detStoreFile: String? = null
+var detStorePassword: String? = null
+var detKeyAlias: String? = null
+var detKeyPassword: String? = null
+
+// Check if the properties file exists before doing anything else
+if (propertiesFile.exists()) {
+    println("Info: keystore.properties found. Loading signing information.")
+
+    // Load the file's contents into the properties object
+    keyProperties.load(FileInputStream(propertiesFile))
+
+    // get the required properties. This code only runs if the file exists.
+    detKeyAlias = keyProperties.getRequiredProperty("keyAlias")
+    detKeyPassword = keyProperties.getRequiredProperty("keyPassword")
+    detStoreFile = keyProperties.getRequiredProperty("storeFile")
+    detStorePassword = keyProperties.getRequiredProperty("storePassword")
+
+} else {
+    // This message will now appear when building without the file
+    println("Warning: keystore.properties not found. Skipping release signing configuration.")
+}
+
 android {
     namespace = "com.moazsalem.pills_reminder"
     compileSdk = flutter.compileSdkVersion
@@ -46,10 +70,12 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = detKeyAlias
-            keyPassword = detKeyPassword
-            storeFile = file(detStoreFile)
-            storePassword = detStorePassword
+            if (detStoreFile != null) {
+                storeFile = file(detStoreFile!!)
+                storePassword = detStorePassword
+                keyAlias = detKeyAlias
+                keyPassword = detKeyPassword
+            }
         }
     }
 

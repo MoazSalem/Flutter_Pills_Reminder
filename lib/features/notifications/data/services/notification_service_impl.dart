@@ -290,7 +290,7 @@ class NotificationServiceImpl implements NotificationService {
       payload: notification.payload,
     );
     debugOnlyPrint(
-      "Scheduled notification with id: ${notification.id} with title: ${notification.title} with payload: ${jsonDecode(notification.payload!)["id"]}",
+      "Scheduled notification with id: ${notification.id} with title: ${notification.title} with id in payload: ${jsonDecode(notification.payload!)["id"]}",
     );
   }
 }
