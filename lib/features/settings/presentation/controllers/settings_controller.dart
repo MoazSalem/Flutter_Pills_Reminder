@@ -69,12 +69,12 @@ class SettingsController extends GetxController {
 
   Future<void> changeNotificationMode(bool value) async {
     if (value) {
-      Get.find<NotificationsController>().convertNormalToGrouped(
+      await Get.find<NotificationsController>().convertNormalToGrouped(
         normalBox: await Hive.openBox<NotificationList>('notifications'),
         groupedBox: await Hive.openBox('groupedNotifications'),
       );
     } else {
-      Get.find<NotificationsController>().convertGroupedToNormal(
+      await Get.find<NotificationsController>().convertGroupedToNormal(
         normalBox: await Hive.openBox<NotificationList>('notifications'),
         groupedBox: await Hive.openBox('groupedNotifications'),
       );
