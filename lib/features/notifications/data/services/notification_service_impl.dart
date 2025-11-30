@@ -56,9 +56,12 @@ class NotificationServiceImpl implements NotificationService {
     /// Add notification to box if repeating
     if (isRepeating) {
       final bool isGrouped =
-          Get.find<SettingsController>().groupedNotifications.value;
+          Get
+              .find<SettingsController>()
+              .groupedNotifications
+              .value;
       if (isGrouped) {
-        await NotificationManager.saveGroupedNotification(
+        notification = await NotificationManager.saveGroupedNotification(
           notification: notification,
           medicationName: medicationName,
           newId: id,
@@ -87,15 +90,15 @@ class NotificationServiceImpl implements NotificationService {
     if (weekdays.isEmpty) {
       final tz.TZDateTime scheduledDate = TzDateHelper.nextInstanceOfTime(time);
       final NotificationModel notification =
-          NotificationsHelper.buildNotification(
-            id: id + scheduledDate.hour + scheduledDate.minute,
-            medicationId: "$id",
-            title: title,
-            body: body,
-            time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
-            matchComponents: DateTimeComponents.time,
-            type: notificationType,
-          );
+      NotificationsHelper.buildNotification(
+        id: id + scheduledDate.hour + scheduledDate.minute,
+        medicationId: "$id",
+        title: title,
+        body: body,
+        time: tz.TZDateTime.from(scheduledDate.toUtc(), tz.local),
+        matchComponents: DateTimeComponents.time,
+        type: notificationType,
+      );
       // Store notification, for later handling
       await NotificationManager.saveIndividualNotification(
         notification: notification,
@@ -107,7 +110,7 @@ class NotificationServiceImpl implements NotificationService {
       /// Schedule on each selected weekday
       for (final weekday in weekdays) {
         final tz.TZDateTime scheduledDate =
-            TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
+        TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
         final NotificationModel
         notification = NotificationsHelper.buildNotification(
           id: id + weekday.index + scheduledDate.hour + scheduledDate.minute,
@@ -148,18 +151,19 @@ class NotificationServiceImpl implements NotificationService {
       );
 
       final NotificationModel notification =
-          NotificationsHelper.buildNotification(
-            id: id + scheduledDate.hour + scheduledDate.minute,
-            medicationId: "$id",
-            title: title,
-            body: body,
-            time: finalTime,
-            matchComponents: DateTimeComponents.time,
-            type: notificationType,
-            isGrouped: true,
-          );
+      NotificationsHelper.buildNotification(
+        id: id + scheduledDate.hour + scheduledDate.minute,
+        medicationId: "$id",
+        title: title,
+        body: body,
+        time: finalTime,
+        matchComponents: DateTimeComponents.time,
+        type: notificationType,
+        isGrouped: true,
+      );
 
       // Store notification, for later handling
+      final NotificationModel savedNotification =
       await NotificationManager.saveGroupedNotification(
         notification: notification,
         medicationName: medicationName,
@@ -167,20 +171,24 @@ class NotificationServiceImpl implements NotificationService {
       );
 
       // Schedule the notification
-      await scheduleNotification(notification: notification);
+      await scheduleNotification(notification: savedNotification);
     } else {
       /// Schedule on each selected weekday
       for (final weekday in weekdays) {
         final tz.TZDateTime scheduledDate =
-            TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
+        TzDateHelper.nextInstanceOfDayAndTime(weekday, time);
         final tz.TZDateTime finalTime = tz.TZDateTime.from(
           scheduledDate.toUtc(),
           tz.local,
         );
 
-        final NotificationModel
-        notification = NotificationsHelper.buildNotification(
-          id: id + weekday.index + scheduledDate.hour + scheduledDate.minute,
+        final NotificationModel notification =
+        NotificationsHelper.buildNotification(
+          id:
+          id +
+              weekday.index +
+              scheduledDate.hour +
+              scheduledDate.minute,
           medicationId: "$id",
           title: title,
           body: body,
@@ -191,13 +199,14 @@ class NotificationServiceImpl implements NotificationService {
         );
 
         // Store notification, for later handling
+        final NotificationModel savedNotification =
         await NotificationManager.saveGroupedNotification(
           notification: notification,
           medicationName: medicationName,
           newId: id,
         );
 
-        await scheduleNotification(notification: notification);
+        await scheduleNotification(notification: savedNotification);
       }
     }
   }
@@ -213,8 +222,8 @@ class NotificationServiceImpl implements NotificationService {
     if (Platform.isAndroid) {
       await _plugin
           .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >()
+          AndroidFlutterLocalNotificationsPlugin
+      >()
           ?.requestNotificationsPermission();
     }
   }

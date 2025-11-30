@@ -80,7 +80,8 @@ class NotificationManager {
   /// Saves a grouped notification to Hive.
   /// If a notification for the same time exists, it updates it by appending the new medication ID.
   /// Otherwise, it creates a new grouped notification.
-  static Future<void> saveGroupedNotification({
+  /// Returns the final notification model that was saved (merged or new).
+  static Future<NotificationModel> saveGroupedNotification({
     required NotificationModel notification,
     required String medicationName,
     required int newId,
@@ -111,10 +112,21 @@ class NotificationManager {
     if (existingNotification != null) {
       // Update existing
       final existingPayload = jsonDecode(existingNotification.payload!);
+      final List ids = existingPayload['id']
+          .split(',')
+          .map((e) => e.trim()) // Handle potential spaces
+          .toList();
+
+      // Avoid duplicates
+      if (!ids.contains(newId.toString())) {
+        ids.add(newId.toString());
+      }
+
       finalNotification = existingNotification.copyWith(
-        title: '${existingNotification.title}, $medicationName',
+        title:
+            '${existingNotification.title}, ${NotificationsHelper.stripPrefix(notification.title)}',
         payload: NotificationsHelper.buildPayload(
-          id: '${existingPayload['id']},$newId',
+          id: ids.join(", "),
           time: '${notification.time.hour}:${notification.time.minute}',
           isGrouped: true,
         ),
@@ -131,6 +143,7 @@ class NotificationManager {
     }
 
     await box.put(key, finalNotification);
+    return finalNotification;
   }
 
   /// Saves an individual notification to Hive.
