@@ -28,3 +28,6 @@ void rescheduleAllNotifications() async {
   const channel = MethodChannel("boot_reschedule_channel");
   await channel.invokeMethod("rescheduleComplete");
 }
+
+/// a useless function to keep the import from getting tree shaken
+void nothing() {}

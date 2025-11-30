@@ -6,6 +6,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/utils/debug_print.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
+import 'package:pills_reminder/features/notifications/entrypoints/reschedule_notifications_entrypoint.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -182,5 +183,10 @@ class NotificationManager {
     debugOnlyPrint(
       "Scheduled notification with id: ${notification.id} with title: ${notification.title}",
     );
+  }
+
+  /// a useless function to keep the import from getting tree shaken
+  void uselessFunction() {
+    nothing();
   }
 }
