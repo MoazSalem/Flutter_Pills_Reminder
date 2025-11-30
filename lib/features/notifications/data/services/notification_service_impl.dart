@@ -10,6 +10,7 @@ import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
 import 'package:pills_reminder/core/utils/debug_print.dart';
+import 'package:pills_reminder/core/utils/notification_manager.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/core/utils/tz_date_helper.dart';
 import 'package:pills_reminder/features/notifications/domain/services/notification_service.dart';
@@ -18,6 +19,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServiceImpl implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
+
   NotificationServiceImpl(this._plugin);
 
   @override
@@ -277,20 +279,9 @@ class NotificationServiceImpl implements NotificationService {
   Future<void> scheduleNotification({
     required NotificationModel notification,
   }) async {
-    await _plugin.zonedSchedule(
-      notification.id,
-      notification.title,
-      notification.body,
-      notification.time,
-      NotificationsHelper.getNotificationDetails(
-        locale: json.decode(notification.payload!)['locale'],
-      ),
-      matchDateTimeComponents: notification.matchComponents,
-      androidScheduleMode: notification.androidScheduleMode,
-      payload: notification.payload,
-    );
-    debugOnlyPrint(
-      "Scheduled notification with id: ${notification.id} with title: ${notification.title} with id in payload: ${jsonDecode(notification.payload!)["id"]}",
+    await NotificationManager.scheduleNotification(
+      plugin: _plugin,
+      notification: notification,
     );
   }
 }
