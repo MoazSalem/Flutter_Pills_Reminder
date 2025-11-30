@@ -28,18 +28,22 @@ class NotificationDetails extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppSizes.normalPadding),
       child: Padding(
         padding: const EdgeInsets.all(AppSizes.normalPadding),
-        child: ListTile(
-          leading: Icon(
-            Icons.notifications_active,
-            color: colorScheme.primary,
-            size: AppSizes.largeIconSize,
-          ),
-          title: Text(
-            notification.title ?? "No Title",
-            style: AppStyles.title.copyWith(fontSize: AppSizes.normalTextSize),
-          ),
-          subtitle: Text(
-            "Scheduled at ${pillTime[0]}:${pillTime[1].padLeft(2, "0")}",
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.notifications_active,
+              color: colorScheme.primary,
+              size: AppSizes.largeIconSize,
+            ),
+            title: Text(
+              notification.title ?? "No Title",
+              style: AppStyles.title.copyWith(
+                fontSize: AppSizes.normalTextSize,
+              ),
+            ),
+            subtitle: Text(
+              "Scheduled at ${pillTime[0]}:${pillTime[1].padLeft(2, "0")}",
+            ),
           ),
         ),
       ),

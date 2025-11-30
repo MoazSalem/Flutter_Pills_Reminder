@@ -2,31 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart' as tz;
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:pills_reminder/core/utils/notification_manager.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/features/medications/data/models/hive/hive_registrar.g.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 @pragma('vm:entry-point')
 void notificationBackgroundHandler(NotificationResponse response) async {
   if (response.actionId == 'remind_again') {
     /// init FlutterLocalNotificationsPlugin
-    final plugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings androidInit =
-        AndroidInitializationSettings('@drawable/icon');
-    final InitializationSettings initSettings = InitializationSettings(
-      android: androidInit,
-    );
-    await plugin.initialize(
-      initSettings,
+    final plugin = await NotificationManager.initPlugin(
       onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
     );
-    tz.initializeTimeZones();
-    final String localTimeZone = await tz.FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
     final now = DateTime.now().add(const Duration(minutes: 30));
     final tzTime = tz.TZDateTime.from(now, tz.local);
     final String locale = json.decode(response.payload!)['locale'];
@@ -48,7 +38,9 @@ void notificationBackgroundHandler(NotificationResponse response) async {
 
     /// init Hive for the background isolate
     await Hive.initFlutter();
-    Hive.registerAdapters();
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapters();
+    }
 
     /// open medications box
     Box box = await Hive.openBox('medications');
@@ -95,6 +87,35 @@ void notificationBackgroundHandler(NotificationResponse response) async {
     var dateBox = await Hive.openBox('date');
     dateBox.put('lastOpenedDate', DateTime.now().weekday);
 
+    /// check for last notification regeneration
+    if (dateBox.get('lastNotificationRegenerationDate') == null) {
+      /// if this is the first time this feature works, store the current date
+      dateBox.put('lastNotificationRegenerationDate', DateTime.now());
+    } else {
+      /// check if 2 days have passed since last notification regeneration
+      if (DateTime.now()
+              .difference(dateBox.get('lastNotificationRegenerationDate'))
+              .inDays >=
+          2) {
+        /// reschedule all notifications
+        // init FlutterLocalNotificationsPlugin
+        final plugin = await NotificationManager.initPlugin(
+          onDidReceiveBackgroundNotificationResponse:
+              notificationBackgroundHandler,
+        );
+
+        // Get stored notifications from Hive (handling both grouped and individual)
+        final allNotifications =
+            await NotificationManager.getAllNotifications();
+
+        for (var notification in allNotifications) {
+          await NotificationManager.scheduleNotification(
+            plugin: plugin,
+            notification: notification,
+          );
+        }
+      } // else, do nothing
+    }
     box.close();
     dateBox.close();
   }

@@ -12,7 +12,12 @@ class NotificationsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppSizes.largePadding),
-      child: ListView.builder(
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          childAspectRatio: 3,
+          crossAxisSpacing: 20,
+          maxCrossAxisExtent: 450,
+        ),
         itemCount: notifications.length,
         itemBuilder: (context, index) =>
             NotificationDetails(notification: notifications[index]),

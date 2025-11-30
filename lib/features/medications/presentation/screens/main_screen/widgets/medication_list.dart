@@ -13,8 +13,13 @@ class MedicationList extends StatelessWidget {
         horizontal: AppSizes.largePadding,
         vertical: AppSizes.normalPadding,
       ),
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 2.6,
+          maxCrossAxisExtent: 600,
+        ),
         itemCount: medicationList.length,
         itemBuilder: (context, index) =>
             MedicationWidget(medication: medicationList[index]),
