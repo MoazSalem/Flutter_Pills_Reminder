@@ -38,7 +38,9 @@ void notificationBackgroundHandler(NotificationResponse response) async {
 
     /// init Hive for the background isolate
     await Hive.initFlutter();
-    Hive.registerAdapters();
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapters();
+    }
 
     /// open medications box
     Box box = await Hive.openBox('medications');
