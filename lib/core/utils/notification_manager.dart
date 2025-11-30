@@ -76,6 +76,80 @@ class NotificationManager {
     return allNotifications;
   }
 
+  /// Saves a grouped notification to Hive.
+  /// If a notification for the same time exists, it updates it by appending the new medication ID.
+  /// Otherwise, it creates a new grouped notification.
+  static Future<void> saveGroupedNotification({
+    required NotificationModel notification,
+    required String medicationName,
+    required int newId,
+  }) async {
+    if (!Hive.isBoxOpen('groupedNotifications')) {
+      await Hive.openBox('groupedNotifications');
+    }
+    final Box box = Hive.box('groupedNotifications');
+
+    // Key format: M{day}/{hour}:{minute} or {weekday}/{hour}:{minute} or {hour}:{minute}
+    // We need to construct the key based on the notification type/components
+    String key;
+    if (notification.matchComponents == DateTimeComponents.dayOfMonthAndTime) {
+      key =
+          'M${notification.time.day}/${notification.time.hour}:${notification.time.minute}';
+    } else if (notification.matchComponents ==
+        DateTimeComponents.dayOfWeekAndTime) {
+      key =
+          '${notification.time.weekday}/${notification.time.hour}:${notification.time.minute}';
+    } else {
+      key = '${notification.time.hour}:${notification.time.minute}';
+    }
+
+    NotificationModel? existingNotification = box.get(key);
+
+    late final NotificationModel finalNotification;
+
+    if (existingNotification != null) {
+      // Update existing
+      final existingPayload = jsonDecode(existingNotification.payload!);
+      finalNotification = existingNotification.copyWith(
+        title: '${existingNotification.title}, $medicationName',
+        payload: NotificationsHelper.buildPayload(
+          id: '${existingPayload['id']},$newId',
+          time: '${notification.time.hour}:${notification.time.minute}',
+          isGrouped: true,
+        ),
+      );
+    } else {
+      // Create new
+      finalNotification = notification.copyWith(
+        payload: NotificationsHelper.buildPayload(
+          id: '$newId',
+          time: '${notification.time.hour}:${notification.time.minute}',
+          isGrouped: true,
+        ),
+      );
+    }
+
+    await box.put(key, finalNotification);
+  }
+
+  /// Saves an individual notification to Hive.
+  /// Appends the notification to the list for the given medication ID.
+  static Future<void> saveIndividualNotification({
+    required NotificationModel notification,
+    required int medicationId,
+  }) async {
+    if (!Hive.isBoxOpen('notifications')) {
+      await Hive.openBox<NotificationList>('notifications');
+    }
+    final Box box = Hive.box<NotificationList>('notifications');
+
+    final NotificationList notifications =
+        box.get(medicationId) ?? NotificationList(items: []);
+
+    notifications.items.add(notification);
+    await box.put(medicationId, notifications);
+  }
+
   /// Schedules a single notification using the provided plugin.
   /// Handles payload decoding and logging.
   static Future<void> scheduleNotification({
