@@ -350,7 +350,7 @@ class NotificationRepoImpl implements NotificationRepo {
     // schedule all normal notifications
     await rescheduleAllNotifications(isGrouped: true, skipSnackBar: true);
     // delete all normal notifications
-    normalBox.clear();
+    await normalBox.deleteAll(normalBox.keys);
     // show snackbar that the conversion is done
     showSnackBar('conversionDone'.tr, 'conversionGroupedDoneMessage'.tr);
   }
@@ -391,7 +391,7 @@ class NotificationRepoImpl implements NotificationRepo {
     // schedule all normal notifications
     await rescheduleAllNotifications(isGrouped: false, skipSnackBar: true);
     // delete all grouped notifications
-    groupedBox.clear();
+    await groupedBox.deleteAll(groupedBox.keys);
     // show snackbar that the conversion is done
     showSnackBar('conversionDone'.tr, 'conversionNormalDoneMessage'.tr);
   }
