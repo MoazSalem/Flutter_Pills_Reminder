@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/models/notification_type.dart';
 import 'package:pills_reminder/core/models/weekday.dart';
+import 'package:pills_reminder/core/utils/notification_manager.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
 import 'package:pills_reminder/features/medications/data/models/medication_model.dart';
 import 'package:pills_reminder/features/notifications/data/services/notification_service_impl.dart';
@@ -18,17 +19,13 @@ import 'package:pills_reminder/features/settings/presentation/controllers/settin
 
 class NotificationRepoImpl implements NotificationRepo {
   bool isNotificationPermissionGranted = false;
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
+  late final FlutterLocalNotificationsPlugin notificationsPlugin;
   late final NotificationService notificationService;
 
   @override
   Future<void> initNotificationService() async {
     // Ensure plugin is initialized
-    await notificationsPlugin.initialize(
-      const InitializationSettings(
-        android: AndroidInitializationSettings('@drawable/icon'),
-        iOS: DarwinInitializationSettings(),
-      ),
+    notificationsPlugin = await NotificationManager.initPlugin(
       onDidReceiveBackgroundNotificationResponse: notificationBackgroundHandler,
     );
     notificationService = NotificationServiceImpl(notificationsPlugin);

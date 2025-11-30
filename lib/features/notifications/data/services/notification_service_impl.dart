@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
+
 import 'package:get/get.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
@@ -45,9 +45,7 @@ class NotificationServiceImpl implements NotificationService {
     NotificationType? notificationType,
     required bool isRepeating,
   }) async {
-    // Set local timezone
-    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
 
     NotificationModel notification = NotificationsHelper.buildNotification(
       id: id,
@@ -106,9 +104,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
-    // Set local timezone
-    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
 
     /// Initialize the notifications box
     Box box = Hive.box<NotificationList>('notifications');
@@ -167,9 +163,7 @@ class NotificationServiceImpl implements NotificationService {
     required List<Weekday> weekdays,
     NotificationType? notificationType,
   }) async {
-    // Set local timezone
-    final String localTimeZone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
 
     /// Initialize the grouped notifications box
     final Box box = Hive.box('groupedNotifications');

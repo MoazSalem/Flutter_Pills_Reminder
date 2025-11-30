@@ -1,12 +1,41 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart' as tz;
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/utils/debug_print.dart';
 import 'package:pills_reminder/core/utils/notifications_helper.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationManager {
+  /// Initializes the FlutterLocalNotificationsPlugin with default settings.
+  /// Also initializes timezones.
+  static Future<FlutterLocalNotificationsPlugin> initPlugin({
+    void Function(NotificationResponse)?
+    onDidReceiveBackgroundNotificationResponse,
+  }) async {
+    // Initialize timezones
+    tz.initializeTimeZones();
+    final String localTimeZone = await tz.FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
+
+    final plugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings androidInit =
+        AndroidInitializationSettings('@drawable/icon');
+    const InitializationSettings initSettings = InitializationSettings(
+      android: androidInit,
+      iOS: DarwinInitializationSettings(),
+    );
+    await plugin.initialize(
+      initSettings,
+      onDidReceiveBackgroundNotificationResponse:
+          onDidReceiveBackgroundNotificationResponse,
+    );
+    return plugin;
+  }
+
   /// Retrieves all active notifications from Hive based on the current storage mode
   /// (Grouped or Individual). Opens necessary boxes if they are not already open.
   static Future<List<NotificationModel>> getAllNotifications() async {
