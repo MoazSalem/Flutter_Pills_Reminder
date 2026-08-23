@@ -79,18 +79,18 @@ void main() {
     mockPlugin = MockFlutterLocalNotificationsPlugin();
     when(
       () => mockPlugin.zonedSchedule(
-        any(),
-        any(),
-        any(),
-        any(),
-        any(),
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        scheduledDate: any(named: 'scheduledDate'),
+        notificationDetails: any(named: 'notificationDetails'),
         matchDateTimeComponents: any(named: 'matchDateTimeComponents'),
         androidScheduleMode: any(named: 'androidScheduleMode'),
         payload: any(named: 'payload'),
       ),
     ).thenAnswer((_) async {});
 
-    when(() => mockPlugin.cancel(any())).thenAnswer((_) async {});
+    when(() => mockPlugin.cancel(id: any(named: 'id'))).thenAnswer((_) async {});
     when(() => mockPlugin.cancelAll()).thenAnswer((_) async {});
     when(
       () => mockPlugin.pendingNotificationRequests(),

@@ -23,11 +23,13 @@ void notificationBackgroundHandler(NotificationResponse response) async {
 
     /// schedule notification
     await plugin.zonedSchedule(
-      UniqueKey().hashCode,
-      NotificationsHelper.getReminderTitle(locale: locale),
-      NotificationsHelper.getReminderBody(locale: locale),
-      tzTime,
-      NotificationsHelper.getNotificationDetails(locale: locale),
+      id: UniqueKey().hashCode,
+      title: NotificationsHelper.getReminderTitle(locale: locale),
+      body: NotificationsHelper.getReminderBody(locale: locale),
+      scheduledDate: tzTime,
+      notificationDetails: NotificationsHelper.getNotificationDetails(
+        locale: locale,
+      ),
       androidScheduleMode: AndroidScheduleMode.alarmClock,
       payload: response.payload,
     );

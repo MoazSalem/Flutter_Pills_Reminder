@@ -29,7 +29,12 @@ class NotificationServiceImpl implements NotificationService {
     required String title,
     required String body,
   }) {
-    return _plugin.show(0, title, body, NotificationDetails());
+    return _plugin.show(
+      id: 0,
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(),
+    );
   }
 
   @override
@@ -214,7 +219,7 @@ class NotificationServiceImpl implements NotificationService {
   @override
   Future<void> cancelNotification(int id) async {
     debugOnlyPrint("Canceling notification with id: $id");
-    await _plugin.cancel(id);
+    await _plugin.cancel(id: id);
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pills_reminder/core/models/notification_model.dart';
 import 'package:pills_reminder/core/utils/debug_print.dart';
@@ -19,8 +19,13 @@ class NotificationManager {
   }) async {
     // Initialize timezones
     tz.initializeTimeZones();
-    final String localTimeZone = await tz.FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+    try {
+      final String localTimeZone =
+          (await FlutterTimezone.getLocalTimezone()).identifier;
+      tz.setLocalLocation(tz.getLocation(localTimeZone));
+    } catch (e) {
+      debugOnlyPrint("Failed to set local timezone: $e");
+    }
 
     final plugin = FlutterLocalNotificationsPlugin();
     const AndroidInitializationSettings androidInit =
@@ -30,7 +35,7 @@ class NotificationManager {
       iOS: DarwinInitializationSettings(),
     );
     await plugin.initialize(
-      initSettings,
+      settings: initSettings,
       onDidReceiveBackgroundNotificationResponse:
           onDidReceiveBackgroundNotificationResponse,
     );
@@ -183,11 +188,13 @@ class NotificationManager {
     }
 
     await plugin.zonedSchedule(
-      notification.id,
-      notification.title,
-      notification.body,
-      notification.time,
-      NotificationsHelper.getNotificationDetails(locale: locale),
+      id: notification.id,
+      title: notification.title,
+      body: notification.body,
+      scheduledDate: notification.time,
+      notificationDetails: NotificationsHelper.getNotificationDetails(
+        locale: locale,
+      ),
       matchDateTimeComponents: notification.matchComponents,
       androidScheduleMode: notification.androidScheduleMode,
       payload: notification.payload,

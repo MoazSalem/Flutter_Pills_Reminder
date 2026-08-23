@@ -4,19 +4,19 @@ import java.util.*
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 // Define the helper extension function
 fun Properties.getRequiredProperty(key: String): String {
-    return getProperty(key) ?: throw IllegalArgumentException("'$key' not found in keystore.properties file.")
+    return getProperty(key)
+        ?: throw IllegalArgumentException("'$key' not found in keystore.properties file.")
 }
 
 // Create an empty Properties object
 val keyProperties = Properties()
-val propertiesFile = File("keystore.properties")
+val propertiesFile = rootProject.file("keystore.properties").takeIf { it.exists() } ?: file("keystore.properties")
 
 var detStoreFile: String? = null
 var detStorePassword: String? = null
@@ -43,17 +43,13 @@ if (propertiesFile.exists()) {
 
 android {
     namespace = "com.moazsalem.pills_reminder"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    compileSdk = 37
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -71,7 +67,7 @@ android {
     signingConfigs {
         create("release") {
             if (detStoreFile != null) {
-                storeFile = file(detStoreFile!!)
+                storeFile = rootProject.file(detStoreFile!!).takeIf { it.exists() } ?: file(detStoreFile!!)
                 storePassword = detStorePassword
                 keyAlias = detKeyAlias
                 keyPassword = detKeyPassword
@@ -86,6 +82,12 @@ android {
         debug {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
